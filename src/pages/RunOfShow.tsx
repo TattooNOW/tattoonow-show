@@ -25,7 +25,8 @@ function segmentStyle(type = '') {
 
 // ── Load episode JSON from /public/data/ ─────────────────────────────────────
 async function fetchEpisode(id) {
-  const res = await fetch(`/data/episode-${id}.json`);
+  const base = import.meta.env.BASE_URL || '/';
+  const res = await fetch(`${base}data/episode-${id}.json`);
   if (!res.ok) throw new Error(`Episode ${id} not found (${res.status})`);
   return res.json();
 }
