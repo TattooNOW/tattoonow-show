@@ -443,8 +443,8 @@ To use presenter mode, your episode JSON must include `presenterNotes` in the `S
 - `presenterNotes` (string): Detailed notes ONLY visible in presenter view
 
 **Example Files:**
-- `/home/user/n8n/public/data/episode-2-with-script.json` - Full example with presenterNotes
-- `/home/user/n8n/public/data/episode-3-with-script.json` - Uses legacy `notes` field (still works)
+- `/home/user/tattoonow-show/public/data/episode-2-with-script.json` - Full example with presenterNotes
+- `/home/user/tattoonow-show/public/data/episode-3-with-script.json` - Uses legacy `notes` field (still works)
 
 ### Benefits
 
