@@ -57,7 +57,8 @@ export function useEpisodeData(episodeId, useSupabase = true) {
  * Load episode from JSON file (fallback)
  */
 async function loadFromJSON(episodeId) {
-  const response = await fetch(`/data/episode-${episodeId}.json`);
+  const base = import.meta.env.BASE_URL || '/';
+  const response = await fetch(`${base}data/episode-${episodeId}.json`);
 
   if (!response.ok) {
     throw new Error(`Failed to load episode ${episodeId}: ${response.statusText}`);
