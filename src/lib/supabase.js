@@ -11,26 +11,33 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Supabase credentials not found. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env');
+let supabase = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false, // Slideshow doesn't need auth session
+    },
+    realtime: {
+      params: {
+        eventsPerSecond: 10,
+      },
+    },
+  });
+} else {
+  console.warn('Supabase credentials not found. Using JSON fallback only. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env');
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '', {
-  auth: {
-    persistSession: false, // Slideshow doesn't need auth session
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 10,
-    },
-  },
-});
+export { supabase };
 
 /**
  * Fetch full episode data by episode number
  * Uses the get_episode_full() database function for optimized query
  */
 export async function getEpisode(episodeNumber) {
+  if (!supabase) {
+    return { data: null, error: 'Supabase not configured' };
+  }
   try {
     const { data, error } = await supabase.rpc('get_episode_full', {
       episode_num: episodeNumber,
