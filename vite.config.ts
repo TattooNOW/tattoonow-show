@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
-  base: '/n8n/',
+  base: '/tattoonow-show/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

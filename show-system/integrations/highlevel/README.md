@@ -145,7 +145,7 @@ These need to be created as custom fields:
 
 ### Workflow: HighLevel Form Submission → Supabase
 
-**File:** `/home/user/n8n/workflows/highlevel-guest-intake.json`
+**File:** `/home/user/tattoonow-show/workflows/highlevel-guest-intake.json`
 
 #### Workflow Nodes:
 

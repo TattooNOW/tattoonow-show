@@ -42,8 +42,8 @@ Complete step-by-step guide to deploy the show system to production.
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/TattooNOW/n8n.git
-cd n8n
+git clone https://github.com/TattooNOW/tattoonow-show.git
+cd tattoonow-show
 npm install
 ```
 
@@ -552,7 +552,7 @@ Verify server running on `ws://localhost:9000`
 ## Support
 
 - **Documentation:** See `/show-system/` directory
-- **Issues:** https://github.com/TattooNOW/n8n/issues
+- **Issues:** https://github.com/TattooNOW/tattoonow-show/issues
 - **Slack:** #tattoonow-tech (internal)
 
 ---
