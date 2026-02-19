@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Film, ArrowUpDown } from 'lucide-react';
+import { Film } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { listShows } from '@/lib/api';
 import type { Show } from '@/lib/types';

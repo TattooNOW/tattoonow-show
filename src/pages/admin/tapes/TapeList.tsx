@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Disc3, Search, ArrowUpDown } from 'lucide-react';
+import { Search, ArrowUpDown } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { listTapes } from '@/lib/api';
 import type { Tape, TapeType, TapeStatus } from '@/lib/types';

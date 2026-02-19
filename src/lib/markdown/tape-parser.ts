@@ -32,20 +32,6 @@ function blockquoteLines(text: string): string {
   return text.split('\n').map(l => `> ${l}`).join('\n');
 }
 
-function parseBlockquote(lines: string[]): string {
-  return lines
-    .filter(l => l.trim().startsWith('>'))
-    .map(l => l.trim().replace(/^>\s?/, ''))
-    .join(' ')
-    .trim();
-}
-
-function parseBullets(lines: string[]): string[] {
-  return lines
-    .filter(l => /^\s*[-*]\s/.test(l))
-    .map(l => l.trim().replace(/^[-*]\s+/, ''));
-}
-
 // ── Interview ────────────────────────────────────────────────────────
 
 function interviewToMarkdown(content: InterviewContent): string {
@@ -553,7 +539,8 @@ export function tapeContentToMarkdown(tape: Tape): string {
 export function markdownToTapeContent(
   md: string,
   type: TapeType
-): Record<string, unknown> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any {
   switch (type) {
     case 'interview':
       return markdownToInterview(md);
