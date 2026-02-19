@@ -13,7 +13,7 @@ import { PresenterView } from './PresenterView';
  * Handles slide sequencing, keyboard controls, overlay toggling,
  * and dual-window presenter mode with BroadcastChannel sync.
  */
-export function SlideController({ episodeData }) {
+export function SlideController({ episodeData, prebuiltSlides }) {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode'); // 'presenter' or null
 
@@ -23,11 +23,21 @@ export function SlideController({ episodeData }) {
   const [portfolioLayout, setPortfolioLayout] = useState('grid'); // 'grid' or 'fullscreen'
   const [selectedImage, setSelectedImage] = useState(null);
 
+  // Auto/manual navigation mode
+  const [autoMode, setAutoMode] = useState(false);
+  // Elapsed time on the current slide (ms)
+  const [slideElapsedMs, setSlideElapsedMs] = useState(0);
+  // Total show elapsed time (ms) — starts when first slide advances
+  const [showStartTime, setShowStartTime] = useState(null);
+  const [showElapsedMs, setShowElapsedMs] = useState(0);
+  const slideTimerRef = useRef(null);
+  const showTimerRef = useRef(null);
+
   // BroadcastChannel for syncing between audience and presenter windows
   const channelRef = useRef(null);
 
-  // Build slides array from episode data
-  const slides = buildSlides(episodeData);
+  // Use prebuilt slides (from Show) or build from episode data
+  const slides = prebuiltSlides || buildSlides(episodeData);
 
   // Initialize BroadcastChannel for window sync
   useEffect(() => {
@@ -53,6 +63,9 @@ export function SlideController({ episodeData }) {
           setSelectedImage(payload.imageIndex);
           setPortfolioLayout(payload.imageIndex !== null ? 'fullscreen' : 'grid');
           break;
+        case 'AUTO_MODE_TOGGLE':
+          setAutoMode(payload.auto);
+          break;
         default:
           break;
       }
@@ -63,6 +76,47 @@ export function SlideController({ episodeData }) {
         channelRef.current.close();
       }
     };
+  }, []);
+
+  // Slide elapsed timer — resets on slide change
+  useEffect(() => {
+    setSlideElapsedMs(0);
+    clearInterval(slideTimerRef.current);
+    slideTimerRef.current = setInterval(() => {
+      setSlideElapsedMs(prev => prev + 250);
+    }, 250);
+    return () => clearInterval(slideTimerRef.current);
+  }, [currentSlideIndex]);
+
+  // Show elapsed timer — starts on first slide advance
+  useEffect(() => {
+    if (showStartTime) {
+      showTimerRef.current = setInterval(() => {
+        setShowElapsedMs(Date.now() - showStartTime);
+      }, 250);
+      return () => clearInterval(showTimerRef.current);
+    }
+  }, [showStartTime]);
+
+  // Auto-advance: when auto mode is on and slide duration has elapsed, go next
+  useEffect(() => {
+    if (!autoMode) return;
+    const currentSlide = slides[currentSlideIndex];
+    if (!currentSlide?.durationMs || currentSlide.durationMs <= 0) return;
+    if (slideElapsedMs >= currentSlide.durationMs && currentSlideIndex < slides.length - 1) {
+      nextSlide();
+    }
+  }, [autoMode, slideElapsedMs, currentSlideIndex, slides]);
+
+  const toggleAutoMode = useCallback(() => {
+    setAutoMode(prev => {
+      const newVal = !prev;
+      channelRef.current?.postMessage({
+        type: 'AUTO_MODE_TOGGLE',
+        payload: { auto: newVal }
+      });
+      return newVal;
+    });
   }, []);
 
   // Broadcast functions
@@ -125,6 +179,10 @@ export function SlideController({ episodeData }) {
         case 'G':
           togglePortfolioLayout();
           break;
+        case 'a':
+        case 'A':
+          toggleAutoMode();
+          break;
         case 'Home':
           setCurrentSlideIndex(0);
           break;
@@ -186,6 +244,8 @@ export function SlideController({ episodeData }) {
 
   // Navigation functions (with broadcast)
   const nextSlide = useCallback(() => {
+    // Start the show clock on first advance
+    setShowStartTime(prev => prev || Date.now());
     setCurrentSlideIndex((prev) => {
       const newIndex = Math.min(prev + 1, slides.length - 1);
       broadcastSlideChange(newIndex);
@@ -282,6 +342,11 @@ export function SlideController({ episodeData }) {
         togglePortfolioLayout={togglePortfolioLayout}
         selectedImage={selectedImage}
         onSelectImage={handleSelectImage}
+        showId={episodeData?._showId}
+        autoMode={autoMode}
+        toggleAutoMode={toggleAutoMode}
+        slideElapsedMs={slideElapsedMs}
+        showElapsedMs={showElapsedMs}
       />
     );
   }
