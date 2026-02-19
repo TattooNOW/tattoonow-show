@@ -153,7 +153,7 @@ export function PresenterView({
             const params = new URLSearchParams(window.location.search);
             const episodeId = params.get('episode') || params.get('id') || '1';
             window.open(
-              `/slideshow?episode=${episodeId}`,
+              `${import.meta.env.BASE_URL}slideshow?episode=${episodeId}`,
               'slideshow-audience',
               'width=1920,height=1080'
             );
