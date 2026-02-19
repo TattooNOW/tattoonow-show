@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { TitleCard } from './TitleCard';
 import { PortfolioSlide } from './PortfolioSlide';
 import { EducationSlide } from './EducationSlide';
 import { LowerThird } from './LowerThird';
 import { QRCode, QRCodeWithTracking } from './QRCode';
 import ScriptSlide from '../slides/ScriptSlide';
+import { PresenterView } from './PresenterView';
 
 /**
- * SlideController - Main slideshow controller (audience view)
- *
- * Presenter mode has been consolidated into the standalone show deck
- * (tattoonow-show-deck.html) which includes presenter, presentation,
- * and teleprompter modes in a single self-contained file.
+ * SlideController - Main slideshow controller
+ * Handles slide sequencing, keyboard controls, overlay toggling,
+ * and dual-window presenter mode with BroadcastChannel sync.
  */
 export function SlideController({ episodeData }) {
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode'); // 'presenter' or null
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [showQR, setShowQR] = useState(false);
@@ -234,7 +236,22 @@ export function SlideController({ episodeData }) {
 
   const currentSlide = slides[currentSlideIndex];
 
-  // Presenter mode is now handled by the standalone show deck (tattoonow-show-deck.html)
+  // Render Presenter View if mode=presenter
+  if (mode === 'presenter') {
+    return (
+      <PresenterView
+        episodeData={episodeData}
+        currentSlideIndex={currentSlideIndex}
+        slides={slides}
+        nextSlide={nextSlide}
+        previousSlide={previousSlide}
+        toggleQR={toggleQR}
+        toggleLowerThird={toggleLowerThird}
+        showQR={showQR}
+        showLowerThird={showLowerThird}
+      />
+    );
+  }
 
   // Render Audience View (default)
   return (
