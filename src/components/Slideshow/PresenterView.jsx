@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Timer } from './Timer';
 import { Clock } from './Clock';
@@ -7,6 +7,55 @@ import { PortfolioSlide } from './PortfolioSlide';
 import { EducationSlide } from './EducationSlide';
 import ScriptSlide from '../slides/ScriptSlide';
 import styles from './PresenterView.module.css';
+
+/**
+ * Hook for draggable border resizing
+ * Returns percentage value and mouse event handlers
+ */
+function useDragResize(initialPct, direction = 'horizontal') {
+  const [pct, setPct] = useState(initialPct);
+  const dragging = useRef(false);
+  const containerRef = useRef(null);
+
+  const onMouseDown = useCallback((e) => {
+    e.preventDefault();
+    dragging.current = true;
+    document.body.style.cursor = direction === 'vertical' ? 'row-resize' : 'col-resize';
+    document.body.style.userSelect = 'none';
+  }, [direction]);
+
+  useEffect(() => {
+    const onMouseMove = (e) => {
+      if (!dragging.current || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      let newPct;
+      if (direction === 'vertical') {
+        newPct = ((e.clientY - rect.top) / rect.height) * 100;
+      } else {
+        newPct = ((e.clientX - rect.left) / rect.width) * 100;
+      }
+      // Clamp between 15% and 85%
+      setPct(Math.min(85, Math.max(15, newPct)));
+    };
+
+    const onMouseUp = () => {
+      if (dragging.current) {
+        dragging.current = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [direction]);
+
+  return { pct, containerRef, onMouseDown };
+}
 
 /**
  * PresenterView - Presenter mode for TattooNOW show slideshow
@@ -30,6 +79,10 @@ export function PresenterView({
   showQR,
   showLowerThird
 }) {
+  // Hooks must be called unconditionally
+  const hSplit = useDragResize(60, 'horizontal');
+  const vSplit = useDragResize(50, 'vertical');
+
   if (!episodeData || !slides || slides.length === 0) {
     return (
       <div className={styles.container}>
@@ -49,11 +102,15 @@ export function PresenterView({
     'No presenter notes for this slide.';
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={vSplit.containerRef}>
       {/* Top: Slide Previews */}
-      <div className={styles.previewRow}>
+      <div
+        className={styles.previewRow}
+        ref={hSplit.containerRef}
+        style={{ height: `${vSplit.pct}%` }}
+      >
         {/* Current Slide Preview */}
-        <div className={styles.currentSlidePreview}>
+        <div className={styles.currentSlidePreview} style={{ flex: `0 0 ${hSplit.pct}%` }}>
           <div className={styles.previewLabel}>
             <span className={styles.labelDot} />
             Current Slide
@@ -63,8 +120,14 @@ export function PresenterView({
           </div>
         </div>
 
+        {/* Vertical drag handle between slides */}
+        <div
+          className={styles.dragHandleVertical}
+          onMouseDown={hSplit.onMouseDown}
+        />
+
         {/* Next Slide Preview */}
-        <div className={styles.nextSlidePreview}>
+        <div className={styles.nextSlidePreview} style={{ flex: 1 }}>
           <div className={styles.previewLabel}>Next Slide</div>
           <div className={styles.slidePreviewContainer}>
             {nextSlideData ? (
@@ -78,8 +141,14 @@ export function PresenterView({
         </div>
       </div>
 
+      {/* Horizontal drag handle between previews and notes */}
+      <div
+        className={styles.dragHandleHorizontal}
+        onMouseDown={vSplit.onMouseDown}
+      />
+
       {/* Middle: Presenter Notes */}
-      <div className={styles.notesPanel}>
+      <div className={styles.notesPanel} style={{ flex: 1 }}>
         <div className={styles.notesHeader}>
           <h3>Presenter Notes</h3>
           <span className={styles.slideIndicator}>
