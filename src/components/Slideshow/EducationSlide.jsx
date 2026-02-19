@@ -15,17 +15,19 @@ export function EducationSlide({
   // Split layout: visual on left, points on right
   if (layout === 'split') {
     return (
-      <div className="slideshow-container bg-background p-16">
+      <div className="slideshow-container bg-background"
+        style={{ display: 'flex', flexDirection: 'column', padding: '3rem 4rem' }}
+      >
         {/* Slide number indicator */}
         <div className="absolute top-8 right-8 brand-accent text-lg font-semibold">
           Slide {slideNumber}
         </div>
 
         {/* Title */}
-        <h2 className="text-6xl font-bold mb-12 brand-accent">{title}</h2>
+        <h2 className="text-6xl font-bold brand-accent" style={{ flexShrink: 0, marginBottom: '2rem' }}>{title}</h2>
 
         {/* Content grid */}
-        <div className="grid grid-cols-2 gap-12 h-[800px]">
+        <div className="grid grid-cols-2 gap-12" style={{ flex: 1, minHeight: 0 }}>
           {/* Left: Visual */}
           <div className="flex items-center justify-center bg-card rounded-lg border-2 brand-border p-8">
             {typeof visual === 'string' ? (
