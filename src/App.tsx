@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { RunOfShow } from "@/pages/RunOfShow";
 const Slideshow = lazy(() => import("@/pages/Slideshow").then(m => ({ default: m.Slideshow })));
 const NotesPopout = lazy(() => import("@/pages/NotesPopout").then(m => ({ default: m.NotesPopout })));
+const AdminRouter = lazy(() => import("@/pages/admin/AdminRouter"));
 
 function Layout() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Routes>
         <Route path="/slideshow" element={<Suspense fallback={null}><Slideshow /></Suspense>} />
         <Route path="/notes" element={<Suspense fallback={null}><NotesPopout /></Suspense>} />
+        <Route path="/admin/*" element={<Suspense fallback={null}><AdminRouter /></Suspense>} />
         <Route element={<Layout />}>
           <Route path="/" element={<Navigate to="/run-of-show" replace />} />
           <Route path="/run-of-show" element={<RunOfShow />} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Teleprompter } from '@/components/Slideshow/Teleprompter';
+import { EpisodeTeleprompter } from '@/components/Slideshow/EpisodeTeleprompter';
 
 /**
  * NotesPopout - Standalone popout window for presenter notes + teleprompter.
@@ -14,7 +14,8 @@ export function NotesPopout() {
     totalSlides: 0,
     slideType: '',
     slideTitle: '',
-    talkingPoints: []
+    talkingPoints: [],
+    episodeData: null
   });
 
   useEffect(() => {
@@ -76,7 +77,10 @@ export function NotesPopout() {
         </div>
       ) : (
         <div style={scriptContainerStyle}>
-          <Teleprompter />
+          <EpisodeTeleprompter
+            episodeData={slideData.episodeData}
+            currentSlideIndex={slideData.slideIndex}
+          />
         </div>
       )}
     </div>
