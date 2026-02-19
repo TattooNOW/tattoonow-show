@@ -6,6 +6,7 @@ import { TitleCard } from './TitleCard';
 import { PortfolioSlide } from './PortfolioSlide';
 import { EducationSlide } from './EducationSlide';
 import ScriptSlide from '../slides/ScriptSlide';
+import { Teleprompter } from './Teleprompter';
 import styles from './PresenterView.module.css';
 
 /**
@@ -82,10 +83,27 @@ export function PresenterView({
   // Hooks must be called unconditionally
   const hSplit = useDragResize(60, 'horizontal');
   const vSplit = useDragResize(50, 'vertical');
+  const [viewMode, setViewMode] = useState('presenter'); // 'presenter' or 'teleprompter'
+
+  if (viewMode === 'teleprompter') {
+    return (
+      <div className={styles.container}>
+        <div className={styles.modeTabs}>
+          <button className={styles.modeTab} onClick={() => setViewMode('presenter')}>Presenter</button>
+          <button className={`${styles.modeTab} ${styles.modeTabActive}`}>Teleprompter</button>
+        </div>
+        <Teleprompter />
+      </div>
+    );
+  }
 
   if (!episodeData || !slides || slides.length === 0) {
     return (
       <div className={styles.container}>
+        <div className={styles.modeTabs}>
+          <button className={`${styles.modeTab} ${styles.modeTabActive}`}>Presenter</button>
+          <button className={styles.modeTab} onClick={() => setViewMode('teleprompter')}>Teleprompter</button>
+        </div>
         <div className={styles.emptyState}>
           <h2>No Episode Data Loaded</h2>
           <p>Please load an episode to see presenter view.</p>
@@ -103,6 +121,11 @@ export function PresenterView({
 
   return (
     <div className={styles.container} ref={vSplit.containerRef}>
+      {/* Mode Tabs */}
+      <div className={styles.modeTabs}>
+        <button className={`${styles.modeTab} ${styles.modeTabActive}`}>Presenter</button>
+        <button className={styles.modeTab} onClick={() => setViewMode('teleprompter')}>Teleprompter</button>
+      </div>
       {/* Top: Slide Previews */}
       <div
         className={styles.previewRow}
