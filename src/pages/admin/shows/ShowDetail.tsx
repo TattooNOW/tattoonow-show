@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Disc3 } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Disc3, Image, FileText, Presentation, GraduationCap, Clapperboard, ChevronDown, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
-import { fetchShow } from '@/lib/api';
-import type { Show, RundownEntry } from '@/lib/types';
+import { fetchShow, fetchTape } from '@/lib/api';
+import { buildSlidesFromShow } from '@/lib/buildSlidesFromShow';
+import type { Show, RundownEntry, Tape } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 const SEGMENT_COLORS: Record<string, string> = {
@@ -22,12 +23,26 @@ const SEGMENT_COLORS: Record<string, string> = {
   'panel-intro': 'border-l-indigo-300',
 };
 
+const SLIDE_TYPE_ICONS: Record<string, typeof Image> = {
+  title: Presentation,
+  portfolio: Image,
+  education: GraduationCap,
+  script: FileText,
+};
+
+const SLIDE_TYPE_COLORS: Record<string, string> = {
+  title: 'bg-accent/20 text-accent border-accent/30',
+  portfolio: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  education: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+  script: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+};
+
 export function ShowDetail() {
   const { id } = useParams<{ id: string }>();
   const [show, setShow] = useState<Show | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'rundown' | 'script' | 'social'>('rundown');
+  const [activeTab, setActiveTab] = useState<'rundown' | 'slides' | 'script' | 'social'>('rundown');
 
   useEffect(() => {
     if (!id) return;
@@ -83,7 +98,7 @@ export function ShowDetail() {
 
       {/* Tabs */}
       <div className="flex border-b border-border mb-6">
-        {(['rundown', 'script', 'social'] as const).map(tab => (
+        {(['rundown', 'slides', 'script', 'social'] as const).map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -107,6 +122,9 @@ export function ShowDetail() {
           ))}
         </div>
       )}
+
+      {/* Slides (built from show + tapes) */}
+      {activeTab === 'slides' && <SlidesPreview show={show} />}
 
       {/* Script (markdown from talking points) */}
       {activeTab === 'script' && (
@@ -166,6 +184,304 @@ export function ShowDetail() {
     </div>
   );
 }
+
+// ── Slides Preview ─────────────────────────────────────────────────────
+
+function SlidesPreview({ show }: { show: Show }) {
+  const [slides, setSlides] = useState<any[]>([]);
+  const [tapes, setTapes] = useState<Record<string, Tape>>({});
+  const [loading, setLoading] = useState(true);
+  const [tapesLoaded, setTapesLoaded] = useState(0);
+  const [tapesTotal, setTapesTotal] = useState(0);
+  const [expandedSlide, setExpandedSlide] = useState<number | null>(null);
+
+  // Collect unique tapeIds and fetch them
+  useEffect(() => {
+    const tapeIds = new Set<string>();
+    for (const entry of show.rundown) {
+      if (entry.tapeId) tapeIds.add(entry.tapeId);
+    }
+
+    const ids = [...tapeIds];
+    setTapesTotal(ids.length);
+
+    if (ids.length === 0) {
+      const built = buildSlidesFromShow(show, {});
+      setSlides(built);
+      setLoading(false);
+      return;
+    }
+
+    let loaded = 0;
+    const tapeMap: Record<string, Tape> = {};
+
+    Promise.allSettled(
+      ids.map(async (tapeId) => {
+        try {
+          const tape = await fetchTape(tapeId);
+          tapeMap[tapeId] = tape;
+        } catch {
+          console.warn(`[SlidesPreview] Could not load tape: ${tapeId}`);
+        }
+        loaded++;
+        setTapesLoaded(loaded);
+      })
+    ).then(() => {
+      setTapes(tapeMap);
+      const built = buildSlidesFromShow(show, tapeMap);
+      setSlides(built);
+      setLoading(false);
+    });
+  }, [show]);
+
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-muted-foreground animate-pulse mb-2">
+          Loading tapes... {tapesLoaded}/{tapesTotal}
+        </div>
+        <div className="w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden">
+          <div
+            className="h-full bg-accent transition-all duration-300"
+            style={{ width: tapesTotal > 0 ? `${(tapesLoaded / tapesTotal) * 100}%` : '0%' }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  const typeCounts = slides.reduce<Record<string, number>>((acc, s) => {
+    acc[s.type] = (acc[s.type] || 0) + 1;
+    return acc;
+  }, {});
+
+  const tapeCount = Object.keys(tapes).length;
+  const missingTapes = tapesTotal - tapeCount;
+
+  return (
+    <div>
+      {/* Summary bar */}
+      <div className="flex items-center gap-4 mb-4 pb-4 border-b border-border">
+        <div className="text-sm">
+          <span className="font-semibold text-foreground">{slides.length}</span>
+          <span className="text-muted-foreground"> slides</span>
+        </div>
+        <div className="text-sm text-muted-foreground">from</div>
+        <div className="text-sm">
+          <span className="font-semibold text-foreground">{tapeCount}</span>
+          <span className="text-muted-foreground"> tapes</span>
+        </div>
+        {missingTapes > 0 && (
+          <div className="text-sm text-yellow-500">
+            ({missingTapes} tape{missingTapes > 1 ? 's' : ''} not found)
+          </div>
+        )}
+        <div className="ml-auto flex gap-2">
+          {Object.entries(typeCounts).map(([type, count]) => (
+            <span
+              key={type}
+              className={cn(
+                'text-xs px-2 py-0.5 rounded border',
+                SLIDE_TYPE_COLORS[type] || 'bg-muted text-muted-foreground border-border'
+              )}
+            >
+              {type} ({count})
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Slide list */}
+      <div className="space-y-1">
+        {slides.map((slide, i) => (
+          <SlideRow
+            key={i}
+            index={i}
+            slide={slide}
+            expanded={expandedSlide === i}
+            onToggle={() => setExpandedSlide(expandedSlide === i ? null : i)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SlideRow({ index, slide, expanded, onToggle }: {
+  index: number;
+  slide: any;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const Icon = SLIDE_TYPE_ICONS[slide.type] || Clapperboard;
+  const colorClass = SLIDE_TYPE_COLORS[slide.type] || 'bg-muted text-muted-foreground border-border';
+
+  // Derive a short label for the slide
+  const label = slide.title
+    || slide.artistName
+    || slide.segment
+    || slide.type;
+
+  const imageCount = slide.images?.length || 0;
+  const pointCount = slide.talkingPoints?.length || 0;
+  const hasRange = slide.range && Array.isArray(slide.range);
+  const hasNotes = !!(slide.presenterNotes || slide.notes);
+
+  return (
+    <div className="rounded-lg bg-card/50 overflow-hidden">
+      {/* Row header */}
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors text-left"
+      >
+        <div className="text-xs font-mono text-muted-foreground w-8 text-right">
+          {index + 1}
+        </div>
+        <div className={cn('p-1.5 rounded border', colorClass)}>
+          <Icon size={14} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-medium truncate">{label}</div>
+          <div className="text-xs text-muted-foreground flex gap-3 mt-0.5">
+            {slide.timeCode && <span className="font-mono">{slide.timeCode}</span>}
+            {slide.scriptType && <span>{slide.scriptType}</span>}
+            {imageCount > 0 && (
+              <span className="flex items-center gap-1">
+                <Image size={10} />
+                {hasRange ? `${slide.range[0]}–${slide.range[1]}` : imageCount}
+                {imageCount > 0 && !hasRange ? ' images' : ''}
+              </span>
+            )}
+            {pointCount > 0 && <span>{pointCount} points</span>}
+            {slide.showLowerThird && <span className="text-orange-400">lower-third</span>}
+            {slide.showQR && <span className="text-yellow-400">QR</span>}
+          </div>
+        </div>
+        <div className={cn('text-xs px-2 py-0.5 rounded border', colorClass)}>
+          {slide.type}
+        </div>
+        {expanded ? <ChevronDown size={14} className="text-muted-foreground" /> : <ChevronRight size={14} className="text-muted-foreground" />}
+      </button>
+
+      {/* Expanded detail */}
+      {expanded && (
+        <div className="px-4 pb-4 pl-16 space-y-3">
+          {/* Images preview row */}
+          {imageCount > 0 && (
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                Images ({imageCount} total{hasRange ? `, showing ${slide.range[0]}–${slide.range[1]}` : ''})
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {(hasRange
+                  ? slide.images.slice(slide.range[0], slide.range[1] + 1)
+                  : slide.images.slice(0, 8)
+                ).map((img: any, j: number) => (
+                  <div key={j} className="flex-shrink-0 w-20 h-20 rounded overflow-hidden bg-muted border border-border">
+                    <img
+                      src={img.url || img}
+                      alt={img.description || `Image ${j + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+                {!hasRange && imageCount > 8 && (
+                  <div className="flex-shrink-0 w-20 h-20 rounded bg-muted border border-border flex items-center justify-center text-xs text-muted-foreground">
+                    +{imageCount - 8}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Talking points */}
+          {pointCount > 0 && (
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                Talking Points
+              </div>
+              <ul className="space-y-1">
+                {slide.talkingPoints.map((tp: string, j: number) => (
+                  <li key={j} className="text-sm text-foreground/80 flex gap-2">
+                    <span className="text-accent text-xs mt-1">&#9679;</span>
+                    <span className="line-clamp-2">{tp}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Education fields */}
+          {slide.type === 'education' && slide.keyPoints?.length > 0 && (
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                Key Points
+              </div>
+              <ul className="space-y-1">
+                {slide.keyPoints.map((kp: string, j: number) => (
+                  <li key={j} className="text-sm text-foreground/80 flex gap-2">
+                    <span className="text-emerald-400 text-xs mt-1">&#9679;</span>
+                    {kp}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {slide.type === 'education' && slide.stats?.length > 0 && (
+            <div className="flex gap-3">
+              {slide.stats.map((stat: any, j: number) => (
+                <div key={j} className="bg-emerald-500/10 border border-emerald-500/20 rounded px-3 py-2">
+                  <div className="text-lg font-bold text-emerald-400">{stat.value}</div>
+                  <div className="text-xs text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Guest / artist info */}
+          {slide.artistName && slide.type === 'portfolio' && (
+            <div className="flex items-center gap-3 text-sm">
+              <span className="font-medium">{slide.artistName}</span>
+              {slide.artistStyle && <span className="text-muted-foreground">{slide.artistStyle}</span>}
+              {slide.artistLocation && <span className="text-muted-foreground">{slide.artistLocation}</span>}
+              {slide.artistInstagram && <span className="text-accent">@{slide.artistInstagram}</span>}
+            </div>
+          )}
+
+          {/* Presenter notes */}
+          {hasNotes && (
+            <div className="bg-muted/30 rounded px-3 py-2 border-l-2 border-accent/30">
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
+                Presenter Notes
+              </div>
+              <p className="text-sm text-muted-foreground italic line-clamp-3">
+                {slide.presenterNotes || slide.notes}
+              </p>
+            </div>
+          )}
+
+          {/* Cue */}
+          {slide.cue && (
+            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded px-3 py-2 text-sm font-semibold text-yellow-400">
+              CUE: {slide.cue}
+            </div>
+          )}
+
+          {/* Lower-third info */}
+          {slide.showLowerThird && slide.guestName && (
+            <div className="text-xs text-muted-foreground">
+              Lower-third: {slide.guestName}{slide.guestTitle ? ` — ${slide.guestTitle}` : ''}{slide.guestInstagram ? ` (@${slide.guestInstagram})` : ''}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Rundown Row (existing) ─────────────────────────────────────────────
 
 function RundownRow({ entry }: { entry: RundownEntry }) {
   const colorClass = SEGMENT_COLORS[entry.type] || 'border-l-gray-500';
