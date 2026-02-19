@@ -17,7 +17,11 @@ export function SlideController({ episodeData, prebuiltSlides }) {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode'); // 'presenter' or null
 
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  // Initialize slide index from URL param (for audience windows opened mid-show)
+  const initialSlide = parseInt(searchParams.get('slide') || '0', 10);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(
+    isNaN(initialSlide) ? 0 : Math.max(0, initialSlide)
+  );
   const [showQR, setShowQR] = useState(false);
   const [showLowerThird, setShowLowerThird] = useState(false);
   const [portfolioLayout, setPortfolioLayout] = useState('grid'); // 'grid' or 'fullscreen'
@@ -38,6 +42,13 @@ export function SlideController({ episodeData, prebuiltSlides }) {
 
   // Use prebuilt slides (from Show) or build from episode data
   const slides = prebuiltSlides || buildSlides(episodeData);
+
+  // Clamp initial slide index to valid range once slides are available
+  useEffect(() => {
+    if (slides.length > 0 && currentSlideIndex >= slides.length) {
+      setCurrentSlideIndex(slides.length - 1);
+    }
+  }, [slides.length]);
 
   // Initialize BroadcastChannel for window sync
   useEffect(() => {

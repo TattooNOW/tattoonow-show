@@ -93,30 +93,43 @@ export function PresenterView({
   // Broadcast notes to popout window
   useEffect(() => {
     notesChannelRef.current = new BroadcastChannel('tattoonow-notes-sync');
+
+    // Listen for NOTES_READY from the popout to send current state immediately
+    notesChannelRef.current.onmessage = (event) => {
+      if (event.data?.type === 'NOTES_READY') {
+        broadcastCurrentNotes();
+      }
+    };
+
     return () => {
       if (notesChannelRef.current) notesChannelRef.current.close();
     };
   }, []);
 
-  // Send notes update whenever slide changes
-  useEffect(() => {
+  // Helper to broadcast current notes state (reused on slide change + popout ready)
+  const broadcastCurrentNotes = useCallback(() => {
     if (!notesChannelRef.current || !slides || slides.length === 0) return;
-    const currentSlide = slides[currentSlideIndex];
-    if (!currentSlide) return;
+    const slide = slides[currentSlideIndex];
+    if (!slide) return;
 
     notesChannelRef.current.postMessage({
       type: 'NOTES_UPDATE',
       payload: {
-        presenterNotes: currentSlide.presenterNotes || currentSlide.notes || '',
+        presenterNotes: slide.presenterNotes || slide.notes || '',
         slideIndex: currentSlideIndex,
         totalSlides: slides.length,
-        slideType: currentSlide.type,
-        slideTitle: currentSlide.title || currentSlide.segment || '',
-        talkingPoints: currentSlide.talkingPoints || [],
+        slideType: slide.type,
+        slideTitle: slide.title || slide.segment || '',
+        talkingPoints: slide.talkingPoints || [],
         episodeData: episodeData
       }
     });
-  }, [currentSlideIndex, slides]);
+  }, [currentSlideIndex, slides, episodeData]);
+
+  // Send notes update whenever slide changes
+  useEffect(() => {
+    broadcastCurrentNotes();
+  }, [broadcastCurrentNotes]);
 
   if (!episodeData || !slides || slides.length === 0) {
     return (
@@ -147,6 +160,8 @@ export function PresenterView({
       ? `${import.meta.env.BASE_URL}notes?show=${sid}`
       : `${import.meta.env.BASE_URL}notes?episode=${episodeId}`;
     window.open(notesUrl, 'slideshow-notes', 'width=800,height=600');
+    // Send current state immediately so the popout doesn't start blank
+    setTimeout(() => broadcastCurrentNotes(), 500);
   }
 
   return (
@@ -331,8 +346,8 @@ export function PresenterView({
             const params = new URLSearchParams(window.location.search);
             const sid = showId || params.get('show');
             const url = sid
-              ? `${import.meta.env.BASE_URL}slideshow?show=${sid}`
-              : `${import.meta.env.BASE_URL}slideshow?episode=${params.get('episode') || params.get('id') || '1'}`;
+              ? `${import.meta.env.BASE_URL}slideshow?show=${sid}&slide=${currentSlideIndex}`
+              : `${import.meta.env.BASE_URL}slideshow?episode=${params.get('episode') || params.get('id') || '1'}&slide=${currentSlideIndex}`;
             window.open(url, 'slideshow-audience', 'width=1920,height=1080');
           }}
           className={styles.navButton}
