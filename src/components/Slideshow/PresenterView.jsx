@@ -6,7 +6,7 @@ import { TitleCard } from './TitleCard';
 import { PortfolioSlide } from './PortfolioSlide';
 import { EducationSlide } from './EducationSlide';
 import ScriptSlide from '../slides/ScriptSlide';
-import { Teleprompter } from './Teleprompter';
+import { EpisodeTeleprompter } from './EpisodeTeleprompter';
 import styles from './PresenterView.module.css';
 
 /**
@@ -107,7 +107,8 @@ export function PresenterView({
         totalSlides: slides.length,
         slideType: currentSlide.type,
         slideTitle: currentSlide.title || currentSlide.segment || '',
-        talkingPoints: currentSlide.talkingPoints || []
+        talkingPoints: currentSlide.talkingPoints || [],
+        episodeData: episodeData
       }
     });
   }, [currentSlideIndex, slides]);
@@ -234,7 +235,10 @@ export function PresenterView({
           </div>
         ) : (
           <div className={styles.scriptContainer}>
-            <Teleprompter />
+            <EpisodeTeleprompter
+              episodeData={episodeData}
+              currentSlideIndex={currentSlideIndex}
+            />
           </div>
         )}
       </div>
