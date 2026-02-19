@@ -306,6 +306,14 @@ export function RunOfShow() {
               >
                 Open Presenter ↗
               </a>
+              <a
+                href={`${import.meta.env.BASE_URL}tattoonow-show-deck.html`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded text-sm font-medium border border-accent text-accent hover:bg-accent hover:text-white transition-colors"
+              >
+                Show Deck + Teleprompter ↗
+              </a>
             </div>
           </div>
 

@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TattooNOW Show Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Slab:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   GLOBAL RESET & VARIABLES
+   ===================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent: #EA9320;
+  --accent-hover: #d88520;
+  --bg-dark: #0a0a0a;
+  --bg-panel: #1a1a1a;
+  --text-light: #fafafa;
+  --text-dim: #aaaaaa;
+  --text-muted: #9ca3af;
+  --border: #333333;
+  --border-light: rgba(255,255,255,0.1);
+  --border-accent: rgba(234,147,32,0.3);
+  --font-heading: 'Roboto Slab', serif;
+  --font-body: 'Roboto', sans-serif;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  font-family: var(--font-body);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* =====================================================
+   TOOLBAR
+   ===================================================== */
+#toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-panel);
+  border-bottom: 2px solid var(--border-light);
+  height: 52px;
+  z-index: 100;
+}
+
+#toolbar .logo {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-right: 12px;
+  white-space: nowrap;
+}
+
+.mode-btn {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-body);
+}
+
+.mode-btn:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--text-light);
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.toolbar-spacer { flex: 1; }
+
+/* Timer */
+#timerDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-light);
+  background: rgba(255,255,255,0.05);
+  padding: 4px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+}
+
+#timerDisplay.warning { color: #f59e0b; }
+#timerDisplay.danger { color: #ef4444; }
+
+.timer-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.timer-btn {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.timer-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-light); }
+
+/* =====================================================
+   PRESENTER LAYOUT
+   ===================================================== */
+#presenterLayout {
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  height: calc(100vh - 52px);
+  overflow: hidden;
+}
+
+.presenter-main {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 16px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.slide-preview-box {
+  background: var(--bg-panel);
+  border-radius: 12px;
+  border: 2px solid var(--border-light);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-preview-box .preview-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.slide-preview-box .preview-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.slide-frame .slide-inner {
+  background: var(--bg-dark);
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.slide-inner h2 {
+  font-family: var(--font-heading);
+  color: var(--accent);
+  font-size: 22px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.slide-inner h3 {
+  font-family: var(--font-heading);
+  color: var(--text-light);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.slide-inner p, .slide-inner li {
+  color: var(--text-dim);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.slide-inner ul { list-style: none; text-align: left; width: 100%; padding: 0 20px; }
+.slide-inner ul li { padding: 4px 0; }
+.slide-inner ul li::before { content: "\25B8 "; color: var(--accent); margin-right: 6px; }
+
+.slide-inner .segment-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.slide-inner .timecode {
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+/* Notes panel */
+.notes-panel {
+  background: var(--bg-panel);
+  margin: 0 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border-accent);
+  display: flex;
+  flex-direction: column;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(234,147,32,0.1);
+  border-bottom: 1px solid rgba(234,147,32,0.2);
+}
+
+.notes-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.notes-header .slide-indicator {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.notes-content {
+  flex: 1;
+  padding: 12px 16px;
+  overflow-y: auto;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-light);
+  white-space: pre-wrap;
+}
+
+.notes-content::-webkit-scrollbar { width: 6px; }
+.notes-content::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
+.notes-content::-webkit-scrollbar-thumb { background: rgba(234,147,32,0.5); border-radius: 3px; }
+
+/* Thumbnail strip */
+.thumbnail-strip {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-panel);
+  border-top: 2px solid var(--border-light);
+  overflow-x: auto;
+  align-items: center;
+}
+
+.thumb {
+  flex: 0 0 auto;
+  width: 72px;
+  height: 44px;
+  background: var(--bg-dark);
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.thumb:hover { border-color: var(--text-dim); color: var(--text-light); }
+.thumb.active { border-color: var(--accent); color: var(--accent); background: rgba(234,147,32,0.1); }
+
+.thumb-nav-btn {
+  flex: 0 0 auto;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.thumb-nav-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-light); }
+.thumb-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* =====================================================
+   PRESENTATION LAYOUT
+   ===================================================== */
+#presentationLayout {
+  display: none;
+  width: 100vw;
+  height: calc(100vh - 52px);
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+  position: relative;
+}
+
+#presentationSlide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+#presentationSlide h2 {
+  font-family: var(--font-heading);
+  color: var(--accent);
+  font-size: 48px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+#presentationSlide h3 {
+  font-family: var(--font-heading);
+  color: var(--text-light);
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+#presentationSlide p {
+  color: var(--text-dim);
+  font-size: 24px;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 900px;
+}
+
+#presentationSlide ul {
+  list-style: none;
+  text-align: left;
+  padding: 0;
+}
+
+#presentationSlide ul li {
+  color: var(--text-dim);
+  font-size: 24px;
+  padding: 8px 0;
+  line-height: 1.5;
+}
+
+#presentationSlide ul li::before {
+  content: "\25B8 ";
+  color: var(--accent);
+  margin-right: 10px;
+}
+
+#presentationSlide .segment-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 4px 16px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+#presentationSlide .timecode {
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.presentation-counter {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  background: rgba(0,0,0,0.6);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+/* =====================================================
+   TELEPROMPTER LAYOUT
+   ===================================================== */
+#teleprompterLayout {
+  display: none;
+  flex-direction: column;
+  height: calc(100vh - 52px);
+  background: var(--bg-dark);
+  overflow: hidden;
+}
+
+/* Teleprompter top bar */
+#tp-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.tp-btn {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tp-btn:hover { background: rgba(255,255,255,0.12); color: var(--text-light); }
+.tp-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.tp-btn.voice-btn { background: #1a3a1a; color: #4ade80; border-color: #166534; font-size: 13px; }
+.tp-btn.voice-btn:hover { background: #1a4a1a; }
+.tp-btn.voice-btn.listening { background: #dc2626; color: white; border-color: #dc2626; animation: voice-pulse 1.5s infinite; }
+
+@keyframes voice-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(220,38,38,0); }
+}
+
+.tp-font-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.tp-font-btn {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.tp-font-btn:hover { background: rgba(255,255,255,0.12); color: var(--text-light); }
+
+.tp-font-size {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-family: monospace;
+  min-width: 36px;
+  text-align: center;
+}
+
+.tp-scroll-speed {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tp-scroll-speed label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tp-scroll-speed input[type="range"] {
+  width: 80px;
+  accent-color: var(--accent);
+}
+
+/* Hearing debug bar */
+#tp-hearing {
+  padding: 4px 16px;
+  background: rgba(0,0,0,0.4);
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--text-dim);
+  min-height: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Main teleprompter container */
+#tp-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+#tp-container.mirror {
+  transform: scaleX(-1);
+}
+
+/* Previous lines area */
+#tp-prev {
+  padding: 12px 40px;
+  opacity: 0.3;
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+#tp-prev .tp-line {
+  padding: 6px 0;
+  color: var(--text-dim);
+}
+
+#tp-prev .tp-title-line {
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Current line */
+#tp-current {
+  padding: 16px 40px;
+  border-left: 4px solid var(--accent);
+  background: rgba(234,147,32,0.06);
+  font-family: Georgia, 'Times New Roman', serif;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+#tp-current .word {
+  display: inline;
+  padding: 2px 0;
+  transition: color 0.15s;
+}
+
+#tp-current .word.matched {
+  color: var(--accent);
+}
+
+#tp-current .tp-title-line {
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: 100%;
+}
+
+/* Upcoming lines area */
+#tp-upcoming {
+  flex: 1;
+  padding: 12px 40px;
+  opacity: 0.5;
+  font-family: Georgia, 'Times New Roman', serif;
+  overflow-y: auto;
+}
+
+#tp-upcoming .tp-line {
+  padding: 6px 0;
+  cursor: pointer;
+  color: var(--text-dim);
+}
+
+#tp-upcoming .tp-line:hover {
+  color: var(--text-light);
+  opacity: 1;
+}
+
+#tp-upcoming .tp-title-line {
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+/* Inline editing */
+.tp-line-editing {
+  background: rgba(234,147,32,0.1);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 6px 8px !important;
+  outline: none;
+  color: var(--text-light);
+  font-family: Georgia, 'Times New Roman', serif;
+  width: 100%;
+}
+
+/* Status bar */
+#tp-status {
+  padding: 6px 16px;
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+#tp-status kbd {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-family: monospace;
+  font-size: 10px;
+  margin: 0 2px;
+}
+
+/* =====================================================
+   SCRIPT MODAL
+   ===================================================== */
+#tp-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+#tp-modal-overlay.open {
+  display: flex;
+}
+
+#tp-modal {
+  background: var(--bg-panel);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  width: 700px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#tp-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(234,147,32,0.1);
+  border-bottom: 1px solid var(--border);
+}
+
+#tp-modal .modal-header h2 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  color: var(--accent);
+}
+
+#tp-modal .modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+#tp-modal .modal-close:hover { color: var(--text-light); }
+
+#tp-modal .modal-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#tp-modal .script-selector {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#tp-modal-select {
+  flex: 1;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-family: var(--font-body);
+}
+
+#tp-modal .modal-btn {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+#tp-modal .modal-btn:hover { background: rgba(255,255,255,0.12); color: var(--text-light); }
+#tp-modal .modal-btn.danger { color: #f87171; border-color: rgba(248,113,113,0.3); }
+#tp-modal .modal-btn.danger:hover { background: rgba(248,113,113,0.15); }
+#tp-modal .modal-btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+#tp-modal .modal-btn.primary:hover { background: var(--accent-hover); }
+
+#tp-modal-textarea {
+  flex: 1;
+  min-height: 300px;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+#tp-modal .modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.02);
+  border-top: 1px solid var(--border);
+}
+
+.modal-footer-left, .modal-footer-right {
+  display: flex;
+  gap: 8px;
+}
+
+/* Hidden file input */
+#tp-file-input { display: none; }
+
+/* =====================================================
+   SCROLLBAR GLOBAL
+   ===================================================== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     TOOLBAR
+     ===================================================== -->
+<div id="toolbar">
+  <span class="logo">TattooNOW</span>
+  <button id="btnPresenter" class="mode-btn active" onclick="setMode('presenter')">Presenter</button>
+  <button id="btnPresentation" class="mode-btn" onclick="setMode('presentation')">Present</button>
+  <button id="btnTeleprompter" class="mode-btn" onclick="setMode('teleprompter')">Teleprompter</button>
+  <span class="toolbar-spacer"></span>
+  <div class="timer-btns">
+    <button class="timer-btn" onclick="toggleTimer()">Start</button>
+    <button class="timer-btn" onclick="resetTimer()">Reset</button>
+  </div>
+  <div id="timerDisplay" onclick="toggleTimer()">00:00</div>
+</div>
+
+<!-- =====================================================
+     PRESENTER LAYOUT
+     ===================================================== -->
+<div id="presenterLayout">
+  <div class="presenter-main">
+    <div class="slide-preview-box">
+      <div class="preview-label"><span class="live-dot"></span> Current Slide</div>
+      <div class="preview-content">
+        <div class="slide-frame">
+          <div id="currentSlide" class="slide-inner"></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-preview-box">
+      <div class="preview-label">Next Slide</div>
+      <div class="preview-content">
+        <div class="slide-frame">
+          <div id="nextSlide" class="slide-inner" style="opacity: 0.7;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="notes-panel">
+    <div class="notes-header">
+      <h3>Presenter Notes</h3>
+      <span id="slideIndicator" class="slide-indicator"></span>
+    </div>
+    <div id="notesContent" class="notes-content"></div>
+  </div>
+  <div class="thumbnail-strip">
+    <button class="thumb-nav-btn" onclick="goToSlide(currentSlideIndex-1)" id="prevBtn">&larr;</button>
+    <div id="thumbnailContainer" style="display:flex;gap:8px;overflow-x:auto;flex:1;"></div>
+    <button class="thumb-nav-btn" onclick="goToSlide(currentSlideIndex+1)" id="nextBtn">&rarr;</button>
+  </div>
+</div>
+
+<!-- =====================================================
+     PRESENTATION LAYOUT
+     ===================================================== -->
+<div id="presentationLayout">
+  <div id="presentationSlide"></div>
+  <div class="presentation-counter" id="presentationCounter"></div>
+</div>
+
+<!-- =====================================================
+     TELEPROMPTER LAYOUT
+     ===================================================== -->
+<div id="teleprompterLayout">
+  <div id="tp-topbar">
+    <button class="tp-btn voice-btn" id="tp-voice-btn" onclick="tp_toggleVoice()">Start Voice</button>
+    <button class="tp-btn" id="tp-manual-btn" onclick="tp_toggleManual()">Manual</button>
+    <button class="tp-btn" id="tp-mirror-btn" onclick="tp_toggleMirror()">Mirror</button>
+    <button class="tp-btn" id="tp-scroll-btn" onclick="tp_toggleAutoScroll()">Auto-Scroll</button>
+    <div class="tp-scroll-speed" id="tp-scroll-speed-ctrl" style="display:none;">
+      <label>Speed</label>
+      <input type="range" min="1" max="20" value="5" id="tp-speed-range" oninput="tp_updateScrollSpeed(this.value)">
+      <span id="tp-speed-val" style="font-size:11px;color:var(--text-muted);font-family:monospace;min-width:20px;">5</span>
+    </div>
+    <button class="tp-btn" onclick="tp_openScriptModal()">Scripts</button>
+    <div class="tp-font-controls">
+      <button class="tp-font-btn" onclick="tp_changeSize(-2)">&minus;</button>
+      <span class="tp-font-size" id="tp-font-display">32px</span>
+      <button class="tp-font-btn" onclick="tp_changeSize(2)">+</button>
+    </div>
+  </div>
+  <div id="tp-hearing">Listening...</div>
+  <div id="tp-container">
+    <div id="tp-prev"></div>
+    <div id="tp-current"></div>
+    <div id="tp-upcoming"></div>
+  </div>
+  <div id="tp-status">
+    <span><kbd>Space</kbd> Voice &nbsp; <kbd>&uarr;</kbd><kbd>&darr;</kbd> Navigate &nbsp; <kbd>Dbl-click</kbd> Edit &nbsp; <kbd>S</kbd> Scripts</span>
+    <span id="tp-line-counter"></span>
+  </div>
+</div>
+
+<!-- =====================================================
+     SCRIPT MODAL
+     ===================================================== -->
+<div id="tp-modal-overlay">
+  <div id="tp-modal">
+    <div class="modal-header">
+      <h2>Script Manager</h2>
+      <button class="modal-close" onclick="tp_closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="script-selector">
+        <select id="tp-modal-select" onchange="tp_loadSelectedScript()"></select>
+        <button class="modal-btn" onclick="tp_newScript()">New</button>
+        <button class="modal-btn danger" onclick="tp_deleteScript()">Delete</button>
+      </div>
+      <textarea id="tp-modal-textarea" spellcheck="false"></textarea>
+    </div>
+    <div class="modal-footer">
+      <div class="modal-footer-left">
+        <button class="modal-btn" onclick="tp_loadDefault()">Load Default</button>
+        <button class="modal-btn" onclick="tp_importScript()">Import .md</button>
+        <button class="modal-btn" onclick="tp_exportScript()">Export .md</button>
+      </div>
+      <div class="modal-footer-right">
+        <button class="modal-btn" onclick="tp_closeModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="tp_saveAndClose()">Save &amp; Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<input type="file" id="tp-file-input" accept=".md,.txt" onchange="tp_handleFileImport(event)">
+
+<script>
+/* =====================================================
+   EPISODE DATA (Embedded - Episode 2 with Script)
+   ===================================================== */
+const EPISODE = {
+  EPISODE_NUMBER: "2",
+  EPISODE_TITLE: "Pricing Psychology - Stop Undervaluing Your Work",
+  AIR_DATE: "2026-01-12",
+  DURATION: "40",
+  HOST: "Gabe Ripley",
+  GUEST_NAME: "Nikko Hurtado",
+  GUEST_TITLE: "World-Renowned Tattoo Artist & Innovator",
+  SHOW_SCRIPT: [
+    {
+      segment: "INTRO", timeCode: "0:00",
+      title: "Show Open & Episode Overview", type: "intro",
+      talkingPoints: [
+        "Welcome to TattooNOW Weekly Show - Episode 2!",
+        "Today: Stop undervaluing your work",
+        "Special guest: Nikko Hurtado - Master of pricing strategy"
+      ],
+      presenterNotes: "Energy: HIGH. Make strong eye contact. Emphasize how common underpricing is. Nikko is a legend - 25+ years, pioneered color realism. Build anticipation.",
+      cue: "CUE: Transition to Segment 1 after intro music (0:05)"
+    },
+    {
+      segment: "AD BREAK 1", timeCode: "5:00",
+      title: "Ad Break - TattooNOW Platform", type: "transition",
+      talkingPoints: ["30-second ad break"],
+      presenterNotes: "Read ad script naturally. Smile. Don't rush.",
+      cue: "CUE: Resume at 5:30"
+    },
+    {
+      segment: "SEGMENT 1", timeCode: "5:30",
+      title: "The Pricing Mindset Shift", type: "discussion",
+      talkingPoints: [
+        "Why artists undercharge (fear, guilt, comparison)",
+        "Value vs. Time: You're not selling hours",
+        "Confidence pricing: Charge what you're worth",
+        "The $200/hour myth debunked"
+      ],
+      presenterNotes: "Let Nikko lead here. Ask: 'When did you realize you were undercharging?' Keep energy conversational but focused.",
+      cue: "CUE: Transition to education slides on pricing psychology (10:00)"
+    },
+    {
+      segment: "SEGMENT 2", timeCode: "15:00",
+      title: "Pricing Strategies That Work", type: "discussion",
+      talkingPoints: [
+        "Tiered pricing models (small/medium/large)",
+        "Deposit requirements (secure bookings, reduce no-shows)",
+        "Package deals vs. hourly rates",
+        "When to raise your prices (and how)"
+      ],
+      presenterNotes: "This segment is tactical. Ask Nikko: 'Walk us through your current pricing structure.' Emphasize deposits are STANDARD.",
+      cue: "CUE: Ad Break 2 at 20:00"
+    },
+    {
+      segment: "AD BREAK 2", timeCode: "20:00",
+      title: "Ad Break - TattooNOW Website Builder", type: "transition",
+      talkingPoints: ["30-second ad break"],
+      presenterNotes: "Read ad copy. Emphasize 'Professional websites in minutes'.",
+      cue: "CUE: Resume at 20:30"
+    },
+    {
+      segment: "SEGMENT 3", timeCode: "20:30",
+      title: "Handling Pricing Objections", type: "discussion",
+      talkingPoints: [
+        "When clients say 'That's too expensive'",
+        "Educating clients on value (not cost)",
+        "Standing firm on your rates",
+        "When to offer payment plans (and when not to)"
+      ],
+      presenterNotes: "Role-play opportunity: 'Nikko, pretend I'm a client who just said your rate is too high. How do you respond?' THIS is the gold content.",
+      cue: "CUE: Closing at 35:00"
+    },
+    {
+      segment: "AD BREAK 3", timeCode: "35:00",
+      title: "Ad Break - TattooNOW Booking System", type: "transition",
+      talkingPoints: ["30-second ad break"],
+      presenterNotes: "Tie to deposits: 'Automate your bookings and collect deposits instantly.'",
+      cue: "CUE: Closing at 35:30"
+    },
+    {
+      segment: "CLOSING", timeCode: "35:30",
+      title: "Wrap-Up & Next Week Preview", type: "outro",
+      talkingPoints: [
+        "Recap: Mindset, strategies, objection handling",
+        "Action step: Audit your pricing THIS WEEK",
+        "Thank Nikko Hurtado",
+        "Next week: Building a client network"
+      ],
+      presenterNotes: "Energy: WARM but not rushed. Thank Nikko genuinely. Action plan: (1) Write down current rates, (2) Compare to skill/demand, (3) Commit to raising prices 20% for new clients.",
+      cue: "CUE: END SHOW at 40:00"
+    }
+  ]
+};
+
+/* =====================================================
+   BUILD SLIDES FROM EPISODE DATA
+   ===================================================== */
+const SLIDES = [];
+
+function buildSlides() {
+  SLIDES.length = 0;
+  if (EPISODE.SHOW_SCRIPT && Array.isArray(EPISODE.SHOW_SCRIPT)) {
+    EPISODE.SHOW_SCRIPT.forEach(function(item) {
+      SLIDES.push({
+        segment: item.segment,
+        timeCode: item.timeCode,
+        title: item.title,
+        type: item.type,
+        talkingPoints: item.talkingPoints || [],
+        notes: item.presenterNotes || item.notes || '',
+        cue: item.cue || ''
+      });
+    });
+  } else {
+    // Fallback: single title slide
+    SLIDES.push({
+      segment: 'TITLE',
+      timeCode: '0:00',
+      title: EPISODE.EPISODE_TITLE,
+      type: 'title',
+      talkingPoints: ['Episode ' + EPISODE.EPISODE_NUMBER, EPISODE.AIR_DATE],
+      notes: 'Welcome to the show!',
+      cue: ''
+    });
+  }
+}
+
+/* =====================================================
+   SLIDE RENDERING
+   ===================================================== */
+function renderSlideHTML(slide) {
+  if (!slide) return '<p style="color:#666;">End of Show</p>';
+  var html = '';
+  html += '<span class="segment-badge">' + escHTML(slide.segment) + '</span>';
+  html += '<span class="timecode">' + escHTML(slide.timeCode) + '</span>';
+  html += '<h2>' + escHTML(slide.title) + '</h2>';
+  if (slide.talkingPoints && slide.talkingPoints.length > 0) {
+    html += '<ul>';
+    slide.talkingPoints.forEach(function(pt) {
+      html += '<li>' + escHTML(pt) + '</li>';
+    });
+    html += '</ul>';
+  }
+  if (slide.cue) {
+    html += '<p style="margin-top:12px;color:var(--accent);font-size:0.85em;font-style:italic;">' + escHTML(slide.cue) + '</p>';
+  }
+  return html;
+}
+
+function escHTML(s) {
+  if (!s) return '';
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+/* =====================================================
+   SLIDE NAVIGATION
+   ===================================================== */
+var currentSlideIndex = 0;
+var currentMode = 'presenter';
+
+function goToSlide(idx) {
+  if (idx < 0) idx = 0;
+  if (idx >= SLIDES.length) idx = SLIDES.length - 1;
+  currentSlideIndex = idx;
+  updateSlideViews();
+}
+
+function updateSlideViews() {
+  var slide = SLIDES[currentSlideIndex];
+  var nextSlideData = SLIDES[currentSlideIndex + 1] || null;
+
+  // Current slide
+  var el = document.getElementById('currentSlide');
+  if (el) el.innerHTML = renderSlideHTML(slide);
+
+  // Next slide
+  var nel = document.getElementById('nextSlide');
+  if (nel) nel.innerHTML = nextSlideData ? renderSlideHTML(nextSlideData) : '<p style="color:#666;font-size:20px;">End of Show</p>';
+
+  // Notes
+  var notes = document.getElementById('notesContent');
+  if (notes) notes.textContent = slide ? slide.notes : '';
+
+  // Slide indicator
+  var ind = document.getElementById('slideIndicator');
+  if (ind) ind.textContent = 'Slide ' + (currentSlideIndex + 1) + ' of ' + SLIDES.length;
+
+  // Presentation slide
+  var ps = document.getElementById('presentationSlide');
+  if (ps) ps.innerHTML = renderSlideHTML(slide);
+
+  // Presentation counter
+  var pc = document.getElementById('presentationCounter');
+  if (pc) pc.textContent = (currentSlideIndex + 1) + ' / ' + SLIDES.length;
+
+  // Thumbnails
+  updateThumbnails();
+
+  // Nav buttons
+  var pb = document.getElementById('prevBtn');
+  var nb = document.getElementById('nextBtn');
+  if (pb) pb.disabled = currentSlideIndex === 0;
+  if (nb) nb.disabled = currentSlideIndex === SLIDES.length - 1;
+}
+
+function updateThumbnails() {
+  var container = document.getElementById('thumbnailContainer');
+  if (!container) return;
+  container.innerHTML = '';
+  SLIDES.forEach(function(s, i) {
+    var t = document.createElement('div');
+    t.className = 'thumb' + (i === currentSlideIndex ? ' active' : '');
+    t.textContent = i + 1;
+    t.title = s.title;
+    t.onclick = function() { goToSlide(i); };
+    container.appendChild(t);
+  });
+  // Scroll active thumb into view
+  var active = container.querySelector('.thumb.active');
+  if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+/* =====================================================
+   MODE SWITCHING
+   ===================================================== */
+function setMode(mode) {
+  currentMode = mode;
+
+  document.getElementById('btnPresenter').classList.toggle('active', mode === 'presenter');
+  document.getElementById('btnPresentation').classList.toggle('active', mode === 'presentation');
+  document.getElementById('btnTeleprompter').classList.toggle('active', mode === 'teleprompter');
+
+  document.getElementById('presenterLayout').style.display = mode === 'presenter' ? 'grid' : 'none';
+  document.getElementById('presentationLayout').style.display = mode === 'presentation' ? 'flex' : 'none';
+  document.getElementById('teleprompterLayout').style.display = mode === 'teleprompter' ? 'flex' : 'none';
+
+  // Stop voice recognition when leaving teleprompter mode
+  if (mode !== 'teleprompter' && tp_listening) {
+    tp_stopListening();
+  }
+
+  // Stop auto-scroll when leaving teleprompter
+  if (mode !== 'teleprompter') {
+    tp_stopScroll();
+  }
+
+  // Refresh views
+  if (mode === 'presenter' || mode === 'presentation') {
+    updateSlideViews();
+  }
+
+  if (mode === 'teleprompter') {
+    tp_renderAll();
+  }
+}
+
+/* =====================================================
+   TIMER
+   ===================================================== */
+var timerRunning = false;
+var timerSeconds = 0;
+var timerInterval = null;
+var timerTarget = parseInt(EPISODE.DURATION) * 60 || 2400;
+
+function toggleTimer() {
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    document.querySelector('.timer-btns .timer-btn').textContent = 'Start';
+  } else {
+    timerInterval = setInterval(function() {
+      timerSeconds++;
+      updateTimerDisplay();
+    }, 1000);
+    timerRunning = true;
+    document.querySelector('.timer-btns .timer-btn').textContent = 'Pause';
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 0;
+  updateTimerDisplay();
+  document.querySelector('.timer-btns .timer-btn').textContent = 'Start';
+}
+
+function updateTimerDisplay() {
+  var m = Math.floor(timerSeconds / 60);
+  var s = timerSeconds % 60;
+  var display = document.getElementById('timerDisplay');
+  display.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+
+  display.classList.remove('warning', 'danger');
+  if (timerSeconds >= timerTarget) {
+    display.classList.add('danger');
+  } else if (timerSeconds >= timerTarget * 0.85) {
+    display.classList.add('warning');
+  }
+}
+
+/* =====================================================
+   KEYBOARD HANDLER
+   ===================================================== */
+document.addEventListener('keydown', function(e) {
+  // Don't capture keys when typing in inputs or textareas
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  // Don't capture when inline editing teleprompter
+  if (e.target.contentEditable === 'true') return;
+
+  if (currentMode === 'teleprompter') {
+    // Teleprompter keyboard shortcuts
+    switch(e.key) {
+      case ' ':
+        e.preventDefault();
+        tp_toggleVoice();
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        tp_advance();
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        tp_goBack();
+        break;
+      case 's':
+      case 'S':
+        e.preventDefault();
+        tp_openScriptModal();
+        break;
+      case 'r':
+      case 'R':
+        e.preventDefault();
+        tp_resetAll();
+        break;
+      case 'Escape':
+        tp_finishEdit();
+        tp_closeModal();
+        break;
+    }
+  } else {
+    // Presenter / Presentation keyboard shortcuts
+    switch(e.key) {
+      case 'ArrowRight':
+      case 'PageDown':
+        e.preventDefault();
+        goToSlide(currentSlideIndex + 1);
+        break;
+      case 'ArrowLeft':
+      case 'PageUp':
+        e.preventDefault();
+        goToSlide(currentSlideIndex - 1);
+        break;
+      case 'Home':
+        e.preventDefault();
+        goToSlide(0);
+        break;
+      case 'End':
+        e.preventDefault();
+        goToSlide(SLIDES.length - 1);
+        break;
+      case 'p':
+      case 'P':
+        e.preventDefault();
+        setMode(currentMode === 'presenter' ? 'presentation' : 'presenter');
+        break;
+    }
+  }
+
+  // Global shortcuts
+  if (e.key === 't' || e.key === 'T') {
+    // T for timer — only if not in teleprompter mode (where it could conflict)
+    if (currentMode !== 'teleprompter') {
+      e.preventDefault();
+      toggleTimer();
+    }
+  }
+});
+
+// Touch / swipe for presentation mode
+var touchStartX = 0;
+document.addEventListener('touchstart', function(e) {
+  touchStartX = e.changedTouches[0].screenX;
+});
+document.addEventListener('touchend', function(e) {
+  var diff = e.changedTouches[0].screenX - touchStartX;
+  if (currentMode === 'presenter' || currentMode === 'presentation') {
+    if (diff < -50) goToSlide(currentSlideIndex + 1);
+    else if (diff > 50) goToSlide(currentSlideIndex - 1);
+  }
+});
+
+
+/* =====================================================
+   =====================================================
+   TELEPROMPTER ENGINE (tp_ namespace)
+   =====================================================
+   ===================================================== */
+
+/* ── Default Script ── */
+var DEFAULT_MD = "## Welcome to the TattooNOW Show\n\nWelcome back to the TattooNOW Weekly Show.\n\nToday we have an incredible episode planned for you.\n\nWe're going to cover some topics that will transform your tattoo business.\n\n## Segment One\n\nLet's dive right into our first segment.\n\nThis is where we break down the fundamentals.\n\nEvery artist needs to understand these core principles.\n\nWhether you're just starting out or you've been tattooing for twenty years.\n\nThese strategies will help you grow.\n\n## Guest Introduction\n\nNow let me introduce our special guest today.\n\nThey've been in the industry for over two decades.\n\nAnd they've built one of the most successful studios in the country.\n\nWelcome to the show.\n\n## Key Takeaways\n\nBefore we wrap up let me share the key takeaways.\n\nNumber one: invest in your online presence.\n\nNumber two: price your work based on value not time.\n\nNumber three: build systems that work while you sleep.\n\nThank you for watching and we'll see you next week.";
+
+/* ── Script storage ── */
+var _scripts = {};
+var _activeName = 'Default Script';
+
+function _tryLS(fn) {
+  try { return fn(); } catch(e) { return null; }
+}
+
+function tp_getScripts() {
+  var stored = _tryLS(function() { return localStorage.getItem('tp_scripts'); });
+  if (stored) {
+    try { _scripts = JSON.parse(stored); } catch(e) { _scripts = {}; }
+  }
+  if (Object.keys(_scripts).length === 0) {
+    _scripts['Default Script'] = DEFAULT_MD;
+  }
+  return _scripts;
+}
+
+function tp_saveScripts() {
+  _tryLS(function() { localStorage.setItem('tp_scripts', JSON.stringify(_scripts)); });
+}
+
+function tp_getActive() {
+  var stored = _tryLS(function() { return localStorage.getItem('tp_active_script'); });
+  if (stored && _scripts[stored]) {
+    _activeName = stored;
+  }
+  return _activeName;
+}
+
+function tp_setActive(name) {
+  _activeName = name;
+  _tryLS(function() { localStorage.setItem('tp_active_script', name); });
+}
+
+/* ── Markdown parsing ── */
+function tp_parseMD(md) {
+  var result = [];
+  var lines = md.split('\n');
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+    if (line.startsWith('## ')) {
+      result.push({ text: line.substring(3).trim(), isTitle: true });
+    } else if (line.startsWith('# ')) {
+      result.push({ text: line.substring(2).trim(), isTitle: true });
+    } else {
+      result.push({ text: line, isTitle: false });
+    }
+  }
+  return result;
+}
+
+function tp_toMD(lines) {
+  return lines.map(function(l) {
+    return l.isTitle ? '## ' + l.text : l.text;
+  }).join('\n\n');
+}
+
+/* ── Core state ── */
+var tp_lines = [];
+var tp_curLine = 0;
+var tp_wordIndex = 0;
+var tp_fontSize = 32;
+var tp_listening = false;
+var tp_manualMode = false;
+var tp_mirrorMode = false;
+var tp_autoScroll = false;
+var tp_scrollSpeed = 5;
+var tp_scrollInterval = null;
+var tp_recognition = null;
+var tp_editingLine = -1;
+
+/* ── Load script ── */
+function tp_loadScript(md) {
+  tp_lines = tp_parseMD(md);
+  tp_curLine = 0;
+  tp_wordIndex = 0;
+  if (currentMode === 'teleprompter') {
+    tp_renderAll();
+  }
+}
+
+/* ── Text normalization ── */
+function tp_norm(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+/* ── Word similarity ── */
+function tp_wsim(a, b) {
+  a = tp_norm(a);
+  b = tp_norm(b);
+  if (a === b) return 1;
+  if (!a || !b) return 0;
+  var longer = a.length >= b.length ? a : b;
+  var shorter = a.length < b.length ? a : b;
+  var longerLen = longer.length;
+  if (longerLen === 0) return 1;
+  // Levenshtein distance
+  var costs = [];
+  for (var i = 0; i <= longer.length; i++) {
+    var lastVal = i;
+    for (var j = 0; j <= shorter.length; j++) {
+      if (i === 0) {
+        costs[j] = j;
+      } else if (j > 0) {
+        var newVal = costs[j - 1];
+        if (longer.charAt(i - 1) !== shorter.charAt(j - 1)) {
+          newVal = Math.min(Math.min(newVal, lastVal), costs[j]) + 1;
+        }
+        costs[j - 1] = lastVal;
+        lastVal = newVal;
+      }
+    }
+    if (i > 0) costs[shorter.length] = lastVal;
+  }
+  return (longerLen - costs[shorter.length]) / longerLen;
+}
+
+/* ── Render teleprompter ── */
+function tp_renderAll() {
+  if (tp_lines.length === 0) return;
+  if (tp_curLine >= tp_lines.length) tp_curLine = tp_lines.length - 1;
+  if (tp_curLine < 0) tp_curLine = 0;
+
+  var fontSize = tp_fontSize + 'px';
+
+  // Previous lines
+  var prevEl = document.getElementById('tp-prev');
+  prevEl.innerHTML = '';
+  prevEl.style.fontSize = fontSize;
+  if (tp_curLine > 0) {
+    // Show last 2 previous lines
+    var start = Math.max(0, tp_curLine - 2);
+    for (var i = start; i < tp_curLine; i++) {
+      var div = document.createElement('div');
+      div.className = 'tp-line' + (tp_lines[i].isTitle ? ' tp-title-line' : '');
+      div.textContent = tp_lines[i].text;
+      prevEl.appendChild(div);
+    }
+  }
+
+  // Current line
+  var curEl = document.getElementById('tp-current');
+  curEl.innerHTML = '';
+  curEl.style.fontSize = fontSize;
+  var cur = tp_lines[tp_curLine];
+  if (cur.isTitle) {
+    var titleDiv = document.createElement('div');
+    titleDiv.className = 'tp-title-line';
+    titleDiv.textContent = cur.text;
+    titleDiv.ondblclick = function() { tp_startEdit(tp_curLine); };
+    curEl.appendChild(titleDiv);
+  } else {
+    var words = cur.text.split(/\s+/);
+    words.forEach(function(w, idx) {
+      var span = document.createElement('span');
+      span.className = 'word' + (idx < tp_wordIndex ? ' matched' : '');
+      span.textContent = w + ' ';
+      curEl.appendChild(span);
+    });
+    curEl.ondblclick = function() { tp_startEdit(tp_curLine); };
+  }
+
+  // Upcoming lines
+  var upEl = document.getElementById('tp-upcoming');
+  upEl.innerHTML = '';
+  upEl.style.fontSize = fontSize;
+  for (var j = tp_curLine + 1; j < tp_lines.length; j++) {
+    (function(lineIdx) {
+      var div = document.createElement('div');
+      div.className = 'tp-line' + (tp_lines[lineIdx].isTitle ? ' tp-title-line' : '');
+      div.textContent = tp_lines[lineIdx].text;
+      div.ondblclick = function() { tp_startEdit(lineIdx); };
+      div.onclick = function() { tp_jumpTo(lineIdx); };
+      upEl.appendChild(div);
+    })(j);
+  }
+
+  // Line counter
+  var counter = document.getElementById('tp-line-counter');
+  if (counter) counter.textContent = 'Line ' + (tp_curLine + 1) + ' / ' + tp_lines.length;
+
+  // Font display
+  var fd = document.getElementById('tp-font-display');
+  if (fd) fd.textContent = tp_fontSize + 'px';
+}
+
+/* ── Voice matching engine (DO NOT MODIFY) ── */
+function tp_processTranscript(transcript) {
+  if (tp_curLine >= tp_lines.length) return;
+  var cur = tp_lines[tp_curLine];
+  if (cur.isTitle) {
+    // Auto-advance past titles
+    tp_advance();
+    return;
+  }
+
+  var hearingEl = document.getElementById('tp-hearing');
+  if (hearingEl) hearingEl.textContent = transcript;
+
+  var words = cur.text.split(/\s+/);
+  var spoken = transcript.split(/\s+/);
+
+  for (var s = 0; s < spoken.length; s++) {
+    if (tp_wordIndex >= words.length) break;
+    var target = words[tp_wordIndex];
+    var spokenWord = spoken[s];
+
+    var normedTarget = tp_norm(target);
+    var normedSpoken = tp_norm(spokenWord);
+
+    if (!normedTarget || !normedSpoken) continue;
+
+    // Determine threshold based on word length
+    var threshold;
+    if (normedTarget.length >= 4) {
+      threshold = 0.7; // Substantive words: more lenient
+    } else {
+      threshold = 0.9; // Short/common words: near-exact
+    }
+
+    var sim = tp_wsim(normedTarget, normedSpoken);
+    if (sim >= threshold) {
+      tp_wordIndex++;
+      // Highlight matched word in DOM
+      var wordSpans = document.querySelectorAll('#tp-current .word');
+      if (wordSpans[tp_wordIndex - 1]) {
+        wordSpans[tp_wordIndex - 1].classList.add('matched');
+      }
+    }
+  }
+
+  // Check if line is complete (last word matched)
+  if (tp_wordIndex >= words.length) {
+    tp_advance();
+  }
+}
+
+/* ── Navigation ── */
+function tp_advance() {
+  if (tp_curLine < tp_lines.length - 1) {
+    tp_curLine++;
+    tp_wordIndex = 0;
+    // Auto-skip titles
+    if (tp_lines[tp_curLine].isTitle && tp_listening) {
+      tp_renderAll();
+      setTimeout(function() { tp_advance(); }, 600);
+    } else {
+      tp_renderAll();
+    }
+  }
+}
+
+function tp_goBack() {
+  if (tp_curLine > 0) {
+    tp_curLine--;
+    tp_wordIndex = 0;
+    tp_renderAll();
+  }
+}
+
+function tp_jumpTo(i) {
+  if (i >= 0 && i < tp_lines.length) {
+    tp_curLine = i;
+    tp_wordIndex = 0;
+    tp_renderAll();
+  }
+}
+
+function tp_resetAll() {
+  tp_curLine = 0;
+  tp_wordIndex = 0;
+  tp_renderAll();
+}
+
+/* ── Voice recognition ── */
+function tp_startListening() {
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('Speech recognition is not supported in this browser. Please use Chrome.');
+    return;
+  }
+
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  tp_recognition = new SpeechRecognition();
+  tp_recognition.continuous = true;
+  tp_recognition.interimResults = true;
+  tp_recognition.lang = 'en-US';
+
+  tp_recognition.onresult = function(event) {
+    var transcript = '';
+    for (var i = event.resultIndex; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    tp_processTranscript(transcript);
+  };
+
+  tp_recognition.onerror = function(event) {
+    if (event.error === 'no-speech' || event.error === 'aborted') return;
+    console.warn('Speech recognition error:', event.error);
+  };
+
+  tp_recognition.onend = function() {
+    // Auto-restart if still supposed to be listening
+    if (tp_listening) {
+      try { tp_recognition.start(); } catch(e) {}
+    }
+  };
+
+  try {
+    tp_recognition.start();
+    tp_listening = true;
+    tp_updVoiceBtn();
+  } catch(e) {
+    console.error('Failed to start speech recognition:', e);
+  }
+}
+
+function tp_stopListening() {
+  tp_listening = false;
+  if (tp_recognition) {
+    try { tp_recognition.stop(); } catch(e) {}
+    tp_recognition = null;
+  }
+  tp_updVoiceBtn();
+}
+
+function tp_toggleVoice() {
+  if (tp_listening) {
+    tp_stopListening();
+  } else {
+    tp_startListening();
+  }
+}
+
+function tp_updVoiceBtn() {
+  var btn = document.getElementById('tp-voice-btn');
+  if (!btn) return;
+  if (tp_listening) {
+    btn.textContent = 'Stop Voice';
+    btn.classList.add('listening');
+  } else {
+    btn.textContent = 'Start Voice';
+    btn.classList.remove('listening');
+  }
+}
+
+/* ── UI Controls ── */
+function tp_toggleManual() {
+  tp_manualMode = !tp_manualMode;
+  var btn = document.getElementById('tp-manual-btn');
+  if (btn) btn.classList.toggle('active', tp_manualMode);
+}
+
+function tp_toggleMirror() {
+  tp_mirrorMode = !tp_mirrorMode;
+  var container = document.getElementById('tp-container');
+  if (container) container.classList.toggle('mirror', tp_mirrorMode);
+  var btn = document.getElementById('tp-mirror-btn');
+  if (btn) btn.classList.toggle('active', tp_mirrorMode);
+}
+
+function tp_changeSize(delta) {
+  tp_fontSize = Math.max(18, Math.min(60, tp_fontSize + delta));
+  tp_renderAll();
+}
+
+function tp_toggleAutoScroll() {
+  tp_autoScroll = !tp_autoScroll;
+  var btn = document.getElementById('tp-scroll-btn');
+  if (btn) btn.classList.toggle('active', tp_autoScroll);
+  var ctrl = document.getElementById('tp-scroll-speed-ctrl');
+  if (ctrl) ctrl.style.display = tp_autoScroll ? 'flex' : 'none';
+
+  if (tp_autoScroll) {
+    tp_startScroll();
+  } else {
+    tp_stopScroll();
+  }
+}
+
+function tp_updateScrollSpeed(val) {
+  tp_scrollSpeed = parseInt(val);
+  var sv = document.getElementById('tp-speed-val');
+  if (sv) sv.textContent = tp_scrollSpeed;
+  if (tp_autoScroll) {
+    tp_stopScroll();
+    tp_startScroll();
+  }
+}
+
+function tp_startScroll() {
+  tp_stopScroll();
+  var interval = Math.max(200, 2000 - (tp_scrollSpeed * 90));
+  tp_scrollInterval = setInterval(function() {
+    var upEl = document.getElementById('tp-upcoming');
+    if (upEl) upEl.scrollTop += 2;
+  }, interval);
+}
+
+function tp_stopScroll() {
+  if (tp_scrollInterval) {
+    clearInterval(tp_scrollInterval);
+    tp_scrollInterval = null;
+  }
+}
+
+/* ── Inline editing ── */
+function tp_startEdit(lineIdx) {
+  if (tp_editingLine >= 0) tp_finishEdit();
+  tp_editingLine = lineIdx;
+
+  var target;
+  if (lineIdx === tp_curLine) {
+    target = document.getElementById('tp-current');
+  } else if (lineIdx < tp_curLine) {
+    return; // Don't edit previous lines
+  } else {
+    var upLines = document.querySelectorAll('#tp-upcoming .tp-line');
+    var relIdx = lineIdx - tp_curLine - 1;
+    if (upLines[relIdx]) target = upLines[relIdx];
+  }
+
+  if (!target) return;
+
+  var line = tp_lines[lineIdx];
+  target.innerHTML = '';
+  var input = document.createElement('div');
+  input.className = 'tp-line-editing';
+  input.contentEditable = 'true';
+  input.textContent = line.text;
+  input.style.fontSize = tp_fontSize + 'px';
+  input.style.fontFamily = "Georgia, 'Times New Roman', serif";
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      tp_finishEdit();
+    }
+    if (e.key === 'Escape') {
+      tp_editingLine = -1;
+      tp_renderAll();
+    }
+  });
+
+  input.addEventListener('blur', function() {
+    tp_finishEdit();
+  });
+
+  target.appendChild(input);
+  input.focus();
+
+  // Select all text
+  var range = document.createRange();
+  range.selectNodeContents(input);
+  var sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+function tp_finishEdit() {
+  if (tp_editingLine < 0) return;
+  var editing = document.querySelector('.tp-line-editing');
+  if (editing) {
+    var newText = editing.textContent.trim();
+    if (newText && tp_lines[tp_editingLine]) {
+      tp_lines[tp_editingLine].text = newText;
+      tp_persistScript();
+    }
+  }
+  tp_editingLine = -1;
+  tp_renderAll();
+}
+
+function tp_persistScript() {
+  _scripts[_activeName] = tp_toMD(tp_lines);
+  tp_saveScripts();
+}
+
+/* ── Script modal ── */
+function tp_openScriptModal() {
+  tp_getScripts();
+  tp_getActive();
+
+  var select = document.getElementById('tp-modal-select');
+  select.innerHTML = '';
+  Object.keys(_scripts).forEach(function(name) {
+    var opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    if (name === _activeName) opt.selected = true;
+    select.appendChild(opt);
+  });
+
+  var textarea = document.getElementById('tp-modal-textarea');
+  textarea.value = _scripts[_activeName] || '';
+
+  document.getElementById('tp-modal-overlay').classList.add('open');
+}
+
+function tp_closeModal() {
+  document.getElementById('tp-modal-overlay').classList.remove('open');
+}
+
+function tp_loadSelectedScript() {
+  var select = document.getElementById('tp-modal-select');
+  var name = select.value;
+  var textarea = document.getElementById('tp-modal-textarea');
+  textarea.value = _scripts[name] || '';
+}
+
+function tp_saveAndClose() {
+  var select = document.getElementById('tp-modal-select');
+  var name = select.value;
+  var textarea = document.getElementById('tp-modal-textarea');
+  _scripts[name] = textarea.value;
+  tp_saveScripts();
+  tp_setActive(name);
+  _activeName = name;
+  tp_loadScript(_scripts[name]);
+  tp_closeModal();
+}
+
+function tp_newScript() {
+  var name = prompt('Enter script name:');
+  if (!name || !name.trim()) return;
+  name = name.trim();
+  if (_scripts[name]) {
+    alert('A script with that name already exists.');
+    return;
+  }
+  _scripts[name] = '## New Script\n\nStart writing your script here.\n\nEach line becomes a teleprompter line.\n\nUse ## for section headings.';
+  tp_saveScripts();
+  tp_openScriptModal(); // Refresh modal
+  var select = document.getElementById('tp-modal-select');
+  select.value = name;
+  tp_loadSelectedScript();
+}
+
+function tp_deleteScript() {
+  var select = document.getElementById('tp-modal-select');
+  var name = select.value;
+  if (Object.keys(_scripts).length <= 1) {
+    alert('Cannot delete the last script.');
+    return;
+  }
+  if (!confirm('Delete "' + name + '"?')) return;
+  delete _scripts[name];
+  tp_saveScripts();
+  var remaining = Object.keys(_scripts);
+  _activeName = remaining[0];
+  tp_setActive(_activeName);
+  tp_openScriptModal();
+}
+
+function tp_loadDefault() {
+  var textarea = document.getElementById('tp-modal-textarea');
+  textarea.value = DEFAULT_MD;
+}
+
+function tp_exportScript() {
+  var select = document.getElementById('tp-modal-select');
+  var name = select.value;
+  var content = document.getElementById('tp-modal-textarea').value;
+  var blob = new Blob([content], { type: 'text/markdown' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = name.replace(/[^a-z0-9_-]/gi, '_') + '.md';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function tp_importScript() {
+  document.getElementById('tp-file-input').click();
+}
+
+function tp_handleFileImport(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var content = e.target.result;
+    var name = file.name.replace(/\.[^.]+$/, '');
+    _scripts[name] = content;
+    tp_saveScripts();
+    _activeName = name;
+    tp_setActive(name);
+    tp_openScriptModal();
+    document.getElementById('tp-modal-select').value = name;
+    document.getElementById('tp-modal-textarea').value = content;
+  };
+  reader.readAsText(file);
+  // Reset file input
+  event.target.value = '';
+}
+
+/* =====================================================
+   INITIALIZATION
+   ===================================================== */
+(function init() {
+  // Build slides
+  buildSlides();
+
+  // Initialize teleprompter script storage
+  tp_getScripts();
+  tp_getActive();
+  tp_loadScript(_scripts[_activeName] || DEFAULT_MD);
+
+  // Render initial slide views
+  updateSlideViews();
+
+  // Start in presenter mode
+  setMode('presenter');
+})();
+</script>
+</body>
+</html>
