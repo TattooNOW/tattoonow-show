@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Run of Show", to: "/run-of-show", icon: ListChecks },
-  { label: "Show Deck", to: "/tattoonow-show-deck.html", icon: Presentation },
+  { label: "Presenter", to: "/slideshow?mode=presenter", icon: Presentation },
 ];
 
 export function Header() {

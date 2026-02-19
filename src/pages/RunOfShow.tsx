@@ -299,12 +299,20 @@ export function RunOfShow() {
                 Print / Save PDF
               </button>
               <a
-                href={`${import.meta.env.BASE_URL}tattoonow-show-deck.html`}
+                href={`${import.meta.env.BASE_URL}slideshow?mode=presenter&episode=${episodeId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 py-1.5 rounded text-sm font-medium bg-accent text-white hover:bg-accent/90 transition-colors"
               >
-                Show Deck ↗
+                Open Presenter ↗
+              </a>
+              <a
+                href={`${import.meta.env.BASE_URL}tattoonow-show-deck.html`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded text-sm font-medium border border-accent text-accent hover:bg-accent hover:text-white transition-colors"
+              >
+                Show Deck + Teleprompter ↗
               </a>
             </div>
           </div>
