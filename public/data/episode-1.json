@@ -15,27 +15,27 @@
   "SEGMENT_1_GUEST_INSTAGRAM": "sarahchen.ink",
   "SEGMENT_1_PORTFOLIO_IMAGES": [
     {
-      "url": "https://picsum.photos/800/600?random=1",
+      "url": "https://picsum.photos/seed/ep1-sarah-1/800/600",
       "description": "Watercolor floral sleeve - Cherry blossoms"
     },
     {
-      "url": "https://picsum.photos/800/600?random=2",
+      "url": "https://picsum.photos/seed/ep1-sarah-2/800/600",
       "description": "Abstract geometric design with watercolor splashes"
     },
     {
-      "url": "https://picsum.photos/800/600?random=3",
+      "url": "https://picsum.photos/seed/ep1-sarah-3/800/600",
       "description": "Botanical back piece - Native Oregon wildflowers"
     },
     {
-      "url": "https://picsum.photos/800/600?random=4",
+      "url": "https://picsum.photos/seed/ep1-sarah-4/800/600",
       "description": "Minimalist watercolor bird - Hummingbird"
     },
     {
-      "url": "https://picsum.photos/800/600?random=5",
+      "url": "https://picsum.photos/seed/ep1-sarah-5/800/600",
       "description": "Full color sleeve - Japanese maple leaves"
     },
     {
-      "url": "https://picsum.photos/800/600?random=6",
+      "url": "https://picsum.photos/seed/ep1-sarah-6/800/600",
       "description": "Watercolor portrait - Custom memorial piece"
     }
   ],
@@ -44,7 +44,7 @@
   "SEGMENT_2_SLIDES": [
     {
       "title": "Why Your Website Matters",
-      "visual": "https://picsum.photos/800/600?random=10",
+      "visual": "https://picsum.photos/seed/ep1-edu-1/800/600",
       "keyPoints": [
         "80% of clients research online before booking",
         "Your website is your digital portfolio",
@@ -85,27 +85,27 @@
   "SEGMENT_3_GUEST_INSTAGRAM": "marcusj.tattoo",
   "SEGMENT_3_PORTFOLIO_IMAGES": [
     {
-      "url": "https://picsum.photos/800/600?random=20",
+      "url": "https://picsum.photos/seed/ep1-marcus-1/800/600",
       "description": "Portrait realism - Memorial piece"
     },
     {
-      "url": "https://picsum.photos/800/600?random=21",
+      "url": "https://picsum.photos/seed/ep1-marcus-2/800/600",
       "description": "Wildlife realism - Lion portrait"
     },
     {
-      "url": "https://picsum.photos/800/600?random=22",
+      "url": "https://picsum.photos/seed/ep1-marcus-3/800/600",
       "description": "Black & grey sleeve - Clock and roses"
     },
     {
-      "url": "https://picsum.photos/800/600?random=23",
+      "url": "https://picsum.photos/seed/ep1-marcus-4/800/600",
       "description": "Photo-realistic face - Custom design"
     },
     {
-      "url": "https://picsum.photos/800/600?random=24",
+      "url": "https://picsum.photos/seed/ep1-marcus-5/800/600",
       "description": "Architectural piece - City skyline"
     },
     {
-      "url": "https://picsum.photos/800/600?random=25",
+      "url": "https://picsum.photos/seed/ep1-marcus-6/800/600",
       "description": "Animal realism - Wolf and forest scene"
     }
   ]

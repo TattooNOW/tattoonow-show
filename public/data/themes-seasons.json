@@ -1,0 +1,123 @@
+{
+  "$description": "Themes and seasons for TattooNOW Show. Seasons provide a multi-week narrative arc. Themes tag individual shows within a season. The agent uses these to inform talent selection, tape sourcing, and content strategy.",
+
+  "seasons": [
+    {
+      "id": "season-1",
+      "name": "Season 1 — Foundation",
+      "description": "Building the show format. Testing 4 format rotations. Focus on business fundamentals for tattoo artists: pricing, marketing, client management, and growth.",
+      "episodeRange": [1, 12],
+      "dateRange": ["2026-01-30", "2026-04-23"],
+      "overallTheme": "business-fundamentals",
+      "status": "active",
+
+      "arcs": [
+        {
+          "name": "Pricing & Value",
+          "episodes": [4, 5, 9],
+          "description": "Multi-episode arc on pricing. Starts with education, deepens with guest stories, culminates in a panel debate.",
+          "tags": ["pricing", "business", "value"]
+        },
+        {
+          "name": "Convention Season",
+          "episodes": [5, 6, 7, 8],
+          "description": "Building toward Villain Arts Miami (March 20-22). Convention promo ramps up each week. Ep 8 is the convention spotlight.",
+          "tags": ["convention", "villain-arts", "miami"]
+        },
+        {
+          "name": "Identity & Branding",
+          "episodes": [10, 11, 12],
+          "description": "Post-convention pivot to long-term branding: finding your style, building an online presence, personal brand vs shop brand.",
+          "tags": ["branding", "identity", "marketing", "social-media"]
+        }
+      ],
+
+      "talentStrategy": "Season 1 focuses on established artists who can speak to business topics with authority. Mix of big names (draw viewers) and emerging artists (relatable). Each arc should feature at least one returning guest to build continuity."
+    },
+    {
+      "id": "season-2",
+      "name": "Season 2 — Craft",
+      "description": "Shift from business to artistry. Deep dives into techniques, styles, and the creative process. More hands-on content: drawing exercises, live critiques, before-after showcases.",
+      "episodeRange": [13, 24],
+      "dateRange": ["2026-04-30", "2026-07-16"],
+      "overallTheme": "craft-and-technique",
+      "status": "planned",
+
+      "arcs": [
+        {
+          "name": "Style Deep Dives",
+          "episodes": [13, 14, 15, 16],
+          "description": "Each week spotlights a major style: traditional, realism, Japanese, fine line. Guest is a master of that style.",
+          "tags": ["style", "technique", "traditional", "realism", "japanese", "fineline"]
+        },
+        {
+          "name": "Creative Process",
+          "episodes": [17, 18, 19],
+          "description": "How artists develop concepts, work with clients on custom designs, and find inspiration.",
+          "tags": ["process", "design", "custom", "inspiration"]
+        },
+        {
+          "name": "Cover-ups & Reworks",
+          "episodes": [20, 21],
+          "description": "Before-after showcases. The art and business of cover-up tattoos.",
+          "tags": ["cover-up", "rework", "before-after", "transformation"]
+        },
+        {
+          "name": "Summer Convention Run",
+          "episodes": [22, 23, 24],
+          "description": "Summer convention season. Multiple convention spotlights with live guests from the circuit.",
+          "tags": ["convention", "summer", "circuit"]
+        }
+      ],
+
+      "talentStrategy": "Season 2 skews toward technical masters. Include more variety segments (drawing exercises, critiques) to showcase actual technique. International guests via text Q&A for style episodes."
+    }
+  ],
+
+  "themes": {
+    "$description": "Reusable theme tags that can be assigned to episodes, tapes, and talent. Used by the agent to match content.",
+
+    "business": {
+      "label": "Business & Finance",
+      "subthemes": ["pricing", "marketing", "branding", "taxes", "shop-management", "client-management", "growth"],
+      "talentTags": ["business", "shop-owner", "pricing", "marketing"],
+      "educationSources": ["TattooNOW blog (business category)", "guest expertise"],
+      "varietyFit": ["hot-takes (business opinions)", "critique (pricing your portfolio)"]
+    },
+    "technique": {
+      "label": "Technique & Craft",
+      "subthemes": ["linework", "shading", "color-theory", "machine-setup", "needle-config", "skin-types"],
+      "talentTags": ["technique", "education", "master"],
+      "educationSources": ["TattooNOW blog (technique category)", "guest demonstrations"],
+      "varietyFit": ["drawing-exercise", "before-after", "critique"]
+    },
+    "style": {
+      "label": "Style & Culture",
+      "subthemes": ["traditional", "japanese", "realism", "fineline", "chicano", "tribal", "abstract", "watercolor"],
+      "talentTags": ["style-specific tags match here"],
+      "educationSources": ["Style history articles", "cultural context pieces"],
+      "varietyFit": ["who-tattooed-it", "viewer-spotlight", "hot-takes"]
+    },
+    "convention": {
+      "label": "Conventions & Events",
+      "subthemes": ["convention-prep", "booth-setup", "networking", "competitions", "travel"],
+      "talentTags": ["convention-circuit"],
+      "educationSources": ["Convention prep checklists", "competition judging criteria"],
+      "varietyFit": ["who-tattooed-it (convention artists)", "call-a-friend (from the floor)"]
+    },
+    "community": {
+      "label": "Community & Culture",
+      "subthemes": ["diversity", "history", "apprenticeship", "mentorship", "client-stories"],
+      "talentTags": ["cultural", "diversity", "apprenticeship", "history"],
+      "educationSources": ["History of tattooing", "apprenticeship guides"],
+      "varietyFit": ["viewer-spotlight", "call-a-friend", "before-after"]
+    }
+  },
+
+  "agentUsage": {
+    "scheduling": "When planning a show, check the season arc for the current episode range. Assign the relevant theme. Use theme.talentTags to filter the talent pool for candidates.",
+    "tapeSourceing": "Theme determines which education sources to pull from, which variety variants fit best, and which talent to prioritize.",
+    "continuity": "Track which themes have been covered recently. Avoid repeating the same theme 2 weeks in a row unless part of a deliberate arc.",
+    "seasonPlanning": "At the start of each season, draft the full arc plan and pre-identify target talent for each arc. This gives maximum lead time for booking."
+  }
+}

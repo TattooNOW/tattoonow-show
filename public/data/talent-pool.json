@@ -1,0 +1,200 @@
+{
+  "$description": "Talent pool for TattooNOW Show. Central list of people the team can invite to fill show tape slots. Agent cross-references this when sourcing tapes for upcoming shows. Organized by role type and tagged by expertise for theme/season matching.",
+
+  "roles": {
+    "interview": "Live on-camera guest. Comfortable with conversation. Portfolio-forward.",
+    "text-qa": "Async written Q&A. For camera-shy, remote, or schedule-constrained talent.",
+    "panelist": "Multi-guest discussion participant. Opinionated, engaging, plays well with others.",
+    "variety": "Game/segment participant. Fun energy, good sport."
+  },
+
+  "statuses": {
+    "available": "Not yet contacted, ready to reach out",
+    "contacted": "Invitation sent, waiting for response",
+    "confirmed": "Confirmed for a specific show or generally interested",
+    "declined": "Said no (for now). Can re-approach later.",
+    "appeared": "Has been on the show. Track which episodes.",
+    "recurring": "Standing invite — can appear multiple times per season"
+  },
+
+  "talent": [
+    {
+      "id": "talent-nikko-hurtado",
+      "name": "Nikko Hurtado",
+      "instagram": "nikkohurtado",
+      "location": "Hesperia, CA",
+      "style": "Color Realism & Photorealistic Portraits",
+      "roles": ["interview", "panelist"],
+      "status": "appeared",
+      "tags": ["realism", "celebrity-artist", "pricing", "business", "california", "convention-circuit"],
+      "notes": "Appeared Ep 5. Very engaging on camera. Open to returning for convention episodes.",
+      "appearances": [
+        { "episode": 5, "tapeType": "interview", "date": "2026-02-27" }
+      ],
+      "contactMethod": "DM via Instagram",
+      "availability": "weekday evenings, flexible"
+    },
+    {
+      "id": "talent-emily-tran",
+      "name": "Emily Tran",
+      "instagram": "emilytran.ink",
+      "location": "Brooklyn, NY",
+      "style": "Fine Line & Minimalist",
+      "roles": ["text-qa"],
+      "status": "appeared",
+      "tags": ["fineline", "minimalist", "introvert", "marketing", "pricing", "new-york"],
+      "notes": "Text Q&A only — declined video. Her answers are gold. Waitlist 6 months.",
+      "appearances": [
+        { "episode": 6, "tapeType": "text-qa", "date": "2026-03-06" }
+      ],
+      "contactMethod": "email (emilytranink@gmail.com)",
+      "availability": "text-only, responds within 48h"
+    },
+    {
+      "id": "talent-alex-martinez",
+      "name": "Alex Martinez",
+      "instagram": "alexmartineztattoo",
+      "location": "Miami, FL",
+      "style": "Neo-Traditional & Color",
+      "roles": ["interview", "panelist", "variety"],
+      "status": "confirmed",
+      "tags": ["neo-traditional", "color", "miami", "convention-circuit", "business", "apprenticeship"],
+      "notes": "Confirmed for Ep 6. Runs Miami Ink Collective (3-chair shop). Great on camera.",
+      "appearances": [],
+      "contactMethod": "DM via Instagram",
+      "availability": "Tuesday/Thursday evenings"
+    },
+    {
+      "id": "talent-marcus-rodriguez",
+      "name": "Marcus Rodriguez",
+      "instagram": "marcusrodriguezink",
+      "location": "Austin, TX",
+      "style": "Traditional & Neo-Traditional",
+      "roles": ["panelist", "interview"],
+      "status": "available",
+      "tags": ["traditional", "neo-traditional", "pricing", "business", "texas", "shop-owner"],
+      "notes": "Project-based pricing advocate. Runs a 3-chair shop. Would be great for pricing panel.",
+      "appearances": [],
+      "contactMethod": "DM via Instagram",
+      "availability": "weekday evenings"
+    },
+    {
+      "id": "talent-sarah-chen",
+      "name": "Sarah Chen",
+      "instagram": "sarahchenink",
+      "location": "Portland, OR",
+      "style": "Fine Line & Watercolor",
+      "roles": ["panelist", "interview", "text-qa"],
+      "status": "available",
+      "tags": ["fineline", "watercolor", "pricing", "portland", "private-studio", "marketing"],
+      "notes": "Charges $250/hr. 4-month waitlist. Hourly pricing defender. Good for pricing debate.",
+      "appearances": [],
+      "contactMethod": "email",
+      "availability": "flexible"
+    },
+    {
+      "id": "talent-devon-jackson",
+      "name": "Devon Jackson",
+      "instagram": "devonjacksonart",
+      "location": "Atlanta, GA",
+      "style": "Black & Grey Realism",
+      "roles": ["panelist", "interview"],
+      "status": "available",
+      "tags": ["realism", "black-grey", "pricing", "day-rate", "atlanta", "large-scale"],
+      "notes": "Day rate model ($1,500/day). Vocal about pricing on social. Good for debate format.",
+      "appearances": [],
+      "contactMethod": "DM via Instagram",
+      "availability": "weekends preferred"
+    },
+    {
+      "id": "talent-jake-rivera",
+      "name": "Jake Rivera",
+      "instagram": "tattoo_accountant",
+      "location": "Chicago, IL",
+      "style": "N/A — Business Consultant",
+      "roles": ["text-qa", "panelist"],
+      "status": "available",
+      "tags": ["business", "accounting", "pricing", "taxes", "financial-planning"],
+      "notes": "Not a tattoo artist — he's a CPA who specializes in tattoo businesses. Great for business/pricing episodes. Has done text Q&As for other shows.",
+      "appearances": [],
+      "contactMethod": "email (jake@tattooaccountant.com)",
+      "availability": "text Q&A anytime, live Wed/Thu"
+    },
+    {
+      "id": "talent-megan-massacre",
+      "name": "Megan Massacre",
+      "instagram": "mikiyo_megan",
+      "location": "New York, NY",
+      "style": "Illustrative & Pop Culture",
+      "roles": ["interview", "panelist", "variety"],
+      "status": "available",
+      "tags": ["illustrative", "pop-culture", "celebrity-artist", "tv-personality", "convention-circuit", "new-york"],
+      "notes": "High-profile. NY Ink alum. Attending Villain Arts Miami. Would draw viewers.",
+      "appearances": [],
+      "contactMethod": "management email",
+      "availability": "limited — book 3+ weeks ahead"
+    },
+    {
+      "id": "talent-dr-woo",
+      "name": "Dr. Woo",
+      "instagram": "dr_woo",
+      "location": "Los Angeles, CA",
+      "style": "Fine Line & Micro",
+      "roles": ["interview", "text-qa"],
+      "status": "available",
+      "tags": ["fineline", "micro", "celebrity-artist", "los-angeles", "convention-circuit", "luxury"],
+      "notes": "Celebrity clientele. Massive IG following. Attending Villain Arts Miami as featured artist. May prefer text Q&A due to schedule.",
+      "appearances": [],
+      "contactMethod": "management email",
+      "availability": "very limited — text Q&A more likely"
+    },
+    {
+      "id": "talent-koji-tanaka",
+      "name": "Koji Tanaka",
+      "instagram": "koji.traditional",
+      "location": "Portland, OR",
+      "style": "Japanese Traditional",
+      "roles": ["interview", "panelist"],
+      "status": "available",
+      "tags": ["japanese-traditional", "irezumi", "apprenticeship", "portland", "convention-circuit", "cultural"],
+      "notes": "Apprenticed in Tokyo for 3 years. Brings cultural perspective on tattooing. Attending Villain Arts Miami. Good for education-focused episodes.",
+      "appearances": [],
+      "contactMethod": "DM via Instagram",
+      "availability": "flexible, prefers evening"
+    },
+    {
+      "id": "talent-lisa-omorodion",
+      "name": "Lisa Omorodion",
+      "instagram": "lisa_omorodion_tattoo",
+      "location": "London, UK",
+      "style": "Afrofuturism & Abstract",
+      "roles": ["text-qa", "interview"],
+      "status": "available",
+      "tags": ["abstract", "afrofuturism", "diversity", "london", "international", "emerging-artist"],
+      "notes": "Rising star. Unique style that blends African patterns with abstract tattoo art. International perspective. Time zone makes live harder — text Q&A ideal.",
+      "appearances": [],
+      "contactMethod": "DM via Instagram",
+      "availability": "text Q&A preferred (UK timezone)"
+    },
+    {
+      "id": "talent-carlos-mendez",
+      "name": "Carlos Mendez",
+      "instagram": "carlosmendez.tattoo",
+      "location": "Mexico City, MX",
+      "style": "Chicano & Black & Grey",
+      "roles": ["interview", "panelist"],
+      "status": "available",
+      "tags": ["chicano", "black-grey", "cultural", "mexico", "international", "history"],
+      "notes": "Deep knowledge of Chicano tattoo history. Could anchor an education segment on cultural origins. Bilingual.",
+      "appearances": [],
+      "contactMethod": "DM via Instagram",
+      "availability": "flexible, bilingual shows possible"
+    }
+  ],
+
+  "agentNotes": {
+    "sourcing": "When filling tape slots, cross-reference talent pool tags with show theme and season tags. Prioritize talent who haven't appeared recently. For panel tapes, select talent with contrasting perspectives.",
+    "reachOut": "Agent can draft DM/email templates. Human confirms before sending.",
+    "tracking": "Update status after each contact. Log all appearances. After a show, mark as 'appeared' and add episode reference."
+  }
+}

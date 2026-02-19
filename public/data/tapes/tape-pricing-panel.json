@@ -1,0 +1,97 @@
+{
+  "id": "tape-pricing-panel-2026-03",
+  "type": "panel",
+  "status": "opportunity",
+  "createdBy": "agent",
+  "createdDate": "2026-02-19",
+  "estimatedDuration": 20,
+  "tags": ["pricing", "business", "panel", "multi-guest", "debate"],
+
+  "content": {
+    "topic": "Is Hourly Pricing Dead? The Great Tattoo Pricing Debate",
+    "topicDescription": "Three artists with very different pricing models debate the best approach. Hourly vs flat rate vs project-based. Who's right?",
+
+    "talkingPoints": [
+      "What's your current pricing model and why?",
+      "When did you switch from hourly to your current model?",
+      "How do clients react to your pricing — any pushback?",
+      "What's the biggest mistake you see other artists make with pricing?",
+      "If a new artist asked you how to price their first year, what would you say?",
+      "Lightning round: name your price for these 3 hypothetical pieces"
+    ],
+
+    "presenterNotes": "Host moderates — don't let one voice dominate. After each question, go around the table: panelist 1 answers, then 2, then 3. Encourage friendly disagreement. The 'lightning round' at the end is the most shareable moment — keep it fast and fun. Display each panelist's headshot with lower-third when they're speaking."
+  },
+
+  "panelists": [
+    {
+      "name": "Marcus Rodriguez",
+      "title": "Traditional & Neo-Traditional — Project-Based Pricing",
+      "bio": "Marcus runs a 3-chair shop in Austin and exclusively uses project-based pricing. He quotes every piece individually based on design complexity, placement, and size.",
+      "instagram": "marcusrodriguezink",
+      "location": "Austin, TX",
+      "headshot": "https://picsum.photos/seed/panel-marcus/400/400",
+      "portfolio": [
+        "https://picsum.photos/seed/panel-marcus-01/800/1000",
+        "https://picsum.photos/seed/panel-marcus-02/800/1000"
+      ],
+      "pricingModel": "project-based",
+      "perspective": "Hourly punishes fast artists. I quote the value, not the time."
+    },
+    {
+      "name": "Sarah Chen",
+      "title": "Fine Line & Watercolor — Hourly Rate",
+      "bio": "Sarah charges $250/hr from her private studio in Portland. She's been hourly for 8 years and has no plans to change. Her waitlist is 4 months.",
+      "instagram": "sarahchenink",
+      "location": "Portland, OR",
+      "headshot": "https://picsum.photos/seed/panel-sarah/400/400",
+      "portfolio": [
+        "https://picsum.photos/seed/panel-sarah-01/800/1000",
+        "https://picsum.photos/seed/panel-sarah-02/800/1000"
+      ],
+      "pricingModel": "hourly",
+      "perspective": "Hourly is transparent and fair. Clients know exactly what they're paying for."
+    },
+    {
+      "name": "Devon Jackson",
+      "title": "Black & Grey Realism — Day Rate",
+      "bio": "Devon switched to a flat day rate of $1,500 two years ago. He only takes full-day sessions. His argument: it eliminates scope creep and lets him focus on the art.",
+      "instagram": "devonjacksonart",
+      "location": "Atlanta, GA",
+      "headshot": "https://picsum.photos/seed/panel-devon/400/400",
+      "portfolio": [
+        "https://picsum.photos/seed/panel-devon-01/800/1000",
+        "https://picsum.photos/seed/panel-devon-02/800/1000"
+      ],
+      "pricingModel": "day-rate",
+      "perspective": "Day rate changed my life. No more nickel-and-diming. One price, one day, one piece."
+    }
+  ],
+
+  "media": {
+    "images": [
+      {
+        "url": "https://picsum.photos/seed/panel-marcus/400/400",
+        "description": "Marcus Rodriguez headshot",
+        "aspect": "1:1",
+        "source": "instagram:marcusrodriguezink",
+        "tags": ["headshot", "panelist"]
+      },
+      {
+        "url": "https://picsum.photos/seed/panel-sarah/400/400",
+        "description": "Sarah Chen headshot",
+        "aspect": "1:1",
+        "source": "instagram:sarahchenink",
+        "tags": ["headshot", "panelist"]
+      },
+      {
+        "url": "https://picsum.photos/seed/panel-devon/400/400",
+        "description": "Devon Jackson headshot",
+        "aspect": "1:1",
+        "source": "instagram:devonjacksonart",
+        "tags": ["headshot", "panelist"]
+      }
+    ],
+    "videos": []
+  }
+}

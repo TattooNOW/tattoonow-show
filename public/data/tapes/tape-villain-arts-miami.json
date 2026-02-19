@@ -1,0 +1,80 @@
+{
+  "id": "tape-villain-arts-miami-2026",
+  "type": "promo",
+  "status": "complete",
+  "createdBy": "manual",
+  "createdDate": "2026-02-15",
+  "estimatedDuration": 5,
+  "tags": ["convention", "miami", "villain-arts", "march-2026"],
+
+  "sponsor": {
+    "name": "Villain Arts Tattoo Convention",
+    "type": "convention",
+    "logo": "https://picsum.photos/seed/villain-logo/400/400",
+    "website": "https://villainarts.com",
+    "instagram": "villainarts",
+    "qrUrl": "https://villainarts.com/miami-2026",
+    "qrMessage": "Get Tickets — Miami Tattoo Convention Mar 20-22",
+    "highlevelUrl": "https://api.leadconnectorhq.com/qr/villain-arts-miami",
+    "adCopy": "The biggest tattoo convention in the Southeast is back! Villain Arts Miami — March 20 through 22 at the Miami Beach Convention Center. Over 300 artists, live tattooing, competitions, and vendors. Use code TATTOONOW for 15% off tickets. Scan the QR code to grab yours now.",
+    "eventDates": "March 20-22, 2026",
+    "eventLocation": "Miami Beach Convention Center",
+    "featuredArtists": [
+      {
+        "name": "Nikko Hurtado",
+        "instagram": "nikkohurtado",
+        "image": "https://picsum.photos/seed/va-nikko/800/1000"
+      },
+      {
+        "name": "Kat Von D",
+        "instagram": "katvond",
+        "image": "https://picsum.photos/seed/va-kat/800/1000"
+      },
+      {
+        "name": "Dr. Woo",
+        "instagram": "dr_woo",
+        "image": "https://picsum.photos/seed/va-woo/800/1000"
+      }
+    ]
+  },
+
+  "media": {
+    "images": [
+      {
+        "url": "https://picsum.photos/seed/va-poster/1080/1350",
+        "description": "Villain Arts Miami 2026 — Official Event Poster",
+        "aspect": "4:5",
+        "source": "instagram:villainarts:VA001",
+        "tags": ["poster", "official"]
+      },
+      {
+        "url": "https://picsum.photos/seed/va-floor/1920/1080",
+        "description": "Convention floor — 2025 Miami event (300+ booths)",
+        "aspect": "16:9",
+        "source": "upload",
+        "tags": ["venue", "floor", "atmosphere"]
+      },
+      {
+        "url": "https://picsum.photos/seed/va-crowd/1920/1080",
+        "description": "Crowd shot — live tattooing competition finals",
+        "aspect": "16:9",
+        "source": "upload",
+        "tags": ["crowd", "competition", "atmosphere"]
+      }
+    ],
+    "videos": [
+      {
+        "url": "https://picsum.photos/seed/va-hype/1080/1920",
+        "description": "2025 Miami convention highlight reel",
+        "aspect": "9:16",
+        "duration": 30,
+        "source": "instagram:villainarts:reel_va01",
+        "tags": ["highlight", "hype", "2025"]
+      }
+    ]
+  },
+
+  "content": {
+    "presenterNotes": "Read ad copy naturally. Emphasize the discount code TATTOONOW. Display QR code during the full segment. If we have a featured artist on the show, mention them: 'And you might even run into our guest at the convention!' Keep energy high — this is an exciting event."
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "id": "tape-who-tattooed-it-2026-03",
+  "type": "variety",
+  "variant": "who-tattooed-it",
+  "status": "opportunity",
+  "createdBy": "agent",
+  "createdDate": "2026-02-19",
+  "estimatedDuration": 8,
+  "tags": ["game", "fun", "engagement", "variety", "who-tattooed-it"],
+
+  "content": {
+    "hostIntro": {
+      "script": [
+        "Alright, time for everyone's favorite game.",
+        "I'm going to show you a tattoo. You tell me who did it.",
+        "Three rounds. Panelists, audience — everyone plays.",
+        "Let's go."
+      ],
+      "presenterNotes": "Energy: playful, competitive. Build anticipation before each reveal. Let panelists discuss and guess before revealing."
+    },
+
+    "rounds": [
+      {
+        "image": "https://picsum.photos/seed/wti-round1/800/1000",
+        "imageDescription": "Hyperrealistic lion portrait — full color, incredible detail on the mane",
+        "hints": [
+          "This artist is based in California",
+          "They've been featured on Ink Master",
+          "Their Instagram has over 2 million followers"
+        ],
+        "answer": "Nikko Hurtado",
+        "answerInstagram": "nikkohurtado",
+        "revealImage": "https://picsum.photos/seed/wti-reveal1/800/1000",
+        "revealNote": "This was from a session at Black Anchor Tattoo in 2024. The client flew in from Japan specifically for this piece."
+      },
+      {
+        "image": "https://picsum.photos/seed/wti-round2/800/1000",
+        "imageDescription": "Delicate fine-line botanical — single needle wildflower with impossibly thin lines",
+        "hints": [
+          "This artist works exclusively in single needle",
+          "They're based in New York",
+          "They've never done a video interview"
+        ],
+        "answer": "Emily Tran",
+        "answerInstagram": "emilytran.ink",
+        "revealImage": "https://picsum.photos/seed/wti-reveal2/800/1000",
+        "revealNote": "Emily posted this as a 'healed vs fresh' comparison. The linework held perfectly after 6 months."
+      },
+      {
+        "image": "https://picsum.photos/seed/wti-round3/800/1000",
+        "imageDescription": "Japanese-style dragon sleeve — bold lines, traditional color palette, wind bars throughout",
+        "hints": [
+          "This artist specializes in Japanese traditional",
+          "They apprenticed in Tokyo for 3 years",
+          "They're attending Villain Arts Miami this year"
+        ],
+        "answer": "Koji Tanaka",
+        "answerInstagram": "koji.traditional",
+        "revealImage": "https://picsum.photos/seed/wti-reveal3/800/1000",
+        "revealNote": "Full sleeve, completed over 5 sessions. Koji says this is his favorite piece from 2025."
+      }
+    ],
+
+    "hostOutro": {
+      "script": [
+        "That's the game!",
+        "If you got all three, you know your artists.",
+        "Tag us on Instagram with your guesses — we'll shout out the best ones next week."
+      ],
+      "presenterNotes": "Quick CTA to social. Keep the energy high heading into the next segment."
+    },
+
+    "presenterNotes": "Flow: Host intro → Round 1 (show image, get guesses, give hints one at a time, reveal) → Round 2 → Round 3 → Host outro. Play buzzer/ding sound effects on reveal. Display artist name + IG handle on reveal screen. Keep each round to ~2 minutes."
+  },
+
+  "audio": {
+    "soundEffects": [
+      {
+        "id": "reveal-sting",
+        "url": "tapes/who-tattooed-it-2026-03/audio/reveal-sting.mp3",
+        "trigger": "on-reveal",
+        "notes": "Play when artist name is revealed"
+      },
+      {
+        "id": "correct-ding",
+        "url": "tapes/who-tattooed-it-2026-03/audio/correct-ding.mp3",
+        "trigger": "correct-guess",
+        "notes": "Play if panelist guesses correctly before reveal"
+      },
+      {
+        "id": "wrong-buzzer",
+        "url": "tapes/who-tattooed-it-2026-03/audio/wrong-buzzer.mp3",
+        "trigger": "wrong-guess",
+        "notes": "Play on incorrect guess — keep it fun, not harsh"
+      }
+    ],
+    "backgroundMusic": {
+      "url": "tapes/who-tattooed-it-2026-03/audio/game-show-bed.mp3",
+      "title": "Game show underscore — royalty-free",
+      "license": "royalty-free",
+      "volume": 0.12,
+      "notes": "Light game-show style music under the whole segment. Fade out during guesses, swell on reveals."
+    }
+  },
+
+  "media": {
+    "images": [
+      {
+        "url": "https://picsum.photos/seed/wti-round1/800/1000",
+        "description": "Round 1 — Mystery tattoo (lion portrait)",
+        "aspect": "4:5",
+        "tags": ["game", "round-1", "mystery"]
+      },
+      {
+        "url": "https://picsum.photos/seed/wti-reveal1/800/1000",
+        "description": "Round 1 — Reveal (Nikko Hurtado)",
+        "aspect": "4:5",
+        "tags": ["game", "round-1", "reveal"]
+      },
+      {
+        "url": "https://picsum.photos/seed/wti-round2/800/1000",
+        "description": "Round 2 — Mystery tattoo (fine-line botanical)",
+        "aspect": "4:5",
+        "tags": ["game", "round-2", "mystery"]
+      },
+      {
+        "url": "https://picsum.photos/seed/wti-reveal2/800/1000",
+        "description": "Round 2 — Reveal (Emily Tran)",
+        "aspect": "4:5",
+        "tags": ["game", "round-2", "reveal"]
+      },
+      {
+        "url": "https://picsum.photos/seed/wti-round3/800/1000",
+        "description": "Round 3 — Mystery tattoo (Japanese dragon sleeve)",
+        "aspect": "4:5",
+        "tags": ["game", "round-3", "mystery"]
+      },
+      {
+        "url": "https://picsum.photos/seed/wti-reveal3/800/1000",
+        "description": "Round 3 — Reveal (Koji Tanaka)",
+        "aspect": "4:5",
+        "tags": ["game", "round-3", "reveal"]
+      }
+    ],
+    "videos": []
+  }
+}

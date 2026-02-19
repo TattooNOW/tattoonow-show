@@ -1,0 +1,84 @@
+{
+  "id": "tape-pricing-psychology-blog-2026",
+  "type": "education",
+  "status": "complete",
+  "createdBy": "agent",
+  "createdDate": "2026-02-17",
+  "estimatedDuration": 8,
+  "tags": ["pricing", "psychology", "business", "education"],
+
+  "content": {
+    "source": {
+      "type": "blog",
+      "title": "Pricing Psychology for Tattoo Artists: Stop Leaving Money on the Table",
+      "url": "https://tattoonow.com/blog/pricing-psychology",
+      "author": "Gabe Ripley",
+      "publishDate": "2026-02-10"
+    },
+    "slides": [
+      {
+        "title": "The Pricing Mindset Shift",
+        "subtitle": "You're Not Selling Hours — You're Selling Transformation",
+        "keyPoints": [
+          "73% of tattoo artists undercharge by 30% or more",
+          "Clients value outcomes, not time spent",
+          "Your 10 years of skill is built into every piece",
+          "Premium pricing attracts premium clients"
+        ],
+        "stats": [
+          { "value": "73%", "label": "of artists undercharge by 30%+" },
+          { "value": "$150→$400", "label": "avg rate increase after mindset shift" }
+        ],
+        "layout": "split"
+      },
+      {
+        "title": "Tiered Pricing That Works",
+        "keyPoints": [
+          "Small pieces (2-3 hours): Flat rate, minimum $300",
+          "Medium pieces (4-6 hours): Day rate, $800-$1500",
+          "Large pieces (full day+): Project rate, quote per design",
+          "Always charge a non-refundable deposit (50%)"
+        ],
+        "stats": [
+          { "value": "50%", "label": "deposit reduces no-shows by 90%" }
+        ],
+        "layout": "text-focus"
+      },
+      {
+        "title": "Handling 'That's Too Expensive'",
+        "keyPoints": [
+          "Don't apologize or justify — explain VALUE",
+          "\"This is a custom piece that will be on your body forever\"",
+          "Offer payment plans, not discounts",
+          "If they can't afford you, refer them — don't undersell yourself"
+        ],
+        "layout": "text-focus"
+      },
+      {
+        "title": "Action Steps This Week",
+        "keyPoints": [
+          "Write down your current rates for small / medium / large",
+          "Compare to 3 artists at your skill level in your market",
+          "If you're below average, raise by 20% for new clients starting next month",
+          "Set up a deposit system (Square, TattooNOW Booking, or Venmo)",
+          "Practice saying your new rate out loud until it feels natural"
+        ],
+        "layout": "checklist"
+      }
+    ],
+    "presenterNotes": "This is the educational backbone of the pricing episode. Deliver with authority — you wrote this blog post. Reference the stats confidently. After the 'Action Steps' slide, ask the guest to react: 'Nikko, does this match your experience?'"
+  },
+
+  "media": {
+    "images": [
+      {
+        "url": "https://picsum.photos/seed/pricing-visual-01/1920/1080",
+        "description": "Pricing tier infographic — small / medium / large",
+        "aspect": "16:9",
+        "source": "upload",
+        "tags": ["infographic", "pricing"]
+      }
+    ],
+    "videos": []
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "id": "tape-nikko-hurtado-2026-03",
+  "type": "interview",
+  "status": "complete",
+  "createdBy": "agent",
+  "createdDate": "2026-02-19",
+  "estimatedDuration": 18,
+  "tags": ["pricing", "realism", "celebrity-artist", "california", "color-realism"],
+
+  "subject": {
+    "name": "Nikko Hurtado",
+    "title": "World-Renowned Tattoo Artist & Innovator",
+    "bio": "Nikko Hurtado is considered one of the most influential tattoo artists in the world, known for pioneering color realism and photorealistic portraits. With over 25 years in the industry, he owns Black Anchor Tattoo in Hesperia, California and has tattooed countless celebrities.",
+    "style": "Color Realism & Photorealistic Portraits",
+    "location": "Hesperia, CA",
+    "instagram": "nikkohurtado",
+    "website": "https://nikkohurtado.com"
+  },
+
+  "media": {
+    "images": [
+      {
+        "url": "https://picsum.photos/seed/nikko-01/800/1000",
+        "description": "Color realism portrait — client memorial piece",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx001",
+        "tags": ["portrait", "realism", "memorial"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-02/800/1000",
+        "description": "Photorealistic eye with galaxy reflection",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx002",
+        "tags": ["eye", "realism", "galaxy"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-03/800/1000",
+        "description": "Full color sleeve — underwater coral reef",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx003",
+        "tags": ["sleeve", "color", "underwater"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-04/800/1000",
+        "description": "Celebrity portrait — hyperrealistic face",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx004",
+        "tags": ["portrait", "celebrity", "hyperrealism"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-05/800/1000",
+        "description": "Lion and crown full back piece",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx005",
+        "tags": ["back-piece", "lion", "realism"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-06/800/1000",
+        "description": "Color realism rose — forearm detail",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx006",
+        "tags": ["rose", "forearm", "detail"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-07/800/1000",
+        "description": "Japanese-inspired koi with color realism treatment",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx007",
+        "tags": ["koi", "japanese", "fusion"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-08/800/1000",
+        "description": "Skull and smoke — black and grey with color accents",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx008",
+        "tags": ["skull", "smoke", "mixed-style"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-09/800/1000",
+        "description": "Child portrait memorial — color realism",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx009",
+        "tags": ["portrait", "memorial", "realism"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-10/800/1000",
+        "description": "Eagle and American flag half-sleeve",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx010",
+        "tags": ["eagle", "patriotic", "half-sleeve"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-11/800/1000",
+        "description": "Butterfly and flowers — feminine forearm piece",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx011",
+        "tags": ["butterfly", "flowers", "feminine"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-12/800/1000",
+        "description": "Tiger face — photorealistic with orange tones",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx012",
+        "tags": ["tiger", "animal", "photorealism"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-13/800/1000",
+        "description": "Full leg sleeve — ocean life theme",
+        "aspect": "4:5",
+        "source": "instagram:nikkohurtado:Cx013",
+        "tags": ["leg-sleeve", "ocean", "full-color"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-14/1080/1920",
+        "description": "Process reel — coloring a portrait (time-lapse)",
+        "aspect": "9:16",
+        "source": "instagram:nikkohurtado:Cx014",
+        "tags": ["process", "timelapse"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-15/1080/1920",
+        "description": "Studio tour — Black Anchor Tattoo walkthrough",
+        "aspect": "9:16",
+        "source": "instagram:nikkohurtado:Cx015",
+        "tags": ["studio", "tour", "behind-scenes"]
+      }
+    ],
+    "videos": [
+      {
+        "url": "https://picsum.photos/seed/nikko-vid-01/1080/1920",
+        "description": "Timelapse of rose sleeve session",
+        "aspect": "9:16",
+        "duration": 45,
+        "source": "instagram:nikkohurtado:reel_001",
+        "tags": ["timelapse", "sleeve", "process"]
+      },
+      {
+        "url": "https://picsum.photos/seed/nikko-vid-02/1080/1920",
+        "description": "Client reaction reveal — memorial portrait",
+        "aspect": "9:16",
+        "duration": 30,
+        "source": "instagram:nikkohurtado:reel_002",
+        "tags": ["reveal", "reaction", "memorial"]
+      }
+    ]
+  },
+
+  "content": {
+    "talkingPoints": [
+      "When did you realize you were undercharging?",
+      "Walk us through your current pricing structure",
+      "How do you handle 'that's too expensive'?",
+      "What's the biggest pricing mistake you see artists make?",
+      "Advice for artists who feel guilty charging more?"
+    ],
+    "presenterNotes": "Let Nikko lead here — he's experienced the full pricing journey from apprentice to celebrity artist. Ask follow-up questions when he mentions specific turning points. Keep energy conversational but focused. Goal: Help viewers see that underpricing hurts THEM and their CLIENTS."
+  }
+}

@@ -314,6 +314,9 @@ function renderSlide(slide, portfolioLayout = 'grid', selectedImage = null, onSe
           artistLocation={slide.artistLocation}
           artistInstagram={slide.artistInstagram}
           images={slide.images}
+          range={slide.range}
+          autoAdvance={slide.autoAdvance || false}
+          autoAdvanceMs={slide.autoAdvanceMs || 20000}
           layout={portfolioLayout}
           selectedImage={selectedImage}
           onSelectImage={onSelectImage}
