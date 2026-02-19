@@ -21,6 +21,7 @@ export function SlideController({ episodeData }) {
   const [showQR, setShowQR] = useState(false);
   const [showLowerThird, setShowLowerThird] = useState(false);
   const [portfolioLayout, setPortfolioLayout] = useState('grid'); // 'grid' or 'fullscreen'
+  const [selectedImage, setSelectedImage] = useState(null);
 
   // BroadcastChannel for syncing between audience and presenter windows
   const channelRef = useRef(null);
@@ -47,6 +48,10 @@ export function SlideController({ episodeData }) {
           break;
         case 'PORTFOLIO_LAYOUT_TOGGLE':
           setPortfolioLayout(payload.layout);
+          break;
+        case 'SELECTED_IMAGE':
+          setSelectedImage(payload.imageIndex);
+          setPortfolioLayout(payload.imageIndex !== null ? 'fullscreen' : 'grid');
           break;
         default:
           break;
@@ -86,6 +91,13 @@ export function SlideController({ episodeData }) {
     channelRef.current?.postMessage({
       type: 'PORTFOLIO_LAYOUT_TOGGLE',
       payload: { layout }
+    });
+  }, []);
+
+  const broadcastSelectedImage = useCallback((imageIndex) => {
+    channelRef.current?.postMessage({
+      type: 'SELECTED_IMAGE',
+      payload: { imageIndex }
     });
   }, []);
 
@@ -213,6 +225,12 @@ export function SlideController({ episodeData }) {
     });
   }, [broadcastPortfolioLayoutToggle]);
 
+  const handleSelectImage = useCallback((imageIndex) => {
+    setSelectedImage(imageIndex);
+    setPortfolioLayout(imageIndex !== null ? 'fullscreen' : 'grid');
+    broadcastSelectedImage(imageIndex);
+  }, [broadcastSelectedImage]);
+
   const jumpToSegment = useCallback((segmentNumber) => {
     // Find the index of the first slide for the given segment
     const segmentIndex = slides.findIndex(
@@ -249,6 +267,10 @@ export function SlideController({ episodeData }) {
         toggleLowerThird={toggleLowerThird}
         showQR={showQR}
         showLowerThird={showLowerThird}
+        portfolioLayout={portfolioLayout}
+        togglePortfolioLayout={togglePortfolioLayout}
+        selectedImage={selectedImage}
+        onSelectImage={handleSelectImage}
       />
     );
   }
@@ -257,7 +279,7 @@ export function SlideController({ episodeData }) {
   return (
     <div className="relative">
       {/* Main slide content */}
-      {renderSlide(currentSlide, portfolioLayout)}
+      {renderSlide(currentSlide, portfolioLayout, selectedImage, handleSelectImage)}
 
       {/* Overlays */}
       {currentSlide.showLowerThird && (
@@ -461,7 +483,7 @@ function parseEducationSlides(episodeData, segmentNumber) {
 /**
  * Render individual slide based on type
  */
-function renderSlide(slide, portfolioLayout) {
+function renderSlide(slide, portfolioLayout, selectedImage, onSelectImage) {
   switch (slide.type) {
     case 'title':
       return (
@@ -482,6 +504,8 @@ function renderSlide(slide, portfolioLayout) {
           artistInstagram={slide.artistInstagram}
           images={slide.images}
           layout={portfolioLayout}
+          selectedImage={selectedImage}
+          onSelectImage={onSelectImage}
         />
       );
 
