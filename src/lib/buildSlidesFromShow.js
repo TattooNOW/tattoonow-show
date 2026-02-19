@@ -16,9 +16,14 @@ export function buildSlidesFromShow(show, tapes) {
   const slides = [];
   const ep = show.episode || {};
 
-  for (const entry of show.rundown) {
+  // Track which rundown entry each slide came from for timing distribution
+  const slideEntryMap = []; // parallel array: slideEntryMap[slideIndex] = entryIndex
+
+  for (let entryIdx = 0; entryIdx < show.rundown.length; entryIdx++) {
+    const entry = show.rundown[entryIdx];
     const tape = entry.tapeId ? tapes[entry.tapeId] : null;
     const entryType = entry.type || entry.segment || '';
+    const slidesBefore = slides.length;
 
     // ── Title card ──────────────────────────────────────────────────
     if (entryType === 'title-card' || entryType === 'skeleton:cold-open') {
@@ -384,6 +389,35 @@ export function buildSlidesFromShow(show, tapes) {
 
     // Unknown entry types — skip with a warning
     console.warn('[buildSlidesFromShow] Unhandled rundown entry:', entryType, entry);
+
+    // Record which entry produced these slides
+    const slidesAdded = slides.length - slidesBefore;
+    for (let s = 0; s < slidesAdded; s++) {
+      slideEntryMap.push(entryIdx);
+    }
+  }
+
+  // ── Post-process: stamp durationMs + targetTimeCode on every slide ──
+  // Distribute each rundown entry's duration evenly across its slides.
+  for (let entryIdx = 0; entryIdx < show.rundown.length; entryIdx++) {
+    const entry = show.rundown[entryIdx];
+    const entryMs = parseDurationToMs(entry.duration);
+    const entryTimeCode = entry.timeCode || '';
+
+    // Find all slide indices belonging to this entry
+    const slideIndices = [];
+    for (let s = 0; s < slideEntryMap.length; s++) {
+      if (slideEntryMap[s] === entryIdx) slideIndices.push(s);
+    }
+    if (slideIndices.length === 0) continue;
+
+    const perSlideMs = Math.round(entryMs / slideIndices.length);
+    slideIndices.forEach((si, offset) => {
+      slides[si].durationMs = perSlideMs;
+      // First slide of the entry gets the entry's timeCode
+      slides[si].targetTimeCode = offset === 0 ? entryTimeCode : '';
+      slides[si].rundownLabel = entry.label || entry.type || '';
+    });
   }
 
   return slides;
@@ -404,4 +438,42 @@ function makeScriptSlide(entry, tape, defaultType) {
     notes: entry.presenterNotes || tape?.content?.presenterNotes || '',
     cue: entry.cue || '',
   };
+}
+
+/**
+ * Parse a duration string like "2:30", "0:30", "15:00" to milliseconds.
+ * Also handles "0:03" (3 minutes) format used in some shows.
+ */
+export function parseDurationToMs(durationStr) {
+  if (!durationStr) return 0;
+  const str = String(durationStr).trim();
+
+  // Handle H:MM:SS or M:SS
+  const parts = str.split(':').map(Number);
+  if (parts.some(isNaN)) return 0;
+
+  if (parts.length === 3) {
+    // H:MM:SS
+    return (parts[0] * 3600 + parts[1] * 60 + parts[2]) * 1000;
+  }
+  if (parts.length === 2) {
+    // M:SS
+    return (parts[0] * 60 + parts[1]) * 1000;
+  }
+  if (parts.length === 1) {
+    // Seconds only
+    return parts[0] * 1000;
+  }
+  return 0;
+}
+
+/**
+ * Format milliseconds to M:SS display string.
+ */
+export function formatMsToTimeCode(ms) {
+  if (!ms || ms <= 0) return '0:00';
+  const totalSeconds = Math.round(ms / 1000);
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink, Maximize2, Settings } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Maximize2, Settings, Play, Pause } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Timer } from './Timer';
 import { Clock } from './Clock';
@@ -7,7 +7,7 @@ import { TitleCard } from './TitleCard';
 import { PortfolioSlide } from './PortfolioSlide';
 import { EducationSlide } from './EducationSlide';
 import ScriptSlide from '../slides/ScriptSlide';
-import { EpisodeTeleprompter } from './EpisodeTeleprompter';
+import { formatMsToTimeCode } from '../../lib/buildSlidesFromShow';
 import styles from './PresenterView.module.css';
 
 /**
@@ -62,9 +62,9 @@ function useDragResize(initialPct, direction = 'horizontal') {
  *
  * Layout:
  * - Slide previews (current + next) top half
- * - Notes panel bottom half with sub-tabs: Notes | Script
- * - Notes panel has pop-out button to open in separate window
- * - Controls bar at bottom
+ * - Show overview (upcoming segments) bottom half
+ * - Notes always pop out to a separate window
+ * - Controls bar at bottom with timing + auto/manual toggle
  */
 export function PresenterView({
   episodeData,
@@ -80,11 +80,14 @@ export function PresenterView({
   togglePortfolioLayout,
   selectedImage,
   onSelectImage,
-  showId
+  showId,
+  autoMode = false,
+  toggleAutoMode,
+  slideElapsedMs = 0,
+  showElapsedMs = 0
 }) {
   const hSplit = useDragResize(60, 'horizontal');
-  const vSplit = useDragResize(50, 'vertical');
-  const [notesMode, setNotesMode] = useState('notes'); // 'notes' or 'script'
+  const vSplit = useDragResize(55, 'vertical');
   const notesChannelRef = useRef(null);
 
   // Broadcast notes to popout window
@@ -115,6 +118,11 @@ export function PresenterView({
     });
   }, [currentSlideIndex, slides]);
 
+  // Auto-open notes popout on mount
+  useEffect(() => {
+    openNotesPopout();
+  }, []);
+
   if (!episodeData || !slides || slides.length === 0) {
     return (
       <div className={styles.container}>
@@ -128,20 +136,23 @@ export function PresenterView({
 
   const currentSlide = slides[currentSlideIndex];
   const nextSlideData = slides[currentSlideIndex + 1];
-  const presenterNotes =
-    currentSlide.presenterNotes ||
-    currentSlide.notes ||
-    'No presenter notes for this slide.';
 
-  const openNotesPopout = () => {
+  // Timing for current slide
+  const slideDurationMs = currentSlide.durationMs || 0;
+  const slideOvertime = slideDurationMs > 0 && slideElapsedMs > slideDurationMs;
+  const slideProgressPct = slideDurationMs > 0
+    ? Math.min(100, (slideElapsedMs / slideDurationMs) * 100)
+    : 0;
+
+  function openNotesPopout() {
     const params = new URLSearchParams(window.location.search);
     const episodeId = params.get('episode') || params.get('id') || '1';
-    window.open(
-      `${import.meta.env.BASE_URL}notes?episode=${episodeId}`,
-      'slideshow-notes',
-      'width=800,height=600'
-    );
-  };
+    const sid = showId || params.get('show');
+    const notesUrl = sid
+      ? `${import.meta.env.BASE_URL}notes?show=${sid}`
+      : `${import.meta.env.BASE_URL}notes?episode=${episodeId}`;
+    window.open(notesUrl, 'slideshow-notes', 'width=800,height=600');
+  }
 
   return (
     <div className={styles.container} ref={vSplit.containerRef}>
@@ -156,7 +167,34 @@ export function PresenterView({
           <div className={styles.previewLabel}>
             <span className={styles.labelDot} />
             Current Slide
+            {slideDurationMs > 0 && (
+              <span style={{
+                marginLeft: '12px',
+                fontFamily: 'monospace',
+                fontSize: '12px',
+                color: slideOvertime ? '#ef4444' : '#888'
+              }}>
+                {formatMsToTimeCode(slideElapsedMs)} / {formatMsToTimeCode(slideDurationMs)}
+              </span>
+            )}
           </div>
+          {/* Slide progress bar */}
+          {slideDurationMs > 0 && (
+            <div style={{
+              height: '3px',
+              background: '#333',
+              borderRadius: '2px',
+              margin: '0 8px 4px',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                height: '100%',
+                width: `${slideProgressPct}%`,
+                background: slideOvertime ? '#ef4444' : '#22c55e',
+                transition: 'width 0.25s linear, background 0.3s',
+              }} />
+            </div>
+          )}
           <div className={styles.slidePreviewContainer}>
             {renderSlidePreview(currentSlide, 'current', portfolioLayout, selectedImage, onSelectImage)}
           </div>
@@ -189,22 +227,13 @@ export function PresenterView({
         onMouseDown={vSplit.onMouseDown}
       />
 
-      {/* Notes Panel with sub-tabs */}
+      {/* Show Overview Panel — upcoming segments */}
       <div className={styles.notesPanel} style={{ flex: 1 }}>
         <div className={styles.notesHeader}>
           <div className={styles.notesTabs}>
-            <button
-              className={`${styles.notesTab} ${notesMode === 'notes' ? styles.notesTabActive : ''}`}
-              onClick={() => setNotesMode('notes')}
-            >
-              Notes
-            </button>
-            <button
-              className={`${styles.notesTab} ${notesMode === 'script' ? styles.notesTabActive : ''}`}
-              onClick={() => setNotesMode('script')}
-            >
-              Script
-            </button>
+            <span className={styles.notesTab} style={{ cursor: 'default', opacity: 1, borderBottom: '2px solid var(--accent, #f97316)' }}>
+              Run of Show
+            </span>
           </div>
           <div className={styles.notesHeaderRight}>
             <span className={styles.slideIndicator}>
@@ -216,33 +245,15 @@ export function PresenterView({
               title="Pop out notes into separate window"
             >
               <Maximize2 size={14} />
-              Pop Out
+              Notes
             </button>
           </div>
         </div>
 
-        {notesMode === 'notes' ? (
-          <div className={styles.notesContent}>
-            {currentSlide.talkingPoints && currentSlide.talkingPoints.length > 0 && (
-              <div className={styles.talkingPoints}>
-                {currentSlide.talkingPoints.map((point, i) => (
-                  <div key={i} className={styles.talkingPoint}>
-                    <span className={styles.talkingPointBullet} />
-                    {point}
-                  </div>
-                ))}
-              </div>
-            )}
-            <p>{presenterNotes}</p>
-          </div>
-        ) : (
-          <div className={styles.scriptContainer}>
-            <EpisodeTeleprompter
-              episodeData={episodeData}
-              currentSlideIndex={currentSlideIndex}
-            />
-          </div>
-        )}
+        <ShowOverview
+          slides={slides}
+          currentSlideIndex={currentSlideIndex}
+        />
       </div>
 
       {/* Bottom: Timer, Clock, Controls */}
@@ -250,12 +261,35 @@ export function PresenterView({
         <Timer targetDuration={parseInt(episodeData.DURATION) || 60} />
         <Clock />
 
+        {/* Show elapsed */}
+        {showElapsedMs > 0 && (
+          <div className={styles.slideCounter}>
+            <div className={styles.counterLabel}>Show</div>
+            <div className={styles.counterValue} style={{ fontFamily: 'monospace' }}>
+              {formatMsToTimeCode(showElapsedMs)}
+            </div>
+          </div>
+        )}
+
         <div className={styles.slideCounter}>
           <div className={styles.counterLabel}>Slide</div>
           <div className={styles.counterValue}>
             {currentSlideIndex + 1} / {slides.length}
           </div>
         </div>
+
+        {/* Auto/Manual toggle */}
+        {toggleAutoMode && (
+          <button
+            onClick={toggleAutoMode}
+            className={`${styles.toggleButton} ${autoMode ? styles.active : ''}`}
+            title="Toggle Auto/Manual navigation (A)"
+            style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+          >
+            {autoMode ? <Pause size={14} /> : <Play size={14} />}
+            {autoMode ? 'Auto' : 'Manual'}
+          </button>
+        )}
 
         <div className={styles.navControls}>
           <button
@@ -321,6 +355,133 @@ export function PresenterView({
           <Settings size={14} />
         </Link>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Show Overview — scrollable list of all slides with current highlighted.
+ * Shows type, label, target time, and duration for each.
+ */
+function ShowOverview({ slides, currentSlideIndex }) {
+  const containerRef = useRef(null);
+  const currentRowRef = useRef(null);
+
+  // Auto-scroll to keep current slide visible
+  useEffect(() => {
+    if (currentRowRef.current && containerRef.current) {
+      currentRowRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [currentSlideIndex]);
+
+  // Group slides by rundownLabel to show segment boundaries
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        flex: 1,
+        overflowY: 'auto',
+        padding: '8px',
+        fontSize: '13px',
+      }}
+    >
+      {slides.map((slide, i) => {
+        const isCurrent = i === currentSlideIndex;
+        const isPast = i < currentSlideIndex;
+        const isSegmentStart = slide.targetTimeCode && slide.targetTimeCode !== '';
+
+        return (
+          <div
+            key={i}
+            ref={isCurrent ? currentRowRef : null}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              background: isCurrent ? 'rgba(249, 115, 22, 0.15)' : 'transparent',
+              borderLeft: isCurrent ? '3px solid #f97316' : isSegmentStart ? '3px solid #333' : '3px solid transparent',
+              opacity: isPast ? 0.4 : 1,
+              transition: 'all 0.2s',
+            }}
+          >
+            {/* Slide number */}
+            <span style={{
+              width: '28px',
+              textAlign: 'right',
+              fontFamily: 'monospace',
+              fontSize: '11px',
+              color: isCurrent ? '#f97316' : '#666',
+              flexShrink: 0,
+            }}>
+              {i + 1}
+            </span>
+
+            {/* Target time */}
+            <span style={{
+              width: '40px',
+              fontFamily: 'monospace',
+              fontSize: '11px',
+              color: isSegmentStart ? '#aaa' : '#444',
+              flexShrink: 0,
+            }}>
+              {slide.targetTimeCode || ''}
+            </span>
+
+            {/* Type badge */}
+            <span style={{
+              display: 'inline-block',
+              width: '60px',
+              fontSize: '10px',
+              textAlign: 'center',
+              padding: '1px 4px',
+              borderRadius: '3px',
+              flexShrink: 0,
+              background: {
+                title: 'rgba(249, 115, 22, 0.2)',
+                portfolio: 'rgba(59, 130, 246, 0.2)',
+                education: 'rgba(16, 185, 129, 0.2)',
+                script: 'rgba(168, 85, 247, 0.2)',
+              }[slide.type] || 'rgba(255,255,255,0.05)',
+              color: {
+                title: '#f97316',
+                portfolio: '#60a5fa',
+                education: '#34d399',
+                script: '#c084fc',
+              }[slide.type] || '#888',
+            }}>
+              {slide.type}
+            </span>
+
+            {/* Label */}
+            <span style={{
+              flex: 1,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              color: isCurrent ? '#fff' : '#ccc',
+            }}>
+              {slide.title || slide.segment || slide.artistName || slide.rundownLabel || ''}
+            </span>
+
+            {/* Duration */}
+            {slide.durationMs > 0 && (
+              <span style={{
+                fontFamily: 'monospace',
+                fontSize: '11px',
+                color: '#666',
+                flexShrink: 0,
+              }}>
+                {formatMsToTimeCode(slide.durationMs)}
+              </span>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
