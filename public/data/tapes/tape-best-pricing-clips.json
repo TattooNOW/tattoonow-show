@@ -1,6 +1,6 @@
 {
   "id": "tape-best-pricing-clips-2026",
-  "bucket": "clip-package",
+  "type": "clips",
   "status": "complete",
   "createdBy": "agent",
   "createdDate": "2026-02-18",

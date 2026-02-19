@@ -5,7 +5,7 @@
     "cadence": "weekly",
     "airDay": "Thursday",
     "airTime": "19:00 EST",
-    "formatRotation": ["deep-dive", "double-feature", "clip-show", "convention-spotlight"],
+    "formatRotation": ["deep-dive", "double-feature", "clip-show", "convention-spotlight", "panel-show"],
     "planningHorizon": "4 weeks ahead"
   },
 
@@ -20,18 +20,19 @@
         "actions": [
           "Read show schedule for next 4 weeks",
           "For each show, check which tapeSlots in the format template are filled vs empty",
+          "Cross-reference talent pool for available guests matching show theme/season",
           "Generate a backlog of unfilled tapeSlots with deadlines",
           "Prioritize: this week's show > next week > week 3 > week 4"
         ],
-        "output": "tapeBacklog — list of { showDate, format, tapeSlot, bucket, status, deadline }"
+        "output": "tapeBacklog — list of { showDate, format, tapeSlot, type, status, deadline }"
       },
       {
         "phase": "2-source",
         "name": "Source Content for Unfilled Slots",
         "trigger": "when tapeBacklog has items in 'opportunity' status",
         "actions": {
-          "artist-feature": [
-            "Check confirmed guest list (from booking system or manual input)",
+          "interview": [
+            "Check confirmed guest list (from booking system or talent pool)",
             "If guest confirmed: scrape Instagram for latest 20 posts",
             "Download best 15 images (prioritize 4:5 and high-engagement posts)",
             "Download up to 5 video clips (reels, max 60s each)",
@@ -39,12 +40,28 @@
             "Draft 5 interview talking points based on guest's niche and episode topic",
             "Move tape to 'collecting' status"
           ],
-          "text-interview": [
-            "Identify shy/remote guest from booking pipeline",
+          "text-qa": [
+            "Identify shy/remote guest from talent pool (prefer text-qa tagged talent)",
             "Generate 4-6 interview questions tailored to episode topic and artist's style",
             "Send questions via DM template or email",
             "When answers received: format as quote cards, extract pull quotes",
             "Download portfolio images from their IG (up to 10)",
+            "Move tape to 'collecting' status"
+          ],
+          "panel": [
+            "Identify 2-5 panelists from talent pool matching episode topic",
+            "Confirm availability for all panelists",
+            "Download headshot per panelist for lower-third and intro card",
+            "Draft topic outline and 5-8 discussion questions",
+            "Draft talking points per panelist based on their expertise",
+            "Move tape to 'collecting' status"
+          ],
+          "variety": [
+            "Select variant based on show format and available talent",
+            "Source variant-specific content (submissions, rounds, prompts, etc.)",
+            "For critique/viewer-spotlight: collect submissions from audience",
+            "For who-tattooed-it: source images from past guests' portfolios",
+            "For hot-takes: extract statements from past episodes or trending topics",
             "Move tape to 'collecting' status"
           ],
           "education": [
@@ -54,21 +71,22 @@
             "If no blog post: flag for manual content creation",
             "Move tape to 'collecting' status"
           ],
-          "clip-package": [
+          "clips": [
             "Search past episode transcripts for topic-relevant moments",
             "Identify 3-5 best clips (highest engagement or most quotable)",
             "Extract timestamps, transcript snippets, and guest attribution",
+            "Draft host intro, bridges, and outro scripts",
             "Move tape to 'collecting' status"
           ],
-          "convention-promo": [
-            "Check sponsor/partner pipeline for upcoming conventions",
+          "promo": [
+            "Check sponsor/partner pipeline for upcoming conventions/events",
             "Request assets from promoter: logo, poster, featured artists, promo video",
             "Generate QR code via HighLevel API",
             "Write ad copy from event details",
             "Move tape to 'collecting' status"
           ],
           "sponsor": [
-            "Same as convention-promo but for non-convention sponsors",
+            "Same as promo but for non-event sponsors",
             "Move tape to 'collecting' status"
           ]
         }
@@ -117,11 +135,12 @@
         "actions": [
           "Transcribe full episode (Whisper or similar)",
           "Split transcript into per-tape segments using timecodes",
-          "Store transcript snippets back on each tape (for future clip-package sourcing)",
+          "Store transcript snippets back on each tape (for future clips sourcing)",
           "Update tape status to 'archived' with usedInShows reference",
           "Generate post-show social assets via Shotstack",
           "Publish social media posts from show.social data",
-          "Collect analytics: views, watch time, engagement, QR scans"
+          "Collect analytics: views, watch time, engagement, QR scans",
+          "Update talent pool with appearance history and engagement metrics"
         ]
       }
     ]
@@ -130,7 +149,7 @@
   "deadlines": {
     "$description": "Working backwards from Thursday 7PM air time",
     "T-7 days":  "Phase 1 — schedule review, identify all gaps for this show",
-    "T-5 days":  "Phase 2 — all artist-feature and text-interview tapes in 'collecting'",
+    "T-5 days":  "Phase 2 — all interview and text-qa tapes in 'collecting'",
     "T-3 days":  "Phase 3 — all tapes assembled and in 'review'",
     "T-2 days":  "Phase 4 — human review complete, all tapes 'complete'",
     "T-1 day":   "Phase 5 — show manifest assembled, social assets rendered, show 'ready'",
@@ -142,10 +161,12 @@
     "$description": "When multiple tapes need filling, prioritize by:",
     "rules": [
       "1. Closest air date first",
-      "2. Required tapeSlots (artist-feature for deep-dive) before optional (clip-package)",
-      "3. Tapes that block other tapes (artist-feature blocks intro auto-generation)",
-      "4. Sponsor tapes (revenue-generating) before editorial tapes",
-      "5. Text-interview tapes (async, longest lead time for Q&A responses)"
+      "2. Required tapeSlots (interview for deep-dive) before optional (clips)",
+      "3. Tapes that block other tapes (interview blocks intro auto-generation)",
+      "4. Sponsor/promo tapes (revenue-generating) before editorial tapes",
+      "5. Text-qa tapes (async, longest lead time for Q&A responses)",
+      "6. Panel tapes (require multiple confirmed guests)",
+      "7. Variety tapes (can be built from existing content, lowest lead time)"
     ]
   },
 
@@ -159,13 +180,16 @@
       "Generate QR codes via HighLevel API",
       "Build show manifest from format template + tapes",
       "Generate social media copy",
-      "Submit Shotstack render jobs"
+      "Submit Shotstack render jobs",
+      "Draft variety segment content (hot-takes statements, who-tattooed-it rounds)",
+      "Match talent pool candidates to upcoming show themes"
     ],
     "requiresHumanInput": [
       "Guest confirmation and booking",
       "Sponsor deal terms and asset delivery",
       "Final tape approval (image selection, talking point edits)",
       "Show manifest sign-off",
+      "Panel guest coordination and scheduling",
       "Post-show social media approval (optional — can auto-publish if trusted)"
     ]
   }

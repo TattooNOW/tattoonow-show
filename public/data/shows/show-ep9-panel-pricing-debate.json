@@ -1,0 +1,235 @@
+{
+  "id": "show-ep9-panel-pricing-debate",
+  "version": "2",
+
+  "episode": {
+    "number": 9,
+    "title": "The Great Pricing Debate — Hourly vs Flat vs Day Rate",
+    "airDate": "2026-03-27T19:00:00-05:00",
+    "duration": 60,
+    "host": "Gabe Ripley",
+    "format": "panel-show",
+    "theme": "pricing",
+    "season": "season-1"
+  },
+
+  "tapes": {
+    "panel": {
+      "tapeId": "tape-pricing-panel-2026-03",
+      "type": "panel",
+      "status": "complete"
+    },
+    "education": {
+      "tapeId": "tape-pricing-psychology-blog-2026",
+      "type": "education",
+      "status": "complete"
+    },
+    "variety-1": {
+      "tapeId": "tape-who-tattooed-it-2026-03",
+      "type": "variety",
+      "variant": "who-tattooed-it",
+      "status": "complete"
+    },
+    "clips": {
+      "tapeId": "tape-best-pricing-clips-2026",
+      "type": "clips",
+      "status": "complete"
+    },
+    "promo": {
+      "tapeId": "tape-villain-arts-miami-2026",
+      "type": "promo",
+      "status": "complete"
+    }
+  },
+
+  "rundown": [
+    {
+      "timeCode": "0:00",
+      "duration": "0:30",
+      "segment": "skeleton:cold-open",
+      "label": "Cold Open / Title Card"
+    },
+    {
+      "timeCode": "0:00:30",
+      "duration": "2:30",
+      "segment": "skeleton:intro",
+      "label": "Host Intro",
+      "script": [
+        "Welcome to TattooNOW Weekly! I'm Gabe Ripley.",
+        "Tonight: The Great Pricing Debate. Three artists, three pricing models, one question — who's right?",
+        "We've got Marcus Rodriguez, Sarah Chen, and Devon Jackson going head to head.",
+        "Plus: clips from our best pricing moments, our Villain Arts Miami update, and a round of Who Tattooed It.",
+        "Let's get into it."
+      ],
+      "presenterNotes": "Energy: excited but grounded. This is a debate episode — set the tone that this will be fun AND informative. Name each panelist with a beat between each."
+    },
+    {
+      "timeCode": "0:03",
+      "duration": "0:05",
+      "segment": "skeleton:bumper-1",
+      "label": "Bumper — Into Panel Intro"
+    },
+    {
+      "timeCode": "0:03:05",
+      "duration": "3:00",
+      "type": "panel-intro",
+      "label": "Meet the Panelists",
+      "tapeId": "tape-pricing-panel-2026-03",
+      "tapeType": "panel",
+      "config": {
+        "overlays": ["lower-third"],
+        "showAllPanelists": true
+      },
+      "presenterNotes": "Introduce each panelist one at a time. Show headshot + lower-third with name, style, and pricing model. Quick portfolio flash (2 images each) as they're introduced. Let each panelist wave/say hello."
+    },
+    {
+      "timeCode": "0:06:05",
+      "duration": "6:00",
+      "type": "education",
+      "label": "Topic Primer: Pricing Psychology",
+      "tapeId": "tape-pricing-psychology-blog-2026",
+      "tapeType": "education",
+      "presenterNotes": "Set the stage before the debate. Go through the pricing slides so the audience (and panelists) have shared context. Ask panelists to hold reactions until after."
+    },
+    {
+      "timeCode": "0:12:05",
+      "duration": "14:00",
+      "type": "panel",
+      "label": "Panel Discussion — Part 1: Your Pricing Model",
+      "tapeId": "tape-pricing-panel-2026-03",
+      "tapeType": "panel",
+      "talkingPoints": [
+        "What's your current pricing model and why?",
+        "When did you switch from hourly to your current model?",
+        "How do clients react to your pricing — any pushback?"
+      ],
+      "presenterNotes": "Go around the table for each question. Marcus first (project-based), then Sarah (hourly), then Devon (day rate). Encourage cross-talk after each round. Keep the debate friendly. Display panelist headshot lower-third when they're speaking."
+    },
+    {
+      "timeCode": "0:26:05",
+      "duration": "5:00",
+      "type": "variety",
+      "label": "Who Tattooed It? — Rounds 1 & 2",
+      "tapeId": "tape-who-tattooed-it-2026-03",
+      "tapeType": "variety",
+      "config": {
+        "rounds": [0, 1]
+      },
+      "presenterNotes": "Palate cleanser between debate halves. Panelists play along — they guess too. Keep it fast and fun. Save round 3 for the closing."
+    },
+    {
+      "timeCode": "0:31:05",
+      "duration": "1:30",
+      "segment": "skeleton:ad-break-1",
+      "label": "Ad Break 1",
+      "adSlots": [
+        {
+          "tapeId": "tape-villain-arts-miami-2026",
+          "tapeType": "promo",
+          "duration": "1:00",
+          "config": { "overlays": ["qr"] }
+        },
+        {
+          "type": "platform-cta",
+          "duration": "0:30",
+          "script": "If you're a tattoo artist looking to level up your business, check out TattooNOW — professional websites, booking systems, and marketing tools built for artists."
+        }
+      ]
+    },
+    {
+      "timeCode": "0:32:35",
+      "duration": "0:05",
+      "segment": "skeleton:bumper-2",
+      "label": "Bumper — Back from Break"
+    },
+    {
+      "timeCode": "0:32:40",
+      "duration": "5:00",
+      "type": "clips",
+      "label": "Best Pricing Moments — React",
+      "tapeId": "tape-best-pricing-clips-2026",
+      "tapeType": "clips",
+      "presenterNotes": "Play 2 of the 3 clips (Marcus Johnson + Sarah Chen's clips). After each, ask the panelists to react. 'Do you agree?' 'Would you handle that differently?'"
+    },
+    {
+      "timeCode": "0:37:40",
+      "duration": "12:00",
+      "type": "panel",
+      "label": "Panel Discussion — Part 2: Advice & Lightning Round",
+      "tapeId": "tape-pricing-panel-2026-03",
+      "tapeType": "panel",
+      "talkingPoints": [
+        "What's the biggest pricing mistake you see other artists make?",
+        "If a new artist asked you how to price their first year, what would you say?",
+        "Lightning round: name your price for these 3 hypothetical pieces"
+      ],
+      "presenterNotes": "The lightning round is the most shareable moment. Show a mystery tattoo photo, each panelist has 10 seconds to quote a price. Display their answers side-by-side. Audience will love the differences. End with: 'Three artists, three models, all successful — that's the point.'"
+    },
+    {
+      "timeCode": "0:49:40",
+      "duration": "3:00",
+      "type": "variety",
+      "label": "Who Tattooed It? — Final Round",
+      "tapeId": "tape-who-tattooed-it-2026-03",
+      "tapeType": "variety",
+      "config": {
+        "rounds": [2]
+      },
+      "presenterNotes": "Final round only. Panelists all guess. Whoever gets it right gets bragging rights. Play it up — 'Last chance to prove you know your artists!'"
+    },
+    {
+      "timeCode": "0:52:40",
+      "duration": "1:00",
+      "segment": "skeleton:ad-break-2",
+      "label": "Ad Break 2 — Pre-Close"
+    },
+    {
+      "timeCode": "0:53:40",
+      "duration": "0:05",
+      "segment": "skeleton:bumper-3",
+      "label": "Bumper — Into Closing"
+    },
+    {
+      "timeCode": "0:53:45",
+      "duration": "2:30",
+      "segment": "skeleton:outro",
+      "label": "Host Outro / CTA",
+      "script": [
+        "That was incredible. Thank you to Marcus Rodriguez, Sarah Chen, and Devon Jackson for bringing the heat tonight.",
+        "If you took one thing away from this episode, let it be this: there is no one right way to price your work — but there IS a wrong way, and that's not thinking about it at all.",
+        "Audit your pricing this week. Compare to artists at your level. And if you're below average — raise it.",
+        "Don't forget: Villain Arts Miami is next weekend. Code TATTOONOW for 15% off.",
+        "Next week: we're heading to the convention floor. Live guests, artist spotlights, and surprises.",
+        "Follow us on Instagram at TattooNOW.",
+        "Thanks for watching — we'll see you next Thursday at 7!"
+      ],
+      "presenterNotes": "Warm, appreciative energy. Thank each panelist by name. The 'no one right way' line is the thesis — deliver it directly to camera. CTA into next week's convention episode should feel exciting."
+    },
+    {
+      "timeCode": "0:56:15",
+      "duration": "0:15",
+      "segment": "skeleton:end-card",
+      "label": "End Card / Subscribe"
+    }
+  ],
+
+  "showQRCodes": {
+    "booking": {
+      "url": "https://tattoonow.com/book?source=ep9",
+      "message": "Build Your Artist Website",
+      "highlevelUrl": "https://api.leadconnectorhq.com/qr/ep9-booking"
+    }
+  },
+
+  "social": {
+    "youtube": {
+      "title": "Hourly vs Flat Rate vs Day Rate: 3 Artists Debate Pricing | TattooNOW Weekly Ep. 9",
+      "description": "Three successful tattoo artists with completely different pricing models go head to head. Who's right?\n\nPanelists:\n- Marcus Rodriguez (Austin, TX) — Project-based pricing\n- Sarah Chen (Portland, OR) — Hourly at $250/hr\n- Devon Jackson (Atlanta, GA) — Day rate at $1,500/day\n\nPlus: pricing psychology education, best pricing clips from past episodes, and Who Tattooed It?\n\n#TattooArtist #TattooBusiness #PricingStrategy #TattooPanel",
+      "tags": ["tattoo pricing", "panel discussion", "tattoo business", "Marcus Rodriguez", "Sarah Chen", "Devon Jackson"]
+    },
+    "instagram": {
+      "caption": "Three pricing models. Three successful artists. One big question: who's right?\n\nWatch @marcusrodriguezink, @sarahchenink, and @devonjacksonart debate hourly vs flat rate vs day rate.\n\nFull episode link in bio.",
+      "hashtags": "#TattooArtist #TattooBusiness #PricingDebate #TattooPanel"
+    }
+  }
+}

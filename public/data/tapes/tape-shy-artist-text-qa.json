@@ -1,6 +1,6 @@
 {
   "id": "tape-emily-tran-text-2026-03",
-  "bucket": "text-interview",
+  "type": "text-qa",
   "status": "complete",
   "createdBy": "agent",
   "createdDate": "2026-02-18",

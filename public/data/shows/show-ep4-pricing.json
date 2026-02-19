@@ -6,20 +6,20 @@
     "number": 4,
     "title": "Pricing Psychology — Stop Undervaluing Your Work",
     "airDate": "2026-03-13T19:00:00-05:00",
-    "duration": 58,
+    "duration": 60,
     "host": "Gabe Ripley"
   },
 
   "rundown": [
     {
       "timeCode": "0:00",
-      "duration": "2:00",
+      "duration": "0:30",
       "type": "title-card",
       "label": "Title Card"
     },
     {
-      "timeCode": "0:02",
-      "duration": "3:00",
+      "timeCode": "0:00:30",
+      "duration": "2:30",
       "type": "intro",
       "label": "Welcome & Episode Intro",
       "talkingPoints": [
@@ -30,20 +30,22 @@
       "presenterNotes": "Energy: HIGH. Tease all the content coming — this is a packed episode."
     },
     {
-      "timeCode": "0:05",
+      "timeCode": "0:03",
       "duration": "2:00",
       "type": "guest-intro",
       "tapeId": "tape-nikko-hurtado-2026-03",
+      "tapeType": "interview",
       "config": {
         "overlays": ["lower-third"]
       }
     },
     {
-      "timeCode": "0:07",
+      "timeCode": "0:05",
       "duration": "5:00",
       "type": "portfolio",
       "label": "Nikko Portfolio — Page 1",
       "tapeId": "tape-nikko-hurtado-2026-03",
+      "tapeType": "interview",
       "config": {
         "mediaType": "images",
         "range": [0, 4],
@@ -51,72 +53,85 @@
       }
     },
     {
-      "timeCode": "0:12",
+      "timeCode": "0:10",
       "duration": "5:00",
       "type": "portfolio",
       "label": "Nikko Portfolio — Page 2",
       "tapeId": "tape-nikko-hurtado-2026-03",
+      "tapeType": "interview",
       "config": {
         "mediaType": "images",
         "range": [5, 9]
       }
     },
     {
-      "timeCode": "0:17",
+      "timeCode": "0:15",
       "duration": "4:00",
       "type": "portfolio",
       "label": "Nikko Portfolio — Page 3 + Video Clips",
       "tapeId": "tape-nikko-hurtado-2026-03",
+      "tapeType": "interview",
       "config": {
         "mediaType": "images",
         "range": [10, 14]
       }
     },
     {
-      "timeCode": "0:21",
-      "duration": "12:00",
+      "timeCode": "0:19",
+      "duration": "15:00",
       "type": "discussion",
       "label": "Interview: Pricing Journey",
-      "tapeId": "tape-nikko-hurtado-2026-03"
+      "tapeId": "tape-nikko-hurtado-2026-03",
+      "tapeType": "interview"
     },
     {
-      "timeCode": "0:33",
-      "duration": "2:00",
-      "type": "sponsor",
-      "label": "Sponsor: Villain Arts Miami",
+      "timeCode": "0:34",
+      "duration": "1:30",
+      "type": "ad-break",
+      "label": "Ad Break 1 — Sponsor: Villain Arts Miami",
       "tapeId": "tape-villain-arts-miami-2026",
+      "tapeType": "promo",
       "config": {
         "overlays": ["qr"]
       }
     },
     {
-      "timeCode": "0:35",
+      "timeCode": "0:35:30",
       "duration": "8:00",
       "type": "education",
       "label": "Education: Pricing Psychology",
-      "tapeId": "tape-pricing-psychology-blog-2026"
+      "tapeId": "tape-pricing-psychology-blog-2026",
+      "tapeType": "education"
     },
     {
-      "timeCode": "0:43",
-      "duration": "7:00",
-      "type": "text-interview",
+      "timeCode": "0:43:30",
+      "duration": "8:00",
+      "type": "text-qa",
       "label": "Text Q&A: Emily Tran",
       "tapeId": "tape-emily-tran-text-2026-03",
+      "tapeType": "text-qa",
       "config": {
         "interleavePortfolio": true,
         "overlays": ["lower-third"]
       }
     },
     {
-      "timeCode": "0:50",
+      "timeCode": "0:51:30",
       "duration": "5:00",
-      "type": "clip-package",
+      "type": "clips",
       "label": "Best Of: Pricing Advice",
-      "tapeId": "tape-best-pricing-clips-2026"
+      "tapeId": "tape-best-pricing-clips-2026",
+      "tapeType": "clips"
     },
     {
-      "timeCode": "0:55",
-      "duration": "3:00",
+      "timeCode": "0:56:30",
+      "duration": "1:00",
+      "type": "ad-break",
+      "label": "Ad Break 2 — Sponsor Reminder"
+    },
+    {
+      "timeCode": "0:57:30",
+      "duration": "2:30",
       "type": "outro",
       "label": "Wrap Up & CTA",
       "tapeId": "tape-nikko-hurtado-2026-03",
