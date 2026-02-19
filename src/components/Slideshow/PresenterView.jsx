@@ -372,19 +372,17 @@ export function PresenterView({
 }
 
 /**
- * ShowTimeline — Proportional timeline visualization.
- *
- * Each slide is a block whose width is proportional to its duration
- * relative to the total show duration. A playhead shows current position.
+ * ShowTimeline — Complete run-of-show with proportional timeline bar
+ * and a scrollable segment list showing all segments with timing.
  *
  * Layout (top to bottom):
- *   - Segment labels (grouped by rundownLabel)
- *   - Timeline bar (colored blocks per slide type)
+ *   - Timeline bar (proportional colored blocks + playhead)
  *   - Time marks
- *   - Details row for current slide
+ *   - Full segment list (auto-scrolls to current segment)
  */
-function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, showElapsedMs = 0 }) {
-  const containerRef = useRef(null);
+function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0 }) {
+  const listRef = useRef(null);
+  const currentRowRef = useRef(null);
 
   const TYPE_COLORS = {
     title: '#f97316',
@@ -418,6 +416,9 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, showElaps
     if (last && last.label === label) {
       last.endIndex = i;
       last.durationMs += slides[i].durationMs || 0;
+      last.slideCount++;
+      // Collect distinct slide types in this segment
+      if (!last.types.includes(slides[i].type)) last.types.push(slides[i].type);
     } else {
       segments.push({
         label,
@@ -425,6 +426,8 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, showElaps
         endIndex: i,
         startMs: cumulativeMs[i],
         durationMs: slides[i].durationMs || 0,
+        slideCount: 1,
+        types: [slides[i].type],
       });
     }
   }
@@ -432,7 +435,6 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, showElaps
   // Time marks at regular intervals
   const timeMarks = [];
   if (totalMs > 0) {
-    // Pick a nice interval: 5min for shows > 30min, 2min for > 10min, 1min otherwise
     const intervalMs = totalMs > 30 * 60000 ? 5 * 60000
       : totalMs > 10 * 60000 ? 2 * 60000
       : 60000;
@@ -441,60 +443,46 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, showElaps
     }
   }
 
-  // Current slide info
-  const current = slides[currentSlideIndex];
-  const currentLabel = current?.title || current?.segment || current?.artistName || '';
-  const currentDurationMs = current?.durationMs || 0;
+  const currentDurationMs = slides[currentSlideIndex]?.durationMs || 0;
+
+  // Find which segment the current slide belongs to
+  const currentSegmentIdx = segments.findIndex(
+    seg => currentSlideIndex >= seg.startIndex && currentSlideIndex <= seg.endIndex
+  );
+
+  // Auto-scroll to keep current segment visible
+  useEffect(() => {
+    if (currentRowRef.current && listRef.current) {
+      const row = currentRowRef.current;
+      const list = listRef.current;
+      const rowTop = row.offsetTop - list.offsetTop;
+      const rowBottom = rowTop + row.offsetHeight;
+      const visibleTop = list.scrollTop;
+      const visibleBottom = visibleTop + list.clientHeight;
+
+      if (rowTop < visibleTop || rowBottom > visibleBottom) {
+        list.scrollTo({ top: rowTop - 40, behavior: 'smooth' });
+      }
+    }
+  }, [currentSegmentIdx]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '12px 16px',
-        overflow: 'hidden',
-        gap: '6px',
-      }}
-    >
-      {/* Segment labels row */}
-      <div style={{ display: 'flex', height: '18px', position: 'relative' }}>
-        {segments.map((seg, i) => {
-          const widthPct = totalMs > 0 ? (seg.durationMs / totalMs) * 100 : 0;
-          if (widthPct < 2) return null; // too small to label
-          return (
-            <div
-              key={i}
-              style={{
-                width: `${widthPct}%`,
-                fontSize: '10px',
-                color: '#888',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                paddingLeft: '2px',
-                borderLeft: i > 0 ? '1px solid #333' : 'none',
-                flexShrink: 0,
-              }}
-              title={`${seg.label} (${formatMsToTimeCode(seg.durationMs)})`}
-            >
-              {seg.label}
-            </div>
-          );
-        })}
-      </div>
-
+    <div style={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '8px 12px 0',
+      overflow: 'hidden',
+      gap: '4px',
+    }}>
       {/* Timeline bar */}
-      <div style={{ position: 'relative', height: '32px', borderRadius: '4px', overflow: 'hidden', background: '#1a1a1a' }}>
-        {/* Slide blocks */}
+      <div style={{ position: 'relative', height: '24px', borderRadius: '3px', overflow: 'hidden', background: '#1a1a1a', flexShrink: 0 }}>
         <div style={{ display: 'flex', height: '100%' }}>
           {slides.map((slide, i) => {
             const widthPct = totalMs > 0 ? ((slide.durationMs || 0) / totalMs) * 100 : 0;
             const isCurrent = i === currentSlideIndex;
             const isPast = i < currentSlideIndex;
             const baseColor = TYPE_COLORS[slide.type] || '#555';
-
             return (
               <div
                 key={i}
@@ -510,13 +498,9 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, showElaps
                 }}
                 title={`${slide.title || slide.segment || slide.type} — ${formatMsToTimeCode(slide.durationMs || 0)}`}
               >
-                {/* Current slide fill based on elapsed */}
                 {isCurrent && currentDurationMs > 0 && (
                   <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
+                    position: 'absolute', top: 0, left: 0, bottom: 0,
                     width: `${Math.min(100, (slideElapsedMs / currentDurationMs) * 100)}%`,
                     background: 'rgba(255, 255, 255, 0.25)',
                     transition: 'width 0.25s linear',
@@ -526,97 +510,129 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, showElaps
             );
           })}
         </div>
-
         {/* Playhead */}
         <div style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: `${playheadPct}%`,
-          width: '2px',
-          background: '#fff',
-          boxShadow: '0 0 6px rgba(255,255,255,0.5)',
-          transition: 'left 0.25s linear',
-          zIndex: 2,
+          position: 'absolute', top: 0, bottom: 0,
+          left: `${playheadPct}%`, width: '2px',
+          background: '#fff', boxShadow: '0 0 6px rgba(255,255,255,0.5)',
+          transition: 'left 0.25s linear', zIndex: 2,
         }} />
       </div>
 
       {/* Time marks */}
-      <div style={{ position: 'relative', height: '14px' }}>
+      <div style={{ position: 'relative', height: '12px', flexShrink: 0 }}>
         {timeMarks.map((t, i) => {
           const pct = totalMs > 0 ? (t / totalMs) * 100 : 0;
           return (
-            <span
-              key={i}
-              style={{
-                position: 'absolute',
-                left: `${pct}%`,
-                transform: 'translateX(-50%)',
-                fontSize: '10px',
-                fontFamily: 'monospace',
-                color: '#555',
-              }}
-            >
+            <span key={i} style={{
+              position: 'absolute', left: `${pct}%`, transform: 'translateX(-50%)',
+              fontSize: '9px', fontFamily: 'monospace', color: '#555',
+            }}>
               {formatMsToTimeCode(t)}
             </span>
           );
         })}
-      </div>
-
-      {/* Current slide detail row */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        padding: '8px 4px',
-        borderTop: '1px solid #222',
-        minHeight: '36px',
-      }}>
-        <span style={{
-          fontSize: '11px',
-          fontFamily: 'monospace',
-          color: '#666',
-        }}>
-          {currentSlideIndex + 1}/{slides.length}
-        </span>
-        <span style={{
-          display: 'inline-block',
-          padding: '2px 8px',
-          borderRadius: '3px',
-          fontSize: '11px',
-          background: (TYPE_COLORS[current?.type] || '#555') + '33',
-          color: TYPE_COLORS[current?.type] || '#888',
-        }}>
-          {current?.type}
-        </span>
-        <span style={{
-          flex: 1,
-          fontSize: '13px',
-          color: '#fff',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-        }}>
-          {currentLabel}
-        </span>
-        {currentDurationMs > 0 && (
-          <span style={{
-            fontSize: '12px',
-            fontFamily: 'monospace',
-            color: slideElapsedMs > currentDurationMs ? '#ef4444' : '#888',
-          }}>
-            {formatMsToTimeCode(slideElapsedMs)} / {formatMsToTimeCode(currentDurationMs)}
-          </span>
-        )}
+        {/* Show total on the right */}
         {totalMs > 0 && (
           <span style={{
-            fontSize: '11px',
-            fontFamily: 'monospace',
-            color: '#555',
+            position: 'absolute', right: 0,
+            fontSize: '9px', fontFamily: 'monospace', color: '#666',
           }}>
             {formatMsToTimeCode(playheadMs)} / {formatMsToTimeCode(totalMs)}
           </span>
         )}
+      </div>
+
+      {/* Full segment list */}
+      <div
+        ref={listRef}
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          borderTop: '1px solid #222',
+          paddingTop: '4px',
+        }}
+      >
+        {segments.map((seg, i) => {
+          const isCurrent = i === currentSegmentIdx;
+          const isPast = currentSegmentIdx > i;
+          const segTimeCode = formatMsToTimeCode(seg.startMs);
+          const segDuration = formatMsToTimeCode(seg.durationMs);
+          // How far through this segment are we?
+          const segElapsedMs = isCurrent
+            ? cumulativeMs[currentSlideIndex] - seg.startMs + slideElapsedMs
+            : 0;
+          const segOvertime = isCurrent && seg.durationMs > 0 && segElapsedMs > seg.durationMs;
+
+          return (
+            <div
+              key={i}
+              ref={isCurrent ? currentRowRef : undefined}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '5px 6px',
+                borderRadius: '3px',
+                background: isCurrent ? 'rgba(249, 115, 22, 0.12)' : 'transparent',
+                borderLeft: isCurrent ? '3px solid #f97316' : '3px solid transparent',
+                opacity: isPast ? 0.45 : 1,
+                transition: 'all 0.2s',
+              }}
+            >
+              {/* Time code */}
+              <span style={{
+                fontSize: '11px', fontFamily: 'monospace', color: '#666',
+                width: '38px', flexShrink: 0, textAlign: 'right',
+              }}>
+                {segTimeCode}
+              </span>
+
+              {/* Type badges */}
+              <div style={{ display: 'flex', gap: '2px', flexShrink: 0 }}>
+                {seg.types.map((t, ti) => (
+                  <span key={ti} style={{
+                    display: 'inline-block', width: '8px', height: '8px',
+                    borderRadius: '2px', background: TYPE_COLORS[t] || '#555',
+                  }} />
+                ))}
+              </div>
+
+              {/* Label */}
+              <span style={{
+                flex: 1, fontSize: '12px',
+                color: isCurrent ? '#fff' : '#aaa',
+                fontWeight: isCurrent ? 600 : 400,
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>
+                {seg.label}
+              </span>
+
+              {/* Slide count (if more than 1) */}
+              {seg.slideCount > 1 && (
+                <span style={{
+                  fontSize: '10px', color: '#555', flexShrink: 0,
+                }}>
+                  {isCurrent
+                    ? `${currentSlideIndex - seg.startIndex + 1}/${seg.slideCount}`
+                    : `${seg.slideCount}`
+                  }
+                </span>
+              )}
+
+              {/* Duration / elapsed */}
+              <span style={{
+                fontSize: '11px', fontFamily: 'monospace', flexShrink: 0,
+                color: segOvertime ? '#ef4444' : isCurrent ? '#f97316' : '#555',
+              }}>
+                {isCurrent && seg.durationMs > 0
+                  ? `${formatMsToTimeCode(segElapsedMs)}/${segDuration}`
+                  : segDuration
+                }
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
