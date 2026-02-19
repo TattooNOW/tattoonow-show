@@ -11,19 +11,30 @@ export function PortfolioSlide({
   artistLocation,
   artistInstagram,
   images = [],
-  layout = 'grid' // 'grid' or 'fullscreen'
+  layout = 'grid', // 'grid' or 'fullscreen'
+  selectedImage: controlledSelectedImage,
+  onSelectImage
 }) {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [currentLayout, setCurrentLayout] = useState(layout);
+  // Use controlled state if provided, otherwise fall back to local state
+  const [localSelectedImage, setLocalSelectedImage] = useState(null);
+  const selectedImage = onSelectImage ? controlledSelectedImage : localSelectedImage;
+
+  const currentLayout = selectedImage !== null ? 'fullscreen' : (layout || 'grid');
 
   const handleImageClick = (imageIndex) => {
-    setSelectedImage(imageIndex);
-    setCurrentLayout('fullscreen');
+    if (onSelectImage) {
+      onSelectImage(imageIndex);
+    } else {
+      setLocalSelectedImage(imageIndex);
+    }
   };
 
   const handleCloseFullscreen = () => {
-    setSelectedImage(null);
-    setCurrentLayout('grid');
+    if (onSelectImage) {
+      onSelectImage(null);
+    } else {
+      setLocalSelectedImage(null);
+    }
   };
 
   // Grid view (contact sheet)

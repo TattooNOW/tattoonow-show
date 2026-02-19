@@ -78,7 +78,11 @@ export function PresenterView({
   toggleQR,
   toggleLowerThird,
   showQR,
-  showLowerThird
+  showLowerThird,
+  portfolioLayout,
+  togglePortfolioLayout,
+  selectedImage,
+  onSelectImage
 }) {
   // Hooks must be called unconditionally
   const hSplit = useDragResize(60, 'horizontal');
@@ -139,7 +143,7 @@ export function PresenterView({
             Current Slide
           </div>
           <div className={styles.slidePreviewContainer}>
-            {renderSlidePreview(currentSlide, 'current')}
+            {renderSlidePreview(currentSlide, 'current', portfolioLayout, selectedImage, onSelectImage)}
           </div>
         </div>
 
@@ -154,7 +158,7 @@ export function PresenterView({
           <div className={styles.previewLabel}>Next Slide</div>
           <div className={styles.slidePreviewContainer}>
             {nextSlideData ? (
-              renderSlidePreview(nextSlideData, 'next')
+              renderSlidePreview(nextSlideData, 'next', portfolioLayout, null, null)
             ) : (
               <div className={styles.endOfShow}>
                 <p>End of Show</p>
@@ -267,7 +271,7 @@ export function PresenterView({
  * Current slide is interactive (for gallery clicking etc.)
  * Next slide preview is non-interactive.
  */
-function renderSlidePreview(slide, size = 'current') {
+function renderSlidePreview(slide, size = 'current', portfolioLayout = 'grid', selectedImage = null, onSelectImage = null) {
   const scale = size === 'current' ? 0.5 : 0.35;
   const interactive = size === 'current';
 
@@ -281,7 +285,7 @@ function renderSlidePreview(slide, size = 'current') {
         pointerEvents: interactive ? 'auto' : 'none'
       }}
     >
-      {renderSlide(slide)}
+      {renderSlide(slide, portfolioLayout, selectedImage, onSelectImage)}
     </div>
   );
 }
@@ -290,7 +294,7 @@ function renderSlidePreview(slide, size = 'current') {
  * Render individual slide based on type
  * (Copied from SlideController)
  */
-function renderSlide(slide) {
+function renderSlide(slide, portfolioLayout = 'grid', selectedImage = null, onSelectImage = null) {
   switch (slide.type) {
     case 'title':
       return (
@@ -310,7 +314,9 @@ function renderSlide(slide) {
           artistLocation={slide.artistLocation}
           artistInstagram={slide.artistInstagram}
           images={slide.images}
-          layout="grid" // Always grid in preview
+          layout={portfolioLayout}
+          selectedImage={selectedImage}
+          onSelectImage={onSelectImage}
         />
       );
 
