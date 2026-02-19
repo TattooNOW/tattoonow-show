@@ -25,6 +25,8 @@ export function NotesPopout() {
         setSlideData(event.data.payload);
       }
     };
+    // Tell the presenter we're ready so it sends us the current state
+    channel.postMessage({ type: 'NOTES_READY' });
     return () => channel.close();
   }, []);
 

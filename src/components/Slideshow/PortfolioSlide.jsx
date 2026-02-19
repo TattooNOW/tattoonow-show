@@ -133,9 +133,11 @@ export function PortfolioSlide({
   // ─── Grid view ───
   if (currentLayout === 'grid' && selectedImage === null) {
     return (
-      <div className="slideshow-container bg-background p-12">
+      <div className="slideshow-container bg-background"
+        style={{ display: 'flex', flexDirection: 'column', padding: '2.5rem 3rem' }}
+      >
         {/* Header */}
-        <div className="mb-6">
+        <div style={{ flexShrink: 0, marginBottom: '1rem' }}>
           <h2 className="text-5xl font-bold mb-2">{artistName}</h2>
           <div className="flex items-center gap-6 text-xl text-muted-foreground">
             {artistStyle && <span>{artistStyle}</span>}
@@ -146,7 +148,7 @@ export function PortfolioSlide({
           </div>
         </div>
 
-        {/* Image grid — adapts to aspect ratio */}
+        {/* Image grid — fills remaining space */}
         <div
           className="gap-3"
           style={{
@@ -155,7 +157,8 @@ export function PortfolioSlide({
             gridTemplateRows: gridLayout.rows > 1
               ? `repeat(${gridLayout.rows}, 1fr)`
               : '1fr',
-            height: gridLayout.style === 'portrait' ? '880px' : '820px',
+            flex: 1,
+            minHeight: 0,
           }}
         >
           {pageImages.map((media, index) => (
@@ -170,7 +173,9 @@ export function PortfolioSlide({
         </div>
 
         {/* Footer: page indicator + hint */}
-        <div className="absolute bottom-8 left-12 right-12 flex items-center justify-between text-muted-foreground text-sm">
+        <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', paddingTop: '0.75rem' }}
+          className="text-muted-foreground text-sm"
+        >
           <span>
             {totalImages > pageImages.length
               ? `Showing ${pageStart}–${pageEnd} of ${totalImages}`

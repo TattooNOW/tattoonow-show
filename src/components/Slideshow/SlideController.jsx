@@ -17,7 +17,11 @@ export function SlideController({ episodeData, prebuiltSlides }) {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode'); // 'presenter' or null
 
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  // Initialize slide index from URL param (for audience windows opened mid-show)
+  const initialSlide = parseInt(searchParams.get('slide') || '0', 10);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(
+    isNaN(initialSlide) ? 0 : Math.max(0, initialSlide)
+  );
   const [showQR, setShowQR] = useState(false);
   const [showLowerThird, setShowLowerThird] = useState(false);
   const [portfolioLayout, setPortfolioLayout] = useState('grid'); // 'grid' or 'fullscreen'
@@ -38,6 +42,13 @@ export function SlideController({ episodeData, prebuiltSlides }) {
 
   // Use prebuilt slides (from Show) or build from episode data
   const slides = prebuiltSlides || buildSlides(episodeData);
+
+  // Clamp initial slide index to valid range once slides are available
+  useEffect(() => {
+    if (slides.length > 0 && currentSlideIndex >= slides.length) {
+      setCurrentSlideIndex(slides.length - 1);
+    }
+  }, [slides.length]);
 
   // Initialize BroadcastChannel for window sync
   useEffect(() => {
@@ -351,9 +362,41 @@ export function SlideController({ episodeData, prebuiltSlides }) {
     );
   }
 
-  // Render Audience View (default)
+  // Render Audience View (default) — scales 1920x1080 content to fill viewport
+  return <AudienceView
+    currentSlide={currentSlide}
+    currentSlideIndex={currentSlideIndex}
+    slides={slides}
+    portfolioLayout={portfolioLayout}
+    selectedImage={selectedImage}
+    handleSelectImage={handleSelectImage}
+    showLowerThird={showLowerThird}
+    showQR={showQR}
+    episodeData={episodeData}
+  />;
+}
+
+/**
+ * AudienceView — Fills the entire viewport by overriding the slideshow
+ * CSS custom properties so .slideshow-container uses 100vw/100vh
+ * instead of the fixed 1920x1080 values.
+ */
+function AudienceView({
+  currentSlide, currentSlideIndex, slides, portfolioLayout,
+  selectedImage, handleSelectImage, showLowerThird, showQR, episodeData
+}) {
   return (
-    <div className="relative">
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        overflow: 'hidden',
+        background: '#0a0a0a',
+        // Override CSS custom properties so .slideshow-container fills viewport
+        '--slideshow-width': '100vw',
+        '--slideshow-height': '100vh',
+      }}
+    >
       {/* Main slide content */}
       {renderSlide(currentSlide, portfolioLayout, selectedImage, handleSelectImage)}
 
@@ -377,14 +420,9 @@ export function SlideController({ episodeData, prebuiltSlides }) {
         />
       )}
 
-      {/* Slide counter (debug - can be hidden) */}
-      <div className="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded text-sm">
+      {/* Slide counter */}
+      <div className="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded text-sm" style={{ zIndex: 10 }}>
         {currentSlideIndex + 1} / {slides.length}
-      </div>
-
-      {/* Keyboard shortcuts hint (can be toggled off) */}
-      <div className="absolute bottom-4 left-4 bg-black/50 px-3 py-1 rounded text-xs text-muted-foreground">
-        ← → Next/Prev | Q: QR | L: Lower Third | G: Grid/Fullscreen
       </div>
     </div>
   );
