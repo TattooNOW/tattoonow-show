@@ -191,7 +191,11 @@ export function SlideController({ episodeData }) {
       broadcastSlideChange(newIndex);
       return newIndex;
     });
-  }, [slides.length, broadcastSlideChange]);
+    // Reset portfolio state when navigating away from a slide
+    setSelectedImage(null);
+    setPortfolioLayout('grid');
+    broadcastSelectedImage(null);
+  }, [slides.length, broadcastSlideChange, broadcastSelectedImage]);
 
   const previousSlide = useCallback(() => {
     setCurrentSlideIndex((prev) => {
@@ -199,7 +203,11 @@ export function SlideController({ episodeData }) {
       broadcastSlideChange(newIndex);
       return newIndex;
     });
-  }, [broadcastSlideChange]);
+    // Reset portfolio state when navigating away from a slide
+    setSelectedImage(null);
+    setPortfolioLayout('grid');
+    broadcastSelectedImage(null);
+  }, [broadcastSlideChange, broadcastSelectedImage]);
 
   const toggleQR = useCallback(() => {
     setShowQR((prev) => {
@@ -239,8 +247,11 @@ export function SlideController({ episodeData }) {
     if (segmentIndex >= 0) {
       setCurrentSlideIndex(segmentIndex);
       broadcastSlideChange(segmentIndex);
+      setSelectedImage(null);
+      setPortfolioLayout('grid');
+      broadcastSelectedImage(null);
     }
-  }, [slides, broadcastSlideChange]);
+  }, [slides, broadcastSlideChange, broadcastSelectedImage]);
 
   if (!episodeData || slides.length === 0) {
     return (

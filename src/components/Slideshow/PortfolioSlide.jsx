@@ -89,15 +89,15 @@ export function PortfolioSlide({
 
     return (
       <div
-        className="slideshow-container bg-background flex items-center justify-center p-12"
+        className="slideshow-container bg-background flex items-center justify-center p-4"
         onClick={handleCloseFullscreen}
       >
-        {/* Fullscreen image */}
-        <div className="relative max-w-6xl max-h-[900px]">
+        {/* Fullscreen image - 90% of container */}
+        <div className="relative" style={{ width: '90%', height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img
             src={image.url || image}
             alt={image.description || `Portfolio image ${selectedImage + 1}`}
-            className="max-w-full max-h-[900px] object-contain rounded-lg"
+            className="max-w-full max-h-full object-contain rounded-lg"
           />
 
           {/* Image description overlay */}
