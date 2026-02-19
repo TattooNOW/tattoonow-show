@@ -34,11 +34,9 @@ export function buildSlidesFromShow(show, tapes) {
         airDate: ep.airDate,
         host: ep.host,
       });
-      continue;
-    }
 
     // ── End card ────────────────────────────────────────────────────
-    if (entryType === 'skeleton:end-card') {
+    } else if (entryType === 'skeleton:end-card') {
       slides.push({
         type: 'title',
         title: 'Thanks for Watching!',
@@ -46,27 +44,22 @@ export function buildSlidesFromShow(show, tapes) {
         airDate: ep.airDate,
         host: ep.host,
       });
-      continue;
-    }
 
     // ── Bumper (short transition — skip or show a brief card) ──────
-    if (entryType.includes('bumper')) {
-      continue; // bumpers are timing-only, no visual slide needed
-    }
+    } else if (entryType.includes('bumper')) {
+      // bumpers are timing-only, no visual slide needed
 
     // ── Intro / Outro / host script segments ────────────────────────
-    if (
+    } else if (
       entryType === 'intro' ||
       entryType === 'outro' ||
       entryType === 'skeleton:intro' ||
       entryType === 'skeleton:outro'
     ) {
       slides.push(makeScriptSlide(entry, tape, 'intro'));
-      continue;
-    }
 
     // ── Guest intro (interview tape) ────────────────────────────────
-    if (entryType === 'guest-intro' && tape) {
+    } else if (entryType === 'guest-intro' && tape) {
       const subject = tape.subject || {};
       slides.push({
         type: 'script',
@@ -89,11 +82,9 @@ export function buildSlidesFromShow(show, tapes) {
         guestLocation: subject.location,
         guestInstagram: subject.instagram,
       });
-      continue;
-    }
 
     // ── Portfolio (interview / text-qa tape — image pages) ──────────
-    if (entryType === 'portfolio' && tape) {
+    } else if (entryType === 'portfolio' && tape) {
       const subject = tape.subject || {};
       const allImages = [
         ...(tape.media?.images || []),
@@ -114,11 +105,9 @@ export function buildSlidesFromShow(show, tapes) {
         guestTitle: subject.title,
         guestInstagram: subject.instagram,
       });
-      continue;
-    }
 
     // ── Discussion (interview tape — talking points) ────────────────
-    if (entryType === 'discussion' && tape) {
+    } else if (entryType === 'discussion' && tape) {
       slides.push({
         type: 'script',
         segment: entry.label || 'Discussion',
@@ -129,11 +118,9 @@ export function buildSlidesFromShow(show, tapes) {
         presenterNotes: tape.content?.presenterNotes || entry.presenterNotes || '',
         notes: tape.content?.presenterNotes || entry.presenterNotes || '',
       });
-      continue;
-    }
 
     // ── Panel intro (panel tape — introduce panelists) ──────────────
-    if (entryType === 'panel-intro' && tape) {
+    } else if (entryType === 'panel-intro' && tape) {
       const panelists = tape.panelists || [];
       // One portfolio slide showing all panelist headshots
       slides.push({
@@ -148,11 +135,9 @@ export function buildSlidesFromShow(show, tapes) {
         showLowerThird: entry.config?.overlays?.includes('lower-third'),
         presenterNotes: entry.presenterNotes || tape.content?.presenterNotes || '',
       });
-      continue;
-    }
 
     // ── Panel discussion ────────────────────────────────────────────
-    if (entryType === 'panel' && tape) {
+    } else if (entryType === 'panel' && tape) {
       slides.push({
         type: 'script',
         segment: entry.label || 'Panel',
@@ -163,11 +148,9 @@ export function buildSlidesFromShow(show, tapes) {
         presenterNotes: entry.presenterNotes || tape.content?.presenterNotes || '',
         notes: entry.presenterNotes || tape.content?.presenterNotes || '',
       });
-      continue;
-    }
 
     // ── Education (education tape — one slide per tape slide) ────────
-    if (entryType === 'education' && tape) {
+    } else if (entryType === 'education' && tape) {
       const tapeSlides = tape.content?.slides || [];
       tapeSlides.forEach((s, i) => {
         slides.push({
@@ -194,11 +177,9 @@ export function buildSlidesFromShow(show, tapes) {
           notes: entry.presenterNotes || tape.content?.presenterNotes || '',
         });
       }
-      continue;
-    }
 
     // ── Text Q&A (text-qa tape — interleave Q/A cards with portfolio) ─
-    if (entryType === 'text-qa' && tape) {
+    } else if (entryType === 'text-qa' && tape) {
       const subject = tape.subject || {};
       const questions = tape.content?.textInterview || [];
       const allImages = tape.media?.images || [];
@@ -256,11 +237,9 @@ export function buildSlidesFromShow(show, tapes) {
           });
         }
       });
-      continue;
-    }
 
     // ── Clips (clips tape — host intro, clip bridges, host outro) ───
-    if (entryType === 'clips' && tape) {
+    } else if (entryType === 'clips' && tape) {
       const content = tape.content || {};
 
       // Host intro
@@ -317,11 +296,9 @@ export function buildSlidesFromShow(show, tapes) {
           notes: content.hostOutro.presenterNotes || '',
         });
       }
-      continue;
-    }
 
     // ── Ad break ────────────────────────────────────────────────────
-    if (entryType === 'ad-break' || entryType.includes('ad-break')) {
+    } else if (entryType === 'ad-break' || entryType.includes('ad-break')) {
       // If the entry has adSlots, use the first promo tape
       if (entry.adSlots) {
         for (const slot of entry.adSlots) {
@@ -363,11 +340,9 @@ export function buildSlidesFromShow(show, tapes) {
       } else {
         slides.push(makeScriptSlide(entry, tape, 'cue'));
       }
-      continue;
-    }
 
     // ── Variety (game tapes — talking points + images) ───────────────
-    if (entryType === 'variety' && tape) {
+    } else if (entryType === 'variety' && tape) {
       slides.push({
         type: 'script',
         segment: entry.label || 'Variety',
@@ -378,19 +353,17 @@ export function buildSlidesFromShow(show, tapes) {
         presenterNotes: entry.presenterNotes || tape.content?.presenterNotes || '',
         notes: entry.presenterNotes || tape.content?.presenterNotes || '',
       });
-      continue;
-    }
 
     // ── Fallback — any rundown entry with script/talkingPoints ──────
-    if (entry.script || entry.talkingPoints || entry.presenterNotes) {
+    } else if (entry.script || entry.talkingPoints || entry.presenterNotes) {
       slides.push(makeScriptSlide(entry, tape, 'cue'));
-      continue;
-    }
 
     // Unknown entry types — skip with a warning
-    console.warn('[buildSlidesFromShow] Unhandled rundown entry:', entryType, entry);
+    } else {
+      console.warn('[buildSlidesFromShow] Unhandled rundown entry:', entryType, entry);
+    }
 
-    // Record which entry produced these slides
+    // Record which entry produced these slides (runs for ALL entry types)
     const slidesAdded = slides.length - slidesBefore;
     for (let s = 0; s < slidesAdded; s++) {
       slideEntryMap.push(entryIdx);
