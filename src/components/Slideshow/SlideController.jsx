@@ -310,19 +310,25 @@ export function SlideController({ episodeData, prebuiltSlides }) {
     broadcastSelectedImage(imageIndex);
   }, [broadcastSelectedImage]);
 
+  const jumpToSlide = useCallback((slideIndex) => {
+    const clamped = Math.max(0, Math.min(slideIndex, slides.length - 1));
+    setShowStartTime(prev => prev || Date.now());
+    setCurrentSlideIndex(clamped);
+    broadcastSlideChange(clamped);
+    setSelectedImage(null);
+    setPortfolioLayout('grid');
+    broadcastSelectedImage(null);
+  }, [slides.length, broadcastSlideChange, broadcastSelectedImage]);
+
   const jumpToSegment = useCallback((segmentNumber) => {
     // Find the index of the first slide for the given segment
     const segmentIndex = slides.findIndex(
       (slide) => slide.segment === segmentNumber
     );
     if (segmentIndex >= 0) {
-      setCurrentSlideIndex(segmentIndex);
-      broadcastSlideChange(segmentIndex);
-      setSelectedImage(null);
-      setPortfolioLayout('grid');
-      broadcastSelectedImage(null);
+      jumpToSlide(segmentIndex);
     }
-  }, [slides, broadcastSlideChange, broadcastSelectedImage]);
+  }, [slides, jumpToSlide]);
 
   if (!episodeData || slides.length === 0) {
     return (
@@ -358,6 +364,7 @@ export function SlideController({ episodeData, prebuiltSlides }) {
         toggleAutoMode={toggleAutoMode}
         slideElapsedMs={slideElapsedMs}
         showElapsedMs={showElapsedMs}
+        jumpToSlide={jumpToSlide}
       />
     );
   }

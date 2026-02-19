@@ -84,11 +84,26 @@ export function PresenterView({
   autoMode = false,
   toggleAutoMode,
   slideElapsedMs = 0,
-  showElapsedMs = 0
+  showElapsedMs = 0,
+  jumpToSlide
 }) {
   const hSplit = useDragResize(60, 'horizontal');
   const vSplit = useDragResize(55, 'vertical');
   const notesChannelRef = useRef(null);
+  const [showShortcuts, setShowShortcuts] = useState(false);
+
+  // Keyboard shortcut: ? toggles shortcut overlay
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === '?') {
+        setShowShortcuts(prev => !prev);
+      } else if (e.key === 'Escape' && showShortcuts) {
+        setShowShortcuts(false);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [showShortcuts]);
 
   // Broadcast notes to popout window
   useEffect(() => {
@@ -182,6 +197,21 @@ export function PresenterView({
           <div className={styles.previewLabel}>
             <span className={styles.labelDot} />
             Current Slide
+            {/* Segment label — shows which segment you're in */}
+            {currentSlide.rundownLabel && (
+              <span style={{
+                marginLeft: '10px',
+                fontSize: '12px',
+                color: '#f97316',
+                fontWeight: 500,
+                maxWidth: '300px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}>
+                {currentSlide.rundownLabel}
+              </span>
+            )}
             {slideDurationMs > 0 && (
               <span style={{
                 marginLeft: '12px',
@@ -299,6 +329,7 @@ export function PresenterView({
           currentSlideIndex={currentSlideIndex}
           slideElapsedMs={slideElapsedMs}
           showElapsedMs={showElapsedMs}
+          onJumpToSlide={jumpToSlide}
         />
       </div>
 
@@ -464,6 +495,69 @@ export function PresenterView({
           <Settings size={14} />
         </Link>
       </div>
+
+      {/* Keyboard shortcut overlay — press ? to toggle */}
+      {showShortcuts && (
+        <div
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 100,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+          onClick={() => setShowShortcuts(false)}
+        >
+          <div style={{
+            background: '#1a1a1a',
+            border: '1px solid rgba(255,255,255,0.15)',
+            borderRadius: '16px',
+            padding: '32px 40px',
+            maxWidth: '520px',
+            width: '90%',
+          }}
+            onClick={e => e.stopPropagation()}
+          >
+            <h2 style={{ fontSize: '20px', fontWeight: 700, color: '#f97316', marginBottom: '20px' }}>
+              Keyboard Shortcuts
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 20px' }}>
+              {[
+                ['← →', 'Previous / Next slide'],
+                ['Home', 'First slide'],
+                ['End', 'Last slide'],
+                ['A', 'Toggle Auto / Manual mode'],
+                ['G', 'Toggle portfolio Grid / Fullscreen'],
+                ['Q', 'Toggle QR Code overlay'],
+                ['L', 'Toggle Lower-Third overlay'],
+                ['?', 'Show / hide this shortcut guide'],
+                ['Esc', 'Close this overlay'],
+              ].map(([key, desc]) => (
+                <React.Fragment key={key}>
+                  <kbd style={{
+                    background: '#2a2a2a',
+                    border: '1px solid #444',
+                    borderRadius: '4px',
+                    padding: '3px 8px',
+                    fontSize: '13px',
+                    fontFamily: 'monospace',
+                    color: '#fff',
+                    textAlign: 'center',
+                    minWidth: '40px',
+                    whiteSpace: 'nowrap',
+                  }}>{key}</kbd>
+                  <span style={{ fontSize: '14px', color: '#ccc', display: 'flex', alignItems: 'center' }}>{desc}</span>
+                </React.Fragment>
+              ))}
+            </div>
+            <div style={{ marginTop: '20px', fontSize: '12px', color: '#666', textAlign: 'center' }}>
+              Click a segment in the timeline to jump to it
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -477,7 +571,7 @@ export function PresenterView({
  *   - Time marks
  *   - Full segment list (auto-scrolls to current segment)
  */
-function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0 }) {
+function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, onJumpToSlide }) {
   const listRef = useRef(null);
   const currentRowRef = useRef(null);
 
@@ -672,6 +766,7 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0 }) {
             <div
               key={i}
               ref={isCurrent ? currentRowRef : undefined}
+              onClick={() => onJumpToSlide && onJumpToSlide(seg.startIndex)}
               style={{
                 flex: `0 0 ${Math.max(widthPct, 6)}%`,
                 minWidth: '60px',
@@ -685,6 +780,7 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0 }) {
                 transition: 'all 0.2s',
                 overflow: 'hidden',
                 position: 'relative',
+                cursor: onJumpToSlide ? 'pointer' : 'default',
               }}
             >
               {/* Progress fill for current segment */}
