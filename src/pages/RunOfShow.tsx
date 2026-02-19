@@ -105,11 +105,6 @@ function formatDate(str) {
 function EpisodeHeader({ ep }) {
   return (
     <div className="mb-8 print:mb-6">
-      {/* Show brand */}
-      <div className="text-xs font-semibold tracking-widest text-accent uppercase mb-1">
-        TattooNOW Weekly Show
-      </div>
-
       {/* Title */}
       <h1 className="text-3xl font-bold text-foreground leading-tight">
         {ep.EPISODE_TITLE || 'Run of Show'}
@@ -304,12 +299,12 @@ export function RunOfShow() {
                 Print / Save PDF
               </button>
               <a
-                href={`/slideshow?episode=${episodeId}`}
+                href={`${import.meta.env.BASE_URL}slideshow?mode=presenter&episode=${episodeId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-3 py-1.5 rounded text-sm font-medium bg-accent text-white hover:bg-accent/90 transition-colors"
               >
-                Open Slideshow ↗
+                Open Presenter ↗
               </a>
             </div>
           </div>
@@ -360,7 +355,7 @@ export function RunOfShow() {
                 {episode.QR_CODE_MESSAGE && (
                   <span>CTA: {episode.QR_CODE_MESSAGE}</span>
                 )}
-                <span className="ml-auto">TattooNOW Weekly Show — tattoonow.com</span>
+                <span className="ml-auto">Show Control</span>
               </div>
             </>
           )}

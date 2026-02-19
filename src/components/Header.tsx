@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Menu, X, ListChecks, Presentation } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Artists", href: "/#audience" },
-  { label: "Studios", href: "/#audience" },
-  { label: "Events", href: "/#features" },
-  { label: "Pricing", href: "/#pricing" },
-  { label: "Testimonials", href: "/#social-proof" },
+  { label: "Run of Show", to: "/run-of-show", icon: ListChecks },
+  { label: "Presenter", to: "/slideshow?mode=presenter", icon: Presentation },
 ];
 
 export function Header() {
@@ -18,42 +14,42 @@ export function Header() {
 
   return (
     <header className="fixed top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-lg">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <span className="font-display text-xl font-bold text-foreground">
-            Tattoo<span className="text-accent-light">NOW</span>
+          <div className="flex h-7 w-7 items-center justify-center rounded bg-accent text-xs font-bold text-accent-foreground">
+            S
+          </div>
+          <span className="text-sm font-semibold text-foreground">
+            Show Control
           </span>
         </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className={cn(
-                "rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
-                location.hash === link.href.split("#")[1] &&
-                  "text-foreground"
-              )}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const active = location.pathname === link.to.split("?")[0];
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={cn(
+                  "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-accent/15 text-accent-light"
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                )}
+              >
+                <Icon size={14} />
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Desktop CTAs */}
-        <div className="hidden items-center gap-3 md:flex">
-          <Link to="/artist-software">
-            <Button variant="outline" size="sm">
-              Artist Software
-            </Button>
-          </Link>
-          <Button variant="default" size="sm">
-            Get Started
-          </Button>
-        </div>
+        {/* Spacer for balance */}
+        <div className="hidden w-32 md:block" />
 
         {/* Mobile Hamburger */}
         <button
@@ -68,29 +64,27 @@ export function Header() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="border-t border-border bg-background px-4 pb-4 md:hidden">
-          <nav className="flex flex-col gap-2 pt-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </a>
-            ))}
-            <hr className="my-2 border-border" />
-            <Link
-              to="/artist-software"
-              onClick={() => setMobileOpen(false)}
-            >
-              <Button variant="outline" size="sm" className="w-full">
-                Artist Software
-              </Button>
-            </Link>
-            <Button variant="default" size="sm" className="w-full">
-              Get Started
-            </Button>
+          <nav className="flex flex-col gap-1 pt-3">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              const active = location.pathname === link.to.split("?")[0];
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={cn(
+                    "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                    active
+                      ? "bg-accent/15 text-accent-light"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <Icon size={16} />
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
         </div>
       )}
