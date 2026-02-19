@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Timer } from './Timer';
 import { Clock } from './Clock';
 import { TitleCard } from './TitleCard';
@@ -146,6 +146,25 @@ export function PresenterView({
             Lower-Third
           </button>
         </div>
+
+        {/* Launch Audience View */}
+        <button
+          onClick={() => {
+            const params = new URLSearchParams(window.location.search);
+            const episodeId = params.get('episode') || params.get('id') || '1';
+            window.open(
+              `/slideshow?episode=${episodeId}`,
+              'slideshow-audience',
+              'width=1920,height=1080'
+            );
+          }}
+          className={styles.navButton}
+          title="Open slides window for screen sharing"
+          style={{ marginLeft: '8px' }}
+        >
+          <ExternalLink size={16} />
+          <span>Open Slides</span>
+        </button>
       </div>
     </div>
   );

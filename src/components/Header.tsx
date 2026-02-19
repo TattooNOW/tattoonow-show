@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ListChecks, Play } from "lucide-react";
+import { Menu, X, ListChecks, Presentation } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Run of Show", to: "/run-of-show", icon: ListChecks },
-  { label: "Slideshow", to: "/slideshow", icon: Play },
+  { label: "Presenter", to: "/slideshow?mode=presenter", icon: Presentation },
 ];
 
 export function Header() {
@@ -29,7 +29,7 @@ export function Header() {
         <nav className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => {
             const Icon = link.icon;
-            const active = location.pathname === link.to;
+            const active = location.pathname === link.to.split("?")[0];
             return (
               <Link
                 key={link.to}
@@ -67,7 +67,7 @@ export function Header() {
           <nav className="flex flex-col gap-1 pt-3">
             {navLinks.map((link) => {
               const Icon = link.icon;
-              const active = location.pathname === link.to;
+              const active = location.pathname === link.to.split("?")[0];
               return (
                 <Link
                   key={link.to}
