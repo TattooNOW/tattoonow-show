@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { TitleCard } from './TitleCard';
 import { PortfolioSlide } from './PortfolioSlide';
@@ -377,14 +377,27 @@ export function SlideController({ episodeData, prebuiltSlides }) {
 }
 
 /**
- * AudienceView — Fills the entire viewport by overriding the slideshow
- * CSS custom properties so .slideshow-container uses 100vw/100vh
- * instead of the fixed 1920x1080 values.
+ * AudienceView — Renders slides at their designed 1920x1080 size,
+ * then CSS-transform-scales the whole thing to fill the viewport.
+ * This makes ALL content (text, images, padding) scale proportionally.
  */
 function AudienceView({
   currentSlide, currentSlideIndex, slides, portfolioLayout,
   selectedImage, handleSelectImage, showLowerThird, showQR, episodeData
 }) {
+  const [scale, setScale] = useState(1);
+
+  useLayoutEffect(() => {
+    const updateScale = () => {
+      const scaleX = window.innerWidth / 1920;
+      const scaleY = window.innerHeight / 1080;
+      setScale(Math.min(scaleX, scaleY));
+    };
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
+
   return (
     <div
       style={{
@@ -392,37 +405,48 @@ function AudienceView({
         inset: 0,
         overflow: 'hidden',
         background: '#0a0a0a',
-        // Override CSS custom properties so .slideshow-container fills viewport
-        '--slideshow-width': '100vw',
-        '--slideshow-height': '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      {/* Main slide content */}
-      {renderSlide(currentSlide, portfolioLayout, selectedImage, handleSelectImage)}
+      {/* 1920x1080 slide scaled to fill viewport */}
+      <div
+        style={{
+          width: 1920,
+          height: 1080,
+          transform: `scale(${scale})`,
+          transformOrigin: 'center center',
+          position: 'relative',
+        }}
+      >
+        {/* Main slide content */}
+        {renderSlide(currentSlide, portfolioLayout, selectedImage, handleSelectImage)}
 
-      {/* Overlays */}
-      {currentSlide.showLowerThird && (
-        <LowerThird
-          guestName={currentSlide.guestName}
-          title={currentSlide.guestTitle}
-          location={currentSlide.guestLocation}
-          instagram={currentSlide.guestInstagram}
-          display={showLowerThird}
-        />
-      )}
+        {/* Overlays */}
+        {currentSlide.showLowerThird && (
+          <LowerThird
+            guestName={currentSlide.guestName}
+            title={currentSlide.guestTitle}
+            location={currentSlide.guestLocation}
+            instagram={currentSlide.guestInstagram}
+            display={showLowerThird}
+          />
+        )}
 
-      {episodeData.QR_CODE_URL && (
-        <QRCode
-          url={episodeData.QR_CODE_URL}
-          highlevelUrl={episodeData.HIGHLEVEL_QR_URL}
-          message={episodeData.QR_CODE_MESSAGE || 'Book Your Consultation'}
-          display={showQR}
-        />
-      )}
+        {episodeData.QR_CODE_URL && (
+          <QRCode
+            url={episodeData.QR_CODE_URL}
+            highlevelUrl={episodeData.HIGHLEVEL_QR_URL}
+            message={episodeData.QR_CODE_MESSAGE || 'Book Your Consultation'}
+            display={showQR}
+          />
+        )}
 
-      {/* Slide counter */}
-      <div className="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded text-sm" style={{ zIndex: 10 }}>
-        {currentSlideIndex + 1} / {slides.length}
+        {/* Slide counter */}
+        <div className="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded text-sm" style={{ zIndex: 10 }}>
+          {currentSlideIndex + 1} / {slides.length}
+        </div>
       </div>
     </div>
   );
