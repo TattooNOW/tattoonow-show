@@ -11,18 +11,15 @@
   overflow: hidden;
 }
 
-/* Mode Tabs */
-.modeTabs {
+/* Notes Sub-Tabs */
+.notesTabs {
   display: flex;
   gap: 0;
-  background: #1a1a1a;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  flex-shrink: 0;
 }
 
-.modeTab {
-  padding: 10px 24px;
-  font-size: 13px;
+.notesTab {
+  padding: 8px 16px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -30,19 +27,82 @@
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
+  margin-bottom: -1px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.modeTab:hover {
+.notesTab:hover {
   color: #fafafa;
   background: rgba(255, 255, 255, 0.05);
 }
 
-.modeTabActive {
+.notesTabActive {
   color: #EA9320;
   border-bottom-color: #EA9320;
+}
+
+/* Notes Header Right */
+.notesHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Pop Out Button */
+.popoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.popoutBtn:hover {
+  color: #fafafa;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Talking Points */
+.talkingPoints {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.talkingPoint {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #fafafa;
+}
+
+.talkingPointBullet {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #EA9320;
+  margin-top: 10px;
+}
+
+/* Script Container (embeds Teleprompter) */
+.scriptContainer {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Empty State */

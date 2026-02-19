@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Maximize2 } from 'lucide-react';
 import { Timer } from './Timer';
 import { Clock } from './Clock';
 import { TitleCard } from './TitleCard';
@@ -11,7 +11,6 @@ import styles from './PresenterView.module.css';
 
 /**
  * Hook for draggable border resizing
- * Returns percentage value and mouse event handlers
  */
 function useDragResize(initialPct, direction = 'horizontal') {
   const [pct, setPct] = useState(initialPct);
@@ -35,7 +34,6 @@ function useDragResize(initialPct, direction = 'horizontal') {
       } else {
         newPct = ((e.clientX - rect.left) / rect.width) * 100;
       }
-      // Clamp between 15% and 85%
       setPct(Math.min(85, Math.max(15, newPct)));
     };
 
@@ -61,13 +59,11 @@ function useDragResize(initialPct, direction = 'horizontal') {
 /**
  * PresenterView - Presenter mode for TattooNOW show slideshow
  *
- * Displays:
- * - Current slide preview (left, 60%)
- * - Next slide preview (right, 40%)
- * - Presenter notes panel (full width below previews)
- * - Timer, Clock, Slide Counter, Navigation Controls (bottom toolbar)
- *
- * This view is for the host's monitor only (not visible in OBS)
+ * Layout:
+ * - Slide previews (current + next) top half
+ * - Notes panel bottom half with sub-tabs: Notes | Script
+ * - Notes panel has pop-out button to open in separate window
+ * - Controls bar at bottom
  */
 export function PresenterView({
   episodeData,
@@ -84,30 +80,41 @@ export function PresenterView({
   selectedImage,
   onSelectImage
 }) {
-  // Hooks must be called unconditionally
   const hSplit = useDragResize(60, 'horizontal');
   const vSplit = useDragResize(50, 'vertical');
-  const [viewMode, setViewMode] = useState('presenter'); // 'presenter' or 'teleprompter'
+  const [notesMode, setNotesMode] = useState('notes'); // 'notes' or 'script'
+  const notesChannelRef = useRef(null);
 
-  if (viewMode === 'teleprompter') {
-    return (
-      <div className={styles.container}>
-        <div className={styles.modeTabs}>
-          <button className={styles.modeTab} onClick={() => setViewMode('presenter')}>Presenter</button>
-          <button className={`${styles.modeTab} ${styles.modeTabActive}`}>Teleprompter</button>
-        </div>
-        <Teleprompter />
-      </div>
-    );
-  }
+  // Broadcast notes to popout window
+  useEffect(() => {
+    notesChannelRef.current = new BroadcastChannel('tattoonow-notes-sync');
+    return () => {
+      if (notesChannelRef.current) notesChannelRef.current.close();
+    };
+  }, []);
+
+  // Send notes update whenever slide changes
+  useEffect(() => {
+    if (!notesChannelRef.current || !slides || slides.length === 0) return;
+    const currentSlide = slides[currentSlideIndex];
+    if (!currentSlide) return;
+
+    notesChannelRef.current.postMessage({
+      type: 'NOTES_UPDATE',
+      payload: {
+        presenterNotes: currentSlide.presenterNotes || currentSlide.notes || '',
+        slideIndex: currentSlideIndex,
+        totalSlides: slides.length,
+        slideType: currentSlide.type,
+        slideTitle: currentSlide.title || currentSlide.segment || '',
+        talkingPoints: currentSlide.talkingPoints || []
+      }
+    });
+  }, [currentSlideIndex, slides]);
 
   if (!episodeData || !slides || slides.length === 0) {
     return (
       <div className={styles.container}>
-        <div className={styles.modeTabs}>
-          <button className={`${styles.modeTab} ${styles.modeTabActive}`}>Presenter</button>
-          <button className={styles.modeTab} onClick={() => setViewMode('teleprompter')}>Teleprompter</button>
-        </div>
         <div className={styles.emptyState}>
           <h2>No Episode Data Loaded</h2>
           <p>Please load an episode to see presenter view.</p>
@@ -123,13 +130,18 @@ export function PresenterView({
     currentSlide.notes ||
     'No presenter notes for this slide.';
 
+  const openNotesPopout = () => {
+    const params = new URLSearchParams(window.location.search);
+    const episodeId = params.get('episode') || params.get('id') || '1';
+    window.open(
+      `${import.meta.env.BASE_URL}notes?episode=${episodeId}`,
+      'slideshow-notes',
+      'width=800,height=600'
+    );
+  };
+
   return (
     <div className={styles.container} ref={vSplit.containerRef}>
-      {/* Mode Tabs */}
-      <div className={styles.modeTabs}>
-        <button className={`${styles.modeTab} ${styles.modeTabActive}`}>Presenter</button>
-        <button className={styles.modeTab} onClick={() => setViewMode('teleprompter')}>Teleprompter</button>
-      </div>
       {/* Top: Slide Previews */}
       <div
         className={styles.previewRow}
@@ -168,34 +180,70 @@ export function PresenterView({
         </div>
       </div>
 
-      {/* Horizontal drag handle between previews and notes */}
+      {/* Horizontal drag handle */}
       <div
         className={styles.dragHandleHorizontal}
         onMouseDown={vSplit.onMouseDown}
       />
 
-      {/* Middle: Presenter Notes */}
+      {/* Notes Panel with sub-tabs */}
       <div className={styles.notesPanel} style={{ flex: 1 }}>
         <div className={styles.notesHeader}>
-          <h3>Presenter Notes</h3>
-          <span className={styles.slideIndicator}>
-            Slide {currentSlideIndex + 1} of {slides.length}
-          </span>
+          <div className={styles.notesTabs}>
+            <button
+              className={`${styles.notesTab} ${notesMode === 'notes' ? styles.notesTabActive : ''}`}
+              onClick={() => setNotesMode('notes')}
+            >
+              Notes
+            </button>
+            <button
+              className={`${styles.notesTab} ${notesMode === 'script' ? styles.notesTabActive : ''}`}
+              onClick={() => setNotesMode('script')}
+            >
+              Script
+            </button>
+          </div>
+          <div className={styles.notesHeaderRight}>
+            <span className={styles.slideIndicator}>
+              Slide {currentSlideIndex + 1} of {slides.length}
+            </span>
+            <button
+              className={styles.popoutBtn}
+              onClick={openNotesPopout}
+              title="Pop out notes into separate window"
+            >
+              <Maximize2 size={14} />
+              Pop Out
+            </button>
+          </div>
         </div>
-        <div className={styles.notesContent}>
-          <p>{presenterNotes}</p>
-        </div>
+
+        {notesMode === 'notes' ? (
+          <div className={styles.notesContent}>
+            {currentSlide.talkingPoints && currentSlide.talkingPoints.length > 0 && (
+              <div className={styles.talkingPoints}>
+                {currentSlide.talkingPoints.map((point, i) => (
+                  <div key={i} className={styles.talkingPoint}>
+                    <span className={styles.talkingPointBullet} />
+                    {point}
+                  </div>
+                ))}
+              </div>
+            )}
+            <p>{presenterNotes}</p>
+          </div>
+        ) : (
+          <div className={styles.scriptContainer}>
+            <Teleprompter />
+          </div>
+        )}
       </div>
 
       {/* Bottom: Timer, Clock, Controls */}
       <div className={styles.controlsBar}>
-        {/* Timer */}
-        <Timer targetDuration={parseInt(episodeData.DURATION) || 40} />
-
-        {/* Clock */}
+        <Timer targetDuration={parseInt(episodeData.DURATION) || 60} />
         <Clock />
 
-        {/* Slide Counter */}
         <div className={styles.slideCounter}>
           <div className={styles.counterLabel}>Slide</div>
           <div className={styles.counterValue}>
@@ -203,13 +251,12 @@ export function PresenterView({
           </div>
         </div>
 
-        {/* Navigation Controls */}
         <div className={styles.navControls}>
           <button
             onClick={previousSlide}
             disabled={currentSlideIndex === 0}
             className={styles.navButton}
-            title="Previous Slide (← or PgUp)"
+            title="Previous Slide"
           >
             <ChevronLeft size={20} />
             <span>Prev</span>
@@ -218,14 +265,13 @@ export function PresenterView({
             onClick={nextSlide}
             disabled={currentSlideIndex === slides.length - 1}
             className={styles.navButton}
-            title="Next Slide (→ or PgDn)"
+            title="Next Slide"
           >
             <span>Next</span>
             <ChevronRight size={20} />
           </button>
         </div>
 
-        {/* Overlay Toggles */}
         <div className={styles.overlayToggles}>
           <button
             onClick={toggleQR}
@@ -243,7 +289,6 @@ export function PresenterView({
           </button>
         </div>
 
-        {/* Launch Audience View */}
         <button
           onClick={() => {
             const params = new URLSearchParams(window.location.search);
@@ -268,8 +313,6 @@ export function PresenterView({
 
 /**
  * Render slide preview (scaled down for presenter view)
- * Current slide is interactive (for gallery clicking etc.)
- * Next slide preview is non-interactive.
  */
 function renderSlidePreview(slide, size = 'current', portfolioLayout = 'grid', selectedImage = null, onSelectImage = null) {
   const scale = size === 'current' ? 0.5 : 0.35;
@@ -290,10 +333,6 @@ function renderSlidePreview(slide, size = 'current', portfolioLayout = 'grid', s
   );
 }
 
-/**
- * Render individual slide based on type
- * (Copied from SlideController)
- */
 function renderSlide(slide, portfolioLayout = 'grid', selectedImage = null, onSelectImage = null) {
   switch (slide.type) {
     case 'title':
