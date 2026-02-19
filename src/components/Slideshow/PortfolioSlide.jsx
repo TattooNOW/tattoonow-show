@@ -188,7 +188,7 @@ export function PortfolioSlide({
     );
   }
 
-  // ─── Fullscreen view — 90% of container ───
+  // ─── Fullscreen view — 90% of viewport ───
   if (currentLayout === 'fullscreen' && selectedImage !== null) {
     const media = images[selectedImage];
     if (!media) return null;
@@ -198,7 +198,8 @@ export function PortfolioSlide({
 
     return (
       <div
-        className="slideshow-container bg-background flex items-center justify-center"
+        className="slideshow-container flex items-center justify-center"
+        style={{ background: '#050505' }}
         onClick={(e) => {
           // Don't close if clicking video controls
           if (e.target.tagName === 'VIDEO') return;
@@ -212,16 +213,20 @@ export function PortfolioSlide({
             <img
               src={media.url || media}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30"
-              style={{ filter: 'blur(40px) brightness(0.4)' }}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{ filter: 'blur(50px) brightness(0.3) saturate(1.2)' }}
             />
-            {/* Sharp centered image */}
+            {/* Sharp centered image — fills 90% of viewport height */}
             <div className="relative z-10" style={{ height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img
                 src={media.url || media}
                 alt={media.description || `Portfolio image ${selectedImage + 1}`}
-                className="max-h-full object-contain rounded-lg"
-                style={{ maxWidth: '50%' }}
+                style={{
+                  maxHeight: '100%',
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  boxShadow: '0 0 80px rgba(0,0,0,0.6)',
+                }}
               />
             </div>
           </>
@@ -231,13 +236,14 @@ export function PortfolioSlide({
         {isTall && isVideo && (
           <>
             <div
-              className="absolute inset-0 opacity-20"
-              style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%)' }}
+              className="absolute inset-0"
+              style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #050505 100%)', opacity: 0.4 }}
             />
+            {/* Video fills 90% of viewport height */}
             <div className="relative z-10" style={{ height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <VideoPlayer
                 media={media}
-                style={{ maxHeight: '100%', maxWidth: '50%', borderRadius: '8px' }}
+                style={{ maxHeight: '100%', borderRadius: '8px', boxShadow: '0 0 80px rgba(0,0,0,0.6)' }}
                 onEnded={autoAdvance ? handleNextImage : undefined}
               />
             </div>
@@ -253,7 +259,13 @@ export function PortfolioSlide({
             <img
               src={media.url || media}
               alt={media.description || `Portfolio image ${selectedImage + 1}`}
-              className="max-w-full max-h-full object-contain rounded-lg"
+              style={{
+                maxWidth: '100%',
+                maxHeight: '100%',
+                objectFit: 'contain',
+                borderRadius: '8px',
+                boxShadow: '0 0 60px rgba(0,0,0,0.5)',
+              }}
             />
           </div>
         )}
@@ -266,7 +278,7 @@ export function PortfolioSlide({
           >
             <VideoPlayer
               media={media}
-              style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '8px' }}
+              style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '8px', boxShadow: '0 0 60px rgba(0,0,0,0.5)' }}
               onEnded={autoAdvance ? handleNextImage : undefined}
             />
           </div>
@@ -274,13 +286,17 @@ export function PortfolioSlide({
 
         {/* Description overlay */}
         {media.description && (
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-black/80 px-8 py-4 rounded-lg max-w-3xl text-center z-20">
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-black/80 px-8 py-4 rounded-lg max-w-3xl text-center z-20"
+            style={{ backdropFilter: 'blur(8px)' }}
+          >
             <p className="text-xl">{media.description}</p>
           </div>
         )}
 
         {/* Artist info overlay (top-left) */}
-        <div className="absolute top-8 left-8 bg-black/70 px-6 py-4 rounded-lg z-20">
+        <div className="absolute top-8 left-8 bg-black/70 px-6 py-4 rounded-lg z-20"
+          style={{ backdropFilter: 'blur(8px)' }}
+        >
           <div className="text-2xl font-bold brand-accent">{artistName}</div>
           {artistInstagram && (
             <div className="text-lg text-muted-foreground">@{artistInstagram}</div>
@@ -288,7 +304,9 @@ export function PortfolioSlide({
         </div>
 
         {/* Image counter (top-right) */}
-        <div className="absolute top-8 right-8 bg-black/70 px-6 py-4 rounded-lg text-xl z-20">
+        <div className="absolute top-8 right-8 bg-black/70 px-6 py-4 rounded-lg text-xl z-20"
+          style={{ backdropFilter: 'blur(8px)' }}
+        >
           {selectedImage + 1} / {totalImages}
           {autoAdvance && !isVideo && (
             <div className="text-xs text-muted-foreground mt-1">Auto {autoAdvanceMs / 1000}s</div>
