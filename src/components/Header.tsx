@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Monitor, ListChecks, Play } from "lucide-react";
+import { Menu, X, ListChecks, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
   { label: "Run of Show", to: "/run-of-show", icon: ListChecks },
   { label: "Slideshow", to: "/slideshow", icon: Play },
-  { label: "Network Preview", to: "/network-preview", icon: Monitor },
 ];
 
 export function Header() {
