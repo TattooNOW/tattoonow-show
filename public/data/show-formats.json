@@ -1,0 +1,108 @@
+{
+  "$description": "4 weekly show formats for A/B testing. Rotate weekly, track analytics. The intro segment is auto-generated from the tapes assigned to the show.",
+
+  "formats": {
+    "deep-dive": {
+      "id": "format-deep-dive",
+      "name": "Deep Dive",
+      "description": "Single guest, long-form interview. 15 portfolio images across 3 pages. Education segment tied to guest topic. Convention promo in the break.",
+      "targetDuration": 58,
+      "bestFor": "Big-name guests with strong portfolios and stories to tell",
+      "analytics": {
+        "trackAs": "format-A",
+        "hypothesis": "Longer guest time = higher watch time and subscriber conversion"
+      },
+      "template": [
+        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
+        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes", "notes": "Intro built from guest bio + episode topic + tease convention promo" },
+        { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature",  "config": { "overlays": ["lower-third"] } },
+        { "type": "portfolio",        "duration": "5:00",  "tapeSlot": "artist-feature",  "config": { "range": [0, 4] } },
+        { "type": "portfolio",        "duration": "5:00",  "tapeSlot": "artist-feature",  "config": { "range": [5, 9] } },
+        { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature",  "config": { "range": [10, 14] } },
+        { "type": "discussion",       "duration": "15:00", "tapeSlot": "artist-feature" },
+        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] } },
+        { "type": "education",        "duration": "8:00",  "tapeSlot": "education" },
+        { "type": "discussion",       "duration": "8:00",  "tapeSlot": "artist-feature",  "label": "Part 2 / Viewer Q&A" },
+        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo", "label": "Quick reminder" },
+        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+      ]
+    },
+
+    "double-feature": {
+      "id": "format-double-feature",
+      "name": "Double Feature",
+      "description": "Two artists — one live interview, one text Q&A. Shorter portfolio pages. Education in the middle. Great for pairing a known name with an emerging artist.",
+      "targetDuration": 58,
+      "bestFor": "Pairing a big name (live) with an emerging/shy artist (text Q&A)",
+      "analytics": {
+        "trackAs": "format-B",
+        "hypothesis": "Variety of guests = broader audience appeal and more shares"
+      },
+      "template": [
+        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
+        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes" },
+        { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature",  "config": { "overlays": ["lower-third"] } },
+        { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature",  "config": { "range": [0, 7] } },
+        { "type": "portfolio",        "duration": "3:00",  "tapeSlot": "artist-feature",  "config": { "range": [8, 14] } },
+        { "type": "discussion",       "duration": "12:00", "tapeSlot": "artist-feature" },
+        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] } },
+        { "type": "education",        "duration": "6:00",  "tapeSlot": "education" },
+        { "type": "text-interview",   "duration": "10:00", "tapeSlot": "text-interview",  "config": { "interleavePortfolio": true, "overlays": ["lower-third"] } },
+        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo", "label": "Quick reminder" },
+        { "type": "discussion",       "duration": "5:00",  "tapeSlot": "artist-feature",  "label": "React to text Q&A + viewer Qs" },
+        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+      ]
+    },
+
+    "clip-show": {
+      "id": "format-clip-show",
+      "name": "Clip Show + Education",
+      "description": "No live guest. Curated clips from past episodes around a theme. Heavy education. Convention promo. Text interview fills the guest slot. Low production lift — good for weeks between big guests.",
+      "targetDuration": 45,
+      "bestFor": "Weeks with no live guest. Repurposes existing content around a topic.",
+      "analytics": {
+        "trackAs": "format-C",
+        "hypothesis": "Shorter + education-heavy = higher completion rate and blog traffic"
+      },
+      "template": [
+        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
+        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes" },
+        { "type": "education",        "duration": "10:00", "tapeSlot": "education" },
+        { "type": "clip-package",     "duration": "8:00",  "tapeSlot": "clip-package" },
+        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] } },
+        { "type": "text-interview",   "duration": "10:00", "tapeSlot": "text-interview",  "config": { "interleavePortfolio": true } },
+        { "type": "education",        "duration": "5:00",  "tapeSlot": "education",       "label": "Action steps recap" },
+        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo" },
+        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+      ]
+    },
+
+    "convention-spotlight": {
+      "id": "format-convention-spotlight",
+      "name": "Convention Spotlight",
+      "description": "Built around a convention. Featured artists from the event. Convention promo is woven throughout, not just ad breaks. Multiple short artist features.",
+      "targetDuration": 58,
+      "bestFor": "Weeks before a major convention. Sponsor gets maximum exposure.",
+      "analytics": {
+        "trackAs": "format-D",
+        "hypothesis": "Convention tie-in = highest sponsor ROI and ticket conversion"
+      },
+      "template": [
+        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
+        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes", "notes": "Intro heavy on convention — 'We're counting down to [convention]!'" },
+        { "type": "sponsor",          "duration": "3:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"], "persistQR": true }, "label": "Convention intro + featured artists" },
+        { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature-1", "config": { "overlays": ["lower-third"] } },
+        { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature-1", "config": { "range": [0, 7] } },
+        { "type": "discussion",       "duration": "10:00", "tapeSlot": "artist-feature-1" },
+        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo", "label": "Ticket reminder" },
+        { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature-2", "config": { "overlays": ["lower-third"] } },
+        { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature-2", "config": { "range": [0, 7] } },
+        { "type": "discussion",       "duration": "10:00", "tapeSlot": "artist-feature-2" },
+        { "type": "education",        "duration": "6:00",  "tapeSlot": "education", "label": "Convention prep tips" },
+        { "type": "text-interview",   "duration": "5:00",  "tapeSlot": "text-interview",  "label": "Quick text Q&A with 3rd featured artist" },
+        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] }, "label": "Final CTA with discount code" },
+        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+      ]
+    }
+  }
+}

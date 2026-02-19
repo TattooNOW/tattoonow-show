@@ -1,0 +1,163 @@
+{
+  "id": "tape-emily-tran-text-2026-03",
+  "bucket": "text-interview",
+  "status": "complete",
+  "createdBy": "agent",
+  "createdDate": "2026-02-18",
+  "estimatedDuration": 10,
+  "tags": ["fineline", "minimalist", "introvert", "text-interview", "new-york"],
+
+  "subject": {
+    "name": "Emily Tran",
+    "title": "Fine Line & Minimalist Specialist",
+    "bio": "Emily Tran creates delicate fine-line work from her private studio in Brooklyn. Known for botanical illustrations and tiny detailed pieces, she's built a 6-month waitlist entirely through Instagram without ever doing a video interview.",
+    "style": "Fine Line & Minimalist",
+    "location": "Brooklyn, NY",
+    "instagram": "emilytran.ink",
+    "website": "https://emilytranink.com"
+  },
+
+  "media": {
+    "images": [
+      {
+        "url": "https://picsum.photos/seed/emily-01/800/1000",
+        "description": "Fine line botanical — wildflower bouquet on inner forearm",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et001",
+        "tags": ["botanical", "fineline", "forearm"]
+      },
+      {
+        "url": "https://picsum.photos/seed/emily-02/800/1000",
+        "description": "Minimalist constellation — Orion on ribcage",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et002",
+        "tags": ["constellation", "minimalist", "ribcage"]
+      },
+      {
+        "url": "https://picsum.photos/seed/emily-03/800/1000",
+        "description": "Tiny detailed hummingbird — behind ear placement",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et003",
+        "tags": ["micro", "bird", "placement"]
+      },
+      {
+        "url": "https://picsum.photos/seed/emily-04/800/1000",
+        "description": "Geometric sacred geometry — sternum piece",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et004",
+        "tags": ["geometric", "sacred-geometry", "sternum"]
+      },
+      {
+        "url": "https://picsum.photos/seed/emily-05/800/1000",
+        "description": "Delicate wave line — ankle wrap",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et005",
+        "tags": ["wave", "minimal", "ankle"]
+      },
+      {
+        "url": "https://picsum.photos/seed/emily-06/800/1000",
+        "description": "Lavender sprig — single needle work",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et006",
+        "tags": ["botanical", "single-needle", "lavender"]
+      },
+      {
+        "url": "https://picsum.photos/seed/emily-07/800/1000",
+        "description": "Matching couple tattoos — interlocking crescents",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et007",
+        "tags": ["matching", "couple", "crescent"]
+      },
+      {
+        "url": "https://picsum.photos/seed/emily-08/800/1000",
+        "description": "Fine line portrait — pet cat memorial",
+        "aspect": "4:5",
+        "source": "instagram:emilytran.ink:Et008",
+        "tags": ["portrait", "pet", "memorial"]
+      }
+    ],
+    "videos": []
+  },
+
+  "audio": {
+    "backgroundMusic": {
+      "url": "tapes/emily-tran-text-2026-03/audio/ambient-chill.mp3",
+      "title": "Ambient chill — royalty-free",
+      "license": "royalty-free",
+      "volume": 0.15,
+      "fadeIn": 3,
+      "fadeOut": 3,
+      "notes": "Low ambient music under quote cards. Fade up between questions while portfolio images show. Fade down when host reads question aloud."
+    },
+    "voiceover": {
+      "script": [
+        {
+          "cue": "before-q1",
+          "text": "Emily Tran is a fine-line specialist in Brooklyn who's built a six-month waitlist — without ever appearing on camera. We asked her how.",
+          "voice": "host",
+          "notes": "Host reads live or pre-records. Sets the scene before first quote card."
+        },
+        {
+          "cue": "between-q1-q2",
+          "text": "Her approach to pricing is just as intentional as her linework.",
+          "voice": "host",
+          "notes": "Short bridge. Show portfolio images during this."
+        },
+        {
+          "cue": "between-q2-q3",
+          "text": "For artists who'd rather let their art do the talking, Emily has a simple philosophy.",
+          "voice": "host",
+          "notes": "Transition to marketing advice. Portfolio images continue."
+        },
+        {
+          "cue": "between-q3-q4",
+          "text": "And her advice for artists pushing the limits of fine-line work?",
+          "voice": "host",
+          "notes": "Set up the final answer."
+        },
+        {
+          "cue": "after-q4",
+          "text": "Emily Tran. Proof that quiet work speaks the loudest. You can find her at emilytran.ink on Instagram.",
+          "voice": "host",
+          "notes": "Close the segment. Show final portfolio image. Music fades."
+        }
+      ],
+      "preRecorded": false,
+      "notes": "Voiceover can be read live by host (preferred for energy) or pre-recorded and played during the segment. If pre-recorded, music and VO are mixed in advance and the host just advances slides."
+    }
+  },
+
+  "content": {
+    "textInterview": [
+      {
+        "question": "You've built a 6-month waitlist without ever doing video content. How?",
+        "answer": "Honestly, I just focused on the work. I post one photo a day of fresh or healed work with a clean white background. No reels, no face, no talking. People find me through hashtags and the explore page. The work speaks for itself.",
+        "pullQuote": "No reels, no face, no talking. The work speaks for itself.",
+        "displayImages": [0, 1],
+        "voiceoverCue": "before-q1"
+      },
+      {
+        "question": "What's your take on pricing fine line work? It looks 'simple' but takes incredible skill.",
+        "answer": "I charge a flat rate per piece, not hourly. A tiny hummingbird behind the ear might take 45 minutes but it took me 10 years to learn to do it in 45 minutes. I start at $250 minimum regardless of size. If someone balks at that, they're not my client.",
+        "pullQuote": "It took me 10 years to learn to do it in 45 minutes.",
+        "displayImages": [2, 3],
+        "voiceoverCue": "between-q1-q2"
+      },
+      {
+        "question": "Advice for introverted artists who dread the marketing side?",
+        "answer": "You don't have to be on camera. You don't have to dance on TikTok. Post your work consistently, respond to DMs within 24 hours, and make booking easy. That's it. Your art IS your marketing.",
+        "pullQuote": "Your art IS your marketing.",
+        "displayImages": [4, 5],
+        "voiceoverCue": "between-q2-q3"
+      },
+      {
+        "question": "What's the biggest mistake you see fine line artists making?",
+        "answer": "Going too small too fast. Master the fundamentals at a reasonable size first. A 3-inch flower teaches you everything a 0.5-inch flower does, but you can actually see your mistakes and learn from them. Tiny work is unforgiving.",
+        "pullQuote": "Tiny work is unforgiving.",
+        "displayImages": [6, 7],
+        "voiceoverCue": "between-q3-q4"
+      }
+    ],
+    "presenterNotes": "Text interview with music bed and voiceover bridges. Flow: VO intro → portfolio images → quote card (hold 5-8s) → VO bridge → portfolio images → next quote card. Music is ambient underneath everything, fades up during image-only moments, fades down under VO and quote display. Emily declined video but her text answers are gold — this segment proves you don't need video to be compelling."
+  }
+}

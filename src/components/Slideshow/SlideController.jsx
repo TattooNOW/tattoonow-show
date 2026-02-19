@@ -514,6 +514,7 @@ function renderSlide(slide, portfolioLayout, selectedImage, onSelectImage) {
           artistLocation={slide.artistLocation}
           artistInstagram={slide.artistInstagram}
           images={slide.images}
+          range={slide.range}
           layout={portfolioLayout}
           selectedImage={selectedImage}
           onSelectImage={onSelectImage}

@@ -1,0 +1,178 @@
+{
+  "$schema": "tape-schema-v1",
+  "$description": "Content tape schema for TattooNOW Show. A tape is a self-contained content unit that gets slotted into a show rundown.",
+
+  "buckets": {
+    "artist-feature": {
+      "description": "Full artist feature: portfolio images, interview talking points, bio. Agent downloads from IG.",
+      "media": {
+        "images": { "max": 15, "acceptAspect": ["4:5", "1:1", "9:16", "16:9"], "preferAspect": "4:5" },
+        "videos": { "max": 5, "maxDurationEach": 60, "acceptAspect": ["9:16", "4:5", "1:1", "16:9"] }
+      },
+      "requiredFields": ["subject", "media.images"],
+      "optionalFields": ["content.talkingPoints", "content.presenterNotes"]
+    },
+    "text-interview": {
+      "description": "Q&A for camera-shy guests. Agent sends questions, formats answers as quote cards. Supports background music bed and voiceover script (live or pre-recorded) between questions.",
+      "media": {
+        "images": { "max": 10, "acceptAspect": ["4:5", "1:1", "9:16", "16:9"], "preferAspect": "4:5" },
+        "videos": { "max": 0 }
+      },
+      "audio": {
+        "backgroundMusic": { "max": 1, "formats": ["mp3", "wav", "aac"], "notes": "Royalty-free ambient music under quote cards and portfolio images" },
+        "voiceover": { "max": 1, "formats": ["mp3", "wav"], "notes": "Pre-recorded VO or live host script with cue points between each Q&A" }
+      },
+      "requiredFields": ["subject", "content.textInterview"],
+      "optionalFields": ["media.images", "audio.backgroundMusic", "audio.voiceover", "content.presenterNotes"]
+    },
+    "education": {
+      "description": "Teaching slides sourced from blog posts, articles, or original content.",
+      "media": {
+        "images": { "max": 8, "acceptAspect": ["16:9", "4:5", "1:1"], "preferAspect": "16:9" },
+        "videos": { "max": 2, "maxDurationEach": 120 }
+      },
+      "requiredFields": ["content.slides"],
+      "optionalFields": ["content.source", "media.images"]
+    },
+    "clip-package": {
+      "description": "Curated clips from previous longform episodes. Agent extracts by topic.",
+      "media": {
+        "images": { "max": 0 },
+        "videos": { "max": 8, "maxDurationEach": 180 }
+      },
+      "requiredFields": ["content.clips"],
+      "optionalFields": ["content.presenterNotes"]
+    },
+    "sponsor": {
+      "description": "Convention promoter, brand sponsor, or ad partner. Includes QR code and ad copy.",
+      "media": {
+        "images": { "max": 5, "acceptAspect": ["16:9", "1:1", "4:5"], "preferAspect": "16:9" },
+        "videos": { "max": 1, "maxDurationEach": 30 }
+      },
+      "requiredFields": ["sponsor"],
+      "optionalFields": ["media.images", "media.videos"]
+    },
+    "convention-promo": {
+      "description": "Tattoo convention promotion with featured artists, dates, QR for tickets.",
+      "media": {
+        "images": { "max": 10, "acceptAspect": ["4:5", "1:1", "9:16", "16:9"], "preferAspect": "4:5" },
+        "videos": { "max": 3, "maxDurationEach": 60 }
+      },
+      "requiredFields": ["sponsor", "sponsor.featuredArtists"],
+      "optionalFields": ["media.images", "media.videos"]
+    },
+    "ad-read": {
+      "description": "Short ad break with CTA, QR code, and transition graphic.",
+      "media": {
+        "images": { "max": 2, "acceptAspect": ["16:9"], "preferAspect": "16:9" },
+        "videos": { "max": 1, "maxDurationEach": 30 }
+      },
+      "requiredFields": ["sponsor.adCopy", "sponsor.qrUrl"],
+      "optionalFields": ["media.images"]
+    }
+  },
+
+  "statuses": ["opportunity", "collecting", "review", "complete", "archived"],
+
+  "mediaItem": {
+    "url": "string (CDN or external URL)",
+    "localPath": "string (relative path within tape directory)",
+    "description": "string",
+    "aspect": "string (e.g. '4:5', '9:16', '1:1', '16:9')",
+    "source": "string (e.g. 'instagram:handle:postId', 'youtube:channel:videoId', 'upload')",
+    "width": "number (pixels, optional)",
+    "height": "number (pixels, optional)",
+    "tags": "string[]"
+  },
+
+  "videoItem": {
+    "extends": "mediaItem",
+    "duration": "number (seconds)",
+    "trimStart": "string (MM:SS, optional — for clips from longer source)",
+    "trimEnd": "string (MM:SS, optional)",
+    "sourceUrl": "string (original full video URL, if trimmed)"
+  },
+
+  "renderHints": {
+    "$description": "Render API compatibility layer. Tapes carry enough data for Shotstack, Creatomate, or similar APIs to build video/image assets without manual editing.",
+
+    "outputTypes": {
+      "social-clip": {
+        "description": "Short promo clip for IG/TikTok from tape media + text overlays",
+        "aspect": "9:16",
+        "maxDuration": 60,
+        "layers": [
+          { "type": "background",  "from": "media.images[0] or media.videos[0]" },
+          { "type": "text-overlay", "from": "subject.name",    "position": "bottom-left",  "style": "brand-heading" },
+          { "type": "text-overlay", "from": "subject.style",   "position": "bottom-left",  "style": "brand-subtitle" },
+          { "type": "logo",         "from": "brand.logo",      "position": "top-right" },
+          { "type": "qr",           "from": "tape.sponsor.qrUrl or show.qrCodes.booking", "position": "bottom-right" }
+        ]
+      },
+      "youtube-thumbnail": {
+        "description": "Thumbnail for YouTube from best portfolio image + guest name + episode title",
+        "aspect": "16:9",
+        "width": 1280,
+        "height": 720,
+        "layers": [
+          { "type": "background",  "from": "media.images[0]", "filter": "darken-30%" },
+          { "type": "text-overlay", "from": "subject.name",    "position": "center-left", "style": "thumbnail-heading" },
+          { "type": "text-overlay", "from": "show.episode.title", "position": "center-left-below", "style": "thumbnail-subtitle" },
+          { "type": "logo",         "from": "brand.logo",      "position": "bottom-right" }
+        ]
+      },
+      "quote-card": {
+        "description": "Static image for IG feed from text-interview pull quotes",
+        "aspect": "1:1",
+        "width": 1080,
+        "height": 1080,
+        "layers": [
+          { "type": "background",  "from": "brand.gradient or media.images[0]", "filter": "blur-heavy" },
+          { "type": "text-overlay", "from": "content.textInterview[N].pullQuote", "position": "center", "style": "quote-large" },
+          { "type": "text-overlay", "from": "subject.name", "position": "bottom-center", "style": "quote-attribution" },
+          { "type": "logo",         "from": "brand.logo", "position": "top-right" }
+        ]
+      },
+      "portfolio-carousel": {
+        "description": "IG carousel of portfolio images with branded frames",
+        "aspect": "4:5",
+        "width": 1080,
+        "height": 1350,
+        "perSlide": {
+          "layers": [
+            { "type": "background",  "from": "media.images[N]", "fit": "cover" },
+            { "type": "frame",       "from": "brand.frame-4x5", "position": "overlay" },
+            { "type": "text-overlay", "from": "media.images[N].description", "position": "bottom", "style": "caption" }
+          ]
+        }
+      },
+      "convention-promo-video": {
+        "description": "Short hype video for convention promotion",
+        "aspect": "9:16",
+        "maxDuration": 30,
+        "layers": [
+          { "type": "background",  "from": "media.videos[0] or media.images slideshow" },
+          { "type": "text-overlay", "from": "sponsor.name",       "position": "top-center",  "style": "brand-heading" },
+          { "type": "text-overlay", "from": "sponsor.eventDates", "position": "center",       "style": "event-dates" },
+          { "type": "featured",     "from": "sponsor.featuredArtists", "position": "bottom", "style": "artist-row" },
+          { "type": "qr",           "from": "sponsor.qrUrl",     "position": "bottom-right" }
+        ]
+      }
+    },
+
+    "mediaRequirements": {
+      "$description": "Minimum specs for render API compatibility",
+      "images": {
+        "minWidth": 1080,
+        "formats": ["jpg", "png", "webp"],
+        "preferFormat": "jpg"
+      },
+      "videos": {
+        "minWidth": 1080,
+        "formats": ["mp4", "mov"],
+        "preferFormat": "mp4",
+        "preferCodec": "h264"
+      }
+    }
+  }
+}

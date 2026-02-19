@@ -1,0 +1,172 @@
+{
+  "$description": "Agent workflow specification. The agent's job is to fill tape slots for upcoming shows. It looks at the show schedule, identifies unfilled slots, and works backwards from air date to collect and produce tapes.",
+
+  "schedule": {
+    "cadence": "weekly",
+    "airDay": "Thursday",
+    "airTime": "19:00 EST",
+    "formatRotation": ["deep-dive", "double-feature", "clip-show", "convention-spotlight"],
+    "planningHorizon": "4 weeks ahead"
+  },
+
+  "pipeline": {
+    "$description": "Agent works a 4-week lookahead. Each week has a show format. The agent fills tapes for all 4 upcoming shows in parallel, prioritizing by air date.",
+
+    "phases": [
+      {
+        "phase": "1-schedule",
+        "name": "Review Schedule & Identify Gaps",
+        "trigger": "daily (automated) or on-demand",
+        "actions": [
+          "Read show schedule for next 4 weeks",
+          "For each show, check which tapeSlots in the format template are filled vs empty",
+          "Generate a backlog of unfilled tapeSlots with deadlines",
+          "Prioritize: this week's show > next week > week 3 > week 4"
+        ],
+        "output": "tapeBacklog — list of { showDate, format, tapeSlot, bucket, status, deadline }"
+      },
+      {
+        "phase": "2-source",
+        "name": "Source Content for Unfilled Slots",
+        "trigger": "when tapeBacklog has items in 'opportunity' status",
+        "actions": {
+          "artist-feature": [
+            "Check confirmed guest list (from booking system or manual input)",
+            "If guest confirmed: scrape Instagram for latest 20 posts",
+            "Download best 15 images (prioritize 4:5 and high-engagement posts)",
+            "Download up to 5 video clips (reels, max 60s each)",
+            "Pull bio from IG profile and website",
+            "Draft 5 interview talking points based on guest's niche and episode topic",
+            "Move tape to 'collecting' status"
+          ],
+          "text-interview": [
+            "Identify shy/remote guest from booking pipeline",
+            "Generate 4-6 interview questions tailored to episode topic and artist's style",
+            "Send questions via DM template or email",
+            "When answers received: format as quote cards, extract pull quotes",
+            "Download portfolio images from their IG (up to 10)",
+            "Move tape to 'collecting' status"
+          ],
+          "education": [
+            "Check TattooNOW blog for recent posts matching episode topic",
+            "If blog post exists: extract key points, stats, and action steps",
+            "Build 3-5 slides from blog content with source attribution",
+            "If no blog post: flag for manual content creation",
+            "Move tape to 'collecting' status"
+          ],
+          "clip-package": [
+            "Search past episode transcripts for topic-relevant moments",
+            "Identify 3-5 best clips (highest engagement or most quotable)",
+            "Extract timestamps, transcript snippets, and guest attribution",
+            "Move tape to 'collecting' status"
+          ],
+          "convention-promo": [
+            "Check sponsor/partner pipeline for upcoming conventions",
+            "Request assets from promoter: logo, poster, featured artists, promo video",
+            "Generate QR code via HighLevel API",
+            "Write ad copy from event details",
+            "Move tape to 'collecting' status"
+          ],
+          "sponsor": [
+            "Same as convention-promo but for non-convention sponsors",
+            "Move tape to 'collecting' status"
+          ]
+        }
+      },
+      {
+        "phase": "3-assemble",
+        "name": "Assemble Tape",
+        "trigger": "when all required media for a tape is collected",
+        "actions": [
+          "Validate media against tape-schema (max counts, aspect ratios, file formats)",
+          "Validate required fields are populated",
+          "Generate render hints for Shotstack outputs (social clips, thumbnails, quote cards)",
+          "Set tape status to 'review'",
+          "Notify human editor for approval"
+        ]
+      },
+      {
+        "phase": "4-review",
+        "name": "Human Review & Approval",
+        "trigger": "tape status = 'review'",
+        "actions": [
+          "Editor reviews tape in offering mode / RunOfShow preview",
+          "Editor can: approve, request changes, swap images, edit talking points",
+          "On approval: tape status → 'complete'",
+          "On changes requested: tape status → 'collecting', agent re-processes"
+        ]
+      },
+      {
+        "phase": "5-assemble-show",
+        "name": "Assemble Show from Complete Tapes",
+        "trigger": "all tapeSlots for a show are 'complete' (ideally 48h before air)",
+        "actions": [
+          "Generate show manifest from format template + assigned tapes",
+          "Auto-build intro segment from tape metadata (guest names, topics, sponsor tease)",
+          "Auto-build outro segment (thank guests, preview next week, sponsor CTA)",
+          "Calculate timecodes from tape estimated durations",
+          "Generate social media copy from tape data + episode metadata",
+          "Generate Shotstack render jobs for: YouTube thumbnail, IG promo clip, quote cards",
+          "Set show status to 'ready'"
+        ]
+      },
+      {
+        "phase": "6-post-show",
+        "name": "Post-Show Processing",
+        "trigger": "after show airs",
+        "actions": [
+          "Transcribe full episode (Whisper or similar)",
+          "Split transcript into per-tape segments using timecodes",
+          "Store transcript snippets back on each tape (for future clip-package sourcing)",
+          "Update tape status to 'archived' with usedInShows reference",
+          "Generate post-show social assets via Shotstack",
+          "Publish social media posts from show.social data",
+          "Collect analytics: views, watch time, engagement, QR scans"
+        ]
+      }
+    ]
+  },
+
+  "deadlines": {
+    "$description": "Working backwards from Thursday 7PM air time",
+    "T-7 days":  "Phase 1 — schedule review, identify all gaps for this show",
+    "T-5 days":  "Phase 2 — all artist-feature and text-interview tapes in 'collecting'",
+    "T-3 days":  "Phase 3 — all tapes assembled and in 'review'",
+    "T-2 days":  "Phase 4 — human review complete, all tapes 'complete'",
+    "T-1 day":   "Phase 5 — show manifest assembled, social assets rendered, show 'ready'",
+    "T-0":       "Air time",
+    "T+1 day":   "Phase 6 — post-show processing, transcription, social publishing"
+  },
+
+  "backlogPriority": {
+    "$description": "When multiple tapes need filling, prioritize by:",
+    "rules": [
+      "1. Closest air date first",
+      "2. Required tapeSlots (artist-feature for deep-dive) before optional (clip-package)",
+      "3. Tapes that block other tapes (artist-feature blocks intro auto-generation)",
+      "4. Sponsor tapes (revenue-generating) before editorial tapes",
+      "5. Text-interview tapes (async, longest lead time for Q&A responses)"
+    ]
+  },
+
+  "agentCapabilities": {
+    "canDoAutonomously": [
+      "Scrape public Instagram profiles for images/videos",
+      "Download and categorize media by aspect ratio and tags",
+      "Draft interview questions from guest bio + episode topic",
+      "Extract blog post content into education slides",
+      "Search past transcripts for clip-worthy moments",
+      "Generate QR codes via HighLevel API",
+      "Build show manifest from format template + tapes",
+      "Generate social media copy",
+      "Submit Shotstack render jobs"
+    ],
+    "requiresHumanInput": [
+      "Guest confirmation and booking",
+      "Sponsor deal terms and asset delivery",
+      "Final tape approval (image selection, talking point edits)",
+      "Show manifest sign-off",
+      "Post-show social media approval (optional — can auto-publish if trusted)"
+    ]
+  }
+}

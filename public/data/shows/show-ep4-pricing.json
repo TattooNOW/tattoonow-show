@@ -1,0 +1,162 @@
+{
+  "id": "show-ep4-pricing-psychology",
+  "version": "2",
+
+  "episode": {
+    "number": 4,
+    "title": "Pricing Psychology — Stop Undervaluing Your Work",
+    "airDate": "2026-03-13T19:00:00-05:00",
+    "duration": 58,
+    "host": "Gabe Ripley"
+  },
+
+  "rundown": [
+    {
+      "timeCode": "0:00",
+      "duration": "2:00",
+      "type": "title-card",
+      "label": "Title Card"
+    },
+    {
+      "timeCode": "0:02",
+      "duration": "3:00",
+      "type": "intro",
+      "label": "Welcome & Episode Intro",
+      "talkingPoints": [
+        "Welcome to TattooNOW Weekly — Episode 4!",
+        "Today: Stop undervaluing your work",
+        "We've got Nikko Hurtado, plus a text Q&A with Emily Tran, clips from past episodes, and our Villain Arts Miami giveaway"
+      ],
+      "presenterNotes": "Energy: HIGH. Tease all the content coming — this is a packed episode."
+    },
+    {
+      "timeCode": "0:05",
+      "duration": "2:00",
+      "type": "guest-intro",
+      "tapeId": "tape-nikko-hurtado-2026-03",
+      "config": {
+        "overlays": ["lower-third"]
+      }
+    },
+    {
+      "timeCode": "0:07",
+      "duration": "5:00",
+      "type": "portfolio",
+      "label": "Nikko Portfolio — Page 1",
+      "tapeId": "tape-nikko-hurtado-2026-03",
+      "config": {
+        "mediaType": "images",
+        "range": [0, 4],
+        "overlays": ["lower-third"]
+      }
+    },
+    {
+      "timeCode": "0:12",
+      "duration": "5:00",
+      "type": "portfolio",
+      "label": "Nikko Portfolio — Page 2",
+      "tapeId": "tape-nikko-hurtado-2026-03",
+      "config": {
+        "mediaType": "images",
+        "range": [5, 9]
+      }
+    },
+    {
+      "timeCode": "0:17",
+      "duration": "4:00",
+      "type": "portfolio",
+      "label": "Nikko Portfolio — Page 3 + Video Clips",
+      "tapeId": "tape-nikko-hurtado-2026-03",
+      "config": {
+        "mediaType": "images",
+        "range": [10, 14]
+      }
+    },
+    {
+      "timeCode": "0:21",
+      "duration": "12:00",
+      "type": "discussion",
+      "label": "Interview: Pricing Journey",
+      "tapeId": "tape-nikko-hurtado-2026-03"
+    },
+    {
+      "timeCode": "0:33",
+      "duration": "2:00",
+      "type": "sponsor",
+      "label": "Sponsor: Villain Arts Miami",
+      "tapeId": "tape-villain-arts-miami-2026",
+      "config": {
+        "overlays": ["qr"]
+      }
+    },
+    {
+      "timeCode": "0:35",
+      "duration": "8:00",
+      "type": "education",
+      "label": "Education: Pricing Psychology",
+      "tapeId": "tape-pricing-psychology-blog-2026"
+    },
+    {
+      "timeCode": "0:43",
+      "duration": "7:00",
+      "type": "text-interview",
+      "label": "Text Q&A: Emily Tran",
+      "tapeId": "tape-emily-tran-text-2026-03",
+      "config": {
+        "interleavePortfolio": true,
+        "overlays": ["lower-third"]
+      }
+    },
+    {
+      "timeCode": "0:50",
+      "duration": "5:00",
+      "type": "clip-package",
+      "label": "Best Of: Pricing Advice",
+      "tapeId": "tape-best-pricing-clips-2026"
+    },
+    {
+      "timeCode": "0:55",
+      "duration": "3:00",
+      "type": "outro",
+      "label": "Wrap Up & CTA",
+      "tapeId": "tape-nikko-hurtado-2026-03",
+      "talkingPoints": [
+        "Recap: Mindset, strategies, objection handling",
+        "Action step: Audit your pricing THIS WEEK",
+        "Thank Nikko Hurtado and Emily Tran",
+        "Reminder: Villain Arts Miami — code TATTOONOW for 15% off",
+        "Next week: Building a Client Network"
+      ],
+      "config": {
+        "overlays": ["qr"]
+      }
+    }
+  ],
+
+  "showQRCodes": {
+    "booking": {
+      "url": "https://tattoonow.com/book?source=ep4",
+      "message": "Book Your Pricing Consultation",
+      "highlevelUrl": "https://api.leadconnectorhq.com/qr/ep4-booking"
+    }
+  },
+
+  "social": {
+    "youtube": {
+      "title": "Pricing Psychology for Tattoo Artists (feat. Nikko Hurtado) | TattooNOW Weekly Ep. 4",
+      "description": "Nikko Hurtado reveals the pricing strategies that transformed his career. Plus: a text Q&A with fine-line artist Emily Tran and clips from past episodes.\n\nIn this episode:\n- Why artists undercharge (and how to stop)\n- Tiered pricing models that work\n- Handling 'too expensive' objections\n- Emily Tran: building a waitlist without video\n\nGuests: Nikko Hurtado (@nikkohurtado), Emily Tran (@emilytran.ink)\n\n#TattooArtist #TattooBusiness #PricingStrategy",
+      "tags": ["tattoo business", "pricing strategy", "Nikko Hurtado", "Emily Tran", "tattoo pricing"]
+    },
+    "instagram": {
+      "caption": "Stop undercharging for your art.\n\n@nikkohurtado breaks down pricing psychology, and @emilytran.ink proves you don't need video to build a 6-month waitlist.\n\nWatch the full episode (link in bio).",
+      "hashtags": "#TattooArtist #TattooBusiness #PricingStrategy #TattooTips #FineLine"
+    },
+    "linkedin": {
+      "post": "Are you undervaluing your work?\n\nIn Episode 4, Nikko Hurtado and Emily Tran share pricing strategies that actually work for creative professionals.\n\nWatch: [link]\n\n#CreativeEntrepreneur #PricingStrategy"
+    },
+    "newsletter": {
+      "topic": "Pricing Calculator: Find Your Perfect Rate",
+      "cta": "Download our free pricing calculator"
+    }
+  }
+}
