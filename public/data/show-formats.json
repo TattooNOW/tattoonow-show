@@ -1,107 +1,299 @@
 {
-  "$description": "4 weekly show formats for A/B testing. Rotate weekly, track analytics. The intro segment is auto-generated from the tapes assigned to the show.",
+  "$description": "Show formats with rigid structural segments and fillable tape slots. Every show has the same skeleton — tapes slot into the gaps.",
+
+  "skeleton": {
+    "$description": "Rigid segments that exist in EVERY show regardless of format. These are not tapes. They are the show's fixed structure.",
+    "segments": [
+      {
+        "id": "cold-open",
+        "type": "rigid",
+        "label": "Cold Open / Title Card",
+        "duration": "0:30",
+        "position": "fixed-start",
+        "content": {
+          "visual": "title-card-animated",
+          "audio": "theme-intro-sting",
+          "script": "TattooNOW Weekly — Episode {episode.number}"
+        }
+      },
+      {
+        "id": "intro",
+        "type": "rigid",
+        "label": "Host Intro",
+        "duration": "2:30",
+        "position": "after:cold-open",
+        "hostScript": {
+          "template": [
+            "Welcome to TattooNOW Weekly! I'm {episode.host}.",
+            "Tonight: {episode.title}.",
+            "{intro.guestTease}",
+            "{intro.contentTease}",
+            "{intro.sponsorTease}",
+            "Let's get into it."
+          ],
+          "autoPopulate": {
+            "guestTease": "Generated from assigned artist-feature and text-interview tapes",
+            "contentTease": "Generated from education and clip-package tapes",
+            "sponsorTease": "Generated from sponsor/convention-promo tapes"
+          }
+        }
+      },
+      {
+        "id": "bumper-1",
+        "type": "rigid",
+        "label": "Bumper — Into Segment 1",
+        "duration": "0:05",
+        "position": "after:intro",
+        "content": {
+          "visual": "bumper-animation",
+          "audio": "bumper-sting",
+          "text": "{segment1.label}"
+        }
+      },
+      {
+        "id": "ad-break-1",
+        "type": "rigid",
+        "label": "Ad Break 1 — Mid-Show",
+        "duration": "1:30",
+        "position": "mid-show",
+        "slots": [
+          { "type": "sponsor", "duration": "1:00", "label": "Primary sponsor (convention-promo or sponsor tape)" },
+          { "type": "ad-read", "duration": "0:30", "label": "TattooNOW platform CTA" }
+        ],
+        "hostScript": {
+          "platformCTA": "If you're a tattoo artist looking to level up your business, check out TattooNOW — professional websites, booking systems, and marketing tools built for artists. Scan the QR code or visit tattoonow.com."
+        }
+      },
+      {
+        "id": "bumper-2",
+        "type": "rigid",
+        "label": "Bumper — Back from Break",
+        "duration": "0:05",
+        "position": "after:ad-break-1",
+        "content": {
+          "visual": "bumper-animation",
+          "audio": "bumper-return-sting",
+          "text": "We're back"
+        }
+      },
+      {
+        "id": "ad-break-2",
+        "type": "rigid",
+        "label": "Ad Break 2 — Pre-Close",
+        "duration": "1:00",
+        "position": "pre-close",
+        "slots": [
+          { "type": "sponsor", "duration": "0:30", "label": "Sponsor reminder with QR" },
+          { "type": "ad-read", "duration": "0:30", "label": "TattooNOW booking CTA" }
+        ]
+      },
+      {
+        "id": "bumper-3",
+        "type": "rigid",
+        "label": "Bumper — Into Closing",
+        "duration": "0:05",
+        "position": "after:ad-break-2",
+        "content": {
+          "visual": "bumper-animation",
+          "audio": "bumper-sting",
+          "text": "Wrapping Up"
+        }
+      },
+      {
+        "id": "outro",
+        "type": "rigid",
+        "label": "Host Outro / CTA",
+        "duration": "2:00",
+        "position": "fixed-end",
+        "hostScript": {
+          "template": [
+            "{outro.thankGuests}",
+            "{outro.actionStep}",
+            "{outro.sponsorReminder}",
+            "Next week: {outro.nextWeekTease}.",
+            "Follow us on Instagram at TattooNOW.",
+            "Thanks for watching — we'll see you next Thursday at 7!"
+          ],
+          "autoPopulate": {
+            "thankGuests": "Generated from artist-feature and text-interview tapes",
+            "actionStep": "Generated from education tape action items",
+            "sponsorReminder": "Generated from sponsor tape — discount code + QR",
+            "nextWeekTease": "Pulled from next show in pipeline"
+          }
+        }
+      },
+      {
+        "id": "end-card",
+        "type": "rigid",
+        "label": "End Card / Subscribe",
+        "duration": "0:15",
+        "position": "after:outro",
+        "content": {
+          "visual": "end-card-animated",
+          "audio": "theme-outro-sting",
+          "overlays": ["qr:booking"],
+          "text": "Subscribe & Turn On Notifications"
+        }
+      }
+    ],
+
+    "totalRigidTime": "8:00",
+    "note": "~8 minutes of every show is fixed structure. Remaining time is filled by tapes."
+  },
 
   "formats": {
     "deep-dive": {
       "id": "format-deep-dive",
       "name": "Deep Dive",
-      "description": "Single guest, long-form interview. 15 portfolio images across 3 pages. Education segment tied to guest topic. Convention promo in the break.",
+      "description": "Single guest, long-form interview. 15 portfolio images across 3 pages. Education tied to guest topic. Convention promo in ad breaks.",
       "targetDuration": 58,
+      "availableForTapes": 50,
       "bestFor": "Big-name guests with strong portfolios and stories to tell",
-      "analytics": {
-        "trackAs": "format-A",
-        "hypothesis": "Longer guest time = higher watch time and subscriber conversion"
+      "analytics": { "trackAs": "format-A", "hypothesis": "Longer guest time = higher watch time" },
+
+      "requiredTapeSlots": {
+        "artist-feature":   { "count": 1, "label": "Primary guest" },
+        "education":        { "count": 1, "label": "Topic-related education" }
       },
-      "template": [
-        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
-        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes", "notes": "Intro built from guest bio + episode topic + tease convention promo" },
-        { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature",  "config": { "overlays": ["lower-third"] } },
-        { "type": "portfolio",        "duration": "5:00",  "tapeSlot": "artist-feature",  "config": { "range": [0, 4] } },
-        { "type": "portfolio",        "duration": "5:00",  "tapeSlot": "artist-feature",  "config": { "range": [5, 9] } },
-        { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature",  "config": { "range": [10, 14] } },
-        { "type": "discussion",       "duration": "15:00", "tapeSlot": "artist-feature" },
-        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] } },
-        { "type": "education",        "duration": "8:00",  "tapeSlot": "education" },
-        { "type": "discussion",       "duration": "8:00",  "tapeSlot": "artist-feature",  "label": "Part 2 / Viewer Q&A" },
-        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo", "label": "Quick reminder" },
-        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+      "optionalTapeSlots": {
+        "convention-promo": { "count": 1, "label": "Convention sponsor" },
+        "sponsor":          { "count": 1, "label": "Additional sponsor" },
+        "clip-package":     { "count": 1, "label": "Related clips from past episodes" }
+      },
+
+      "rundownTemplate": [
+        "skeleton:cold-open",
+        "skeleton:intro",
+        "skeleton:bumper-1",
+        { "type": "guest-intro",   "duration": "2:00",  "tapeSlot": "artist-feature",  "config": { "overlays": ["lower-third"] } },
+        { "type": "portfolio",     "duration": "5:00",  "tapeSlot": "artist-feature",  "config": { "range": [0, 4] } },
+        { "type": "portfolio",     "duration": "5:00",  "tapeSlot": "artist-feature",  "config": { "range": [5, 9] } },
+        { "type": "portfolio",     "duration": "4:00",  "tapeSlot": "artist-feature",  "config": { "range": [10, 14] } },
+        { "type": "discussion",    "duration": "15:00", "tapeSlot": "artist-feature" },
+        "skeleton:ad-break-1",
+        "skeleton:bumper-2",
+        { "type": "education",     "duration": "8:00",  "tapeSlot": "education" },
+        { "type": "discussion",    "duration": "8:00",  "tapeSlot": "artist-feature",  "label": "Part 2 / Viewer Q&A" },
+        "skeleton:ad-break-2",
+        "skeleton:bumper-3",
+        "skeleton:outro",
+        "skeleton:end-card"
       ]
     },
 
     "double-feature": {
       "id": "format-double-feature",
       "name": "Double Feature",
-      "description": "Two artists — one live interview, one text Q&A. Shorter portfolio pages. Education in the middle. Great for pairing a known name with an emerging artist.",
+      "description": "Two artists — one live interview, one text Q&A. Education in the middle. Pairs a known name with an emerging artist.",
       "targetDuration": 58,
+      "availableForTapes": 50,
       "bestFor": "Pairing a big name (live) with an emerging/shy artist (text Q&A)",
-      "analytics": {
-        "trackAs": "format-B",
-        "hypothesis": "Variety of guests = broader audience appeal and more shares"
+      "analytics": { "trackAs": "format-B", "hypothesis": "Variety = broader audience appeal and more shares" },
+
+      "requiredTapeSlots": {
+        "artist-feature":   { "count": 1, "label": "Primary guest (live)" },
+        "text-interview":   { "count": 1, "label": "Secondary guest (text Q&A)" },
+        "education":        { "count": 1, "label": "Topic-related education" }
       },
-      "template": [
-        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
-        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes" },
+      "optionalTapeSlots": {
+        "convention-promo": { "count": 1, "label": "Convention sponsor" },
+        "sponsor":          { "count": 1, "label": "Additional sponsor" }
+      },
+
+      "rundownTemplate": [
+        "skeleton:cold-open",
+        "skeleton:intro",
+        "skeleton:bumper-1",
         { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature",  "config": { "overlays": ["lower-third"] } },
         { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature",  "config": { "range": [0, 7] } },
         { "type": "portfolio",        "duration": "3:00",  "tapeSlot": "artist-feature",  "config": { "range": [8, 14] } },
         { "type": "discussion",       "duration": "12:00", "tapeSlot": "artist-feature" },
-        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] } },
+        "skeleton:ad-break-1",
+        "skeleton:bumper-2",
         { "type": "education",        "duration": "6:00",  "tapeSlot": "education" },
         { "type": "text-interview",   "duration": "10:00", "tapeSlot": "text-interview",  "config": { "interleavePortfolio": true, "overlays": ["lower-third"] } },
-        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo", "label": "Quick reminder" },
         { "type": "discussion",       "duration": "5:00",  "tapeSlot": "artist-feature",  "label": "React to text Q&A + viewer Qs" },
-        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+        "skeleton:ad-break-2",
+        "skeleton:bumper-3",
+        "skeleton:outro",
+        "skeleton:end-card"
       ]
     },
 
     "clip-show": {
       "id": "format-clip-show",
       "name": "Clip Show + Education",
-      "description": "No live guest. Curated clips from past episodes around a theme. Heavy education. Convention promo. Text interview fills the guest slot. Low production lift — good for weeks between big guests.",
+      "description": "No live guest. Curated clips from past episodes around a theme. Heavy education. Text interview fills the guest slot. Low production lift.",
       "targetDuration": 45,
+      "availableForTapes": 37,
       "bestFor": "Weeks with no live guest. Repurposes existing content around a topic.",
-      "analytics": {
-        "trackAs": "format-C",
-        "hypothesis": "Shorter + education-heavy = higher completion rate and blog traffic"
+      "analytics": { "trackAs": "format-C", "hypothesis": "Shorter + education-heavy = higher completion rate" },
+
+      "requiredTapeSlots": {
+        "clip-package":     { "count": 1, "label": "Curated clips around episode topic" },
+        "education":        { "count": 1, "label": "Topic education (primary)" }
       },
-      "template": [
-        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
-        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes" },
+      "optionalTapeSlots": {
+        "text-interview":   { "count": 1, "label": "Text Q&A guest (optional)" },
+        "convention-promo": { "count": 1, "label": "Convention sponsor" },
+        "education-2":      { "count": 1, "label": "Action steps recap (optional second education tape)" }
+      },
+
+      "rundownTemplate": [
+        "skeleton:cold-open",
+        "skeleton:intro",
+        "skeleton:bumper-1",
         { "type": "education",        "duration": "10:00", "tapeSlot": "education" },
-        { "type": "clip-package",     "duration": "8:00",  "tapeSlot": "clip-package" },
-        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] } },
-        { "type": "text-interview",   "duration": "10:00", "tapeSlot": "text-interview",  "config": { "interleavePortfolio": true } },
-        { "type": "education",        "duration": "5:00",  "tapeSlot": "education",       "label": "Action steps recap" },
-        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo" },
-        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+        { "type": "clip-package",     "duration": "10:00", "tapeSlot": "clip-package" },
+        "skeleton:ad-break-1",
+        "skeleton:bumper-2",
+        { "type": "text-interview",   "duration": "10:00", "tapeSlot": "text-interview",  "config": { "interleavePortfolio": true }, "optional": true },
+        { "type": "education",        "duration": "5:00",  "tapeSlot": "education-2",     "label": "Action steps recap", "optional": true },
+        "skeleton:ad-break-2",
+        "skeleton:bumper-3",
+        "skeleton:outro",
+        "skeleton:end-card"
       ]
     },
 
     "convention-spotlight": {
       "id": "format-convention-spotlight",
       "name": "Convention Spotlight",
-      "description": "Built around a convention. Featured artists from the event. Convention promo is woven throughout, not just ad breaks. Multiple short artist features.",
+      "description": "Built around a convention. Featured artists from the event. Convention promo woven throughout. Multiple short artist features.",
       "targetDuration": 58,
-      "bestFor": "Weeks before a major convention. Sponsor gets maximum exposure.",
-      "analytics": {
-        "trackAs": "format-D",
-        "hypothesis": "Convention tie-in = highest sponsor ROI and ticket conversion"
+      "availableForTapes": 50,
+      "bestFor": "Weeks before a major convention. Maximum sponsor exposure.",
+      "analytics": { "trackAs": "format-D", "hypothesis": "Convention tie-in = highest sponsor ROI" },
+
+      "requiredTapeSlots": {
+        "convention-promo": { "count": 1, "label": "Convention sponsor (primary — appears 3x)" },
+        "artist-feature-1": { "count": 1, "label": "Featured artist 1 (live)" },
+        "artist-feature-2": { "count": 1, "label": "Featured artist 2 (live or pre-recorded)" }
       },
-      "template": [
-        { "type": "title-card",       "duration": "2:00",  "source": "auto" },
-        { "type": "intro",            "duration": "3:00",  "source": "auto-from-tapes", "notes": "Intro heavy on convention — 'We're counting down to [convention]!'" },
+      "optionalTapeSlots": {
+        "text-interview":   { "count": 1, "label": "3rd featured artist (text Q&A)" },
+        "education":        { "count": 1, "label": "Convention prep tips" }
+      },
+
+      "rundownTemplate": [
+        "skeleton:cold-open",
+        "skeleton:intro",
+        "skeleton:bumper-1",
         { "type": "sponsor",          "duration": "3:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"], "persistQR": true }, "label": "Convention intro + featured artists" },
         { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature-1", "config": { "overlays": ["lower-third"] } },
         { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature-1", "config": { "range": [0, 7] } },
         { "type": "discussion",       "duration": "10:00", "tapeSlot": "artist-feature-1" },
-        { "type": "sponsor",          "duration": "1:00",  "tapeSlot": "convention-promo", "label": "Ticket reminder" },
+        "skeleton:ad-break-1",
+        "skeleton:bumper-2",
         { "type": "guest-intro",      "duration": "2:00",  "tapeSlot": "artist-feature-2", "config": { "overlays": ["lower-third"] } },
         { "type": "portfolio",        "duration": "4:00",  "tapeSlot": "artist-feature-2", "config": { "range": [0, 7] } },
         { "type": "discussion",       "duration": "10:00", "tapeSlot": "artist-feature-2" },
-        { "type": "education",        "duration": "6:00",  "tapeSlot": "education", "label": "Convention prep tips" },
-        { "type": "text-interview",   "duration": "5:00",  "tapeSlot": "text-interview",  "label": "Quick text Q&A with 3rd featured artist" },
-        { "type": "sponsor",          "duration": "2:00",  "tapeSlot": "convention-promo", "config": { "overlays": ["qr"] }, "label": "Final CTA with discount code" },
-        { "type": "outro",            "duration": "3:00",  "source": "auto-from-tapes" }
+        { "type": "education",        "duration": "5:00",  "tapeSlot": "education", "label": "Convention prep tips", "optional": true },
+        { "type": "text-interview",   "duration": "5:00",  "tapeSlot": "text-interview",  "label": "Quick text Q&A with 3rd featured artist", "optional": true },
+        "skeleton:ad-break-2",
+        "skeleton:bumper-3",
+        "skeleton:outro",
+        "skeleton:end-card"
       ]
     }
   }

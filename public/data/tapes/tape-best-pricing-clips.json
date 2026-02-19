@@ -4,10 +4,20 @@
   "status": "complete",
   "createdBy": "agent",
   "createdDate": "2026-02-18",
-  "estimatedDuration": 6,
+  "estimatedDuration": 8,
   "tags": ["pricing", "compilation", "clips", "best-of"],
 
   "content": {
+    "hostIntro": {
+      "script": [
+        "Before we move on, I want to play you something.",
+        "We've had a lot of incredible artists on this show over the past few weeks, and almost every single one of them has talked about pricing.",
+        "So we pulled the three best moments — three artists, three turning points, one lesson.",
+        "Watch this."
+      ],
+      "presenterNotes": "Deliver with a slight pause before 'Watch this.' Let it feel like a TV moment. The bumper transition should feel intentional. Energy: reflective, building anticipation."
+    },
+
     "clips": [
       {
         "sourceEpisode": "ep-1",
@@ -17,7 +27,8 @@
         "timeEnd": "14:15",
         "duration": 105,
         "description": "Marcus on pricing his first big piece and realizing he was losing money",
-        "transcriptSnippet": "I quoted $200 for a full sleeve session and it took me 8 hours. I made $25 an hour. My barber makes more than that. That was my wake-up call."
+        "transcriptSnippet": "I quoted $200 for a full sleeve session and it took me 8 hours. I made $25 an hour. My barber makes more than that. That was my wake-up call.",
+        "hostBridge": "Twenty-five dollars an hour. For custom artwork that stays on someone's body forever. Marcus figured it out. But he's not the only one."
       },
       {
         "sourceEpisode": "ep-1",
@@ -27,7 +38,8 @@
         "timeEnd": "30:10",
         "duration": 85,
         "description": "Sarah on how raising prices actually increased her bookings",
-        "transcriptSnippet": "When I raised my rate from $120 to $200 an hour, I thought I'd lose half my clients. Instead, I got BETTER clients. People who valued the work, showed up on time, tipped well. The cheap clients were the most difficult ones anyway."
+        "transcriptSnippet": "When I raised my rate from $120 to $200 an hour, I thought I'd lose half my clients. Instead, I got BETTER clients. People who valued the work, showed up on time, tipped well. The cheap clients were the most difficult ones anyway.",
+        "hostBridge": "Better clients. Better work. Better life. And all she had to do was charge what she was worth. One more."
       },
       {
         "sourceEpisode": "ep-2",
@@ -40,7 +52,27 @@
         "transcriptSnippet": "I don't negotiate. Ever. My price is my price. If someone asks for a discount, I politely say: 'I understand budgets are real. Here are some great artists who work at a lower price point.' And I refer them. No hard feelings. But I never devalue my own work."
       }
     ],
-    "presenterNotes": "Play each clip, then pause for 3-5 seconds to let it land. After each clip, add brief host commentary tying it back to the pricing theme. After the last clip: 'Three different artists, same lesson: know your worth and don't apologize for it.'"
+
+    "hostOutro": {
+      "script": [
+        "Three different artists. Three different styles. Three different cities.",
+        "Same lesson: know your worth, and don't apologize for it.",
+        "If any of that hit home, stick around — we've got actionable pricing strategies coming up next that'll help you put this into practice this week."
+      ],
+      "presenterNotes": "Deliver directly to camera. Slow, confident. The 'same lesson' line should land like a thesis statement. The CTA into the next segment should feel like momentum, not a hard sell."
+    },
+
+    "presenterNotes": "Full segment flow: Host intro (live) → Clip 1 + host bridge → Clip 2 + host bridge → Clip 3 (no bridge, straight to outro) → Host outro (live). Display lower-third with source guest name/episode during each clip. Music: subtle underscore during host bridges, silent during clips."
+  },
+
+  "audio": {
+    "backgroundMusic": {
+      "url": "tapes/best-pricing-clips-2026/audio/reflective-underscore.mp3",
+      "title": "Reflective underscore — royalty-free",
+      "license": "royalty-free",
+      "volume": 0.10,
+      "usage": "Under host bridges only. Silent during clip playback."
+    }
   },
 
   "media": {

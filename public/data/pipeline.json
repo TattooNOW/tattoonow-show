@@ -1,0 +1,240 @@
+{
+  "$description": "4-week show pipeline. Offering mode view: shows upcoming shows, their format, which tape slots are filled vs empty, and recommended tapes to complete each show. This is what the agent and the editor both look at.",
+
+  "pipeline": [
+    {
+      "week": 1,
+      "airDate": "2026-02-27T19:00:00-05:00",
+      "episodeNumber": 5,
+      "title": "Pricing Psychology — Stop Undervaluing Your Work",
+      "format": "deep-dive",
+      "host": "Gabe Ripley",
+      "status": "ready",
+
+      "tapeSlots": {
+        "artist-feature": {
+          "required": true,
+          "status": "complete",
+          "tapeId": "tape-nikko-hurtado-2026-03",
+          "tapeName": "Nikko Hurtado — Color Realism",
+          "mediaCount": { "images": 15, "videos": 2 }
+        },
+        "education": {
+          "required": true,
+          "status": "complete",
+          "tapeId": "tape-pricing-psychology-blog-2026",
+          "tapeName": "Pricing Psychology (Blog)",
+          "mediaCount": { "slides": 4, "images": 1 }
+        },
+        "convention-promo": {
+          "required": false,
+          "status": "complete",
+          "tapeId": "tape-villain-arts-miami-2026",
+          "tapeName": "Villain Arts Miami Convention",
+          "mediaCount": { "images": 3, "videos": 1 }
+        },
+        "clip-package": {
+          "required": false,
+          "status": "complete",
+          "tapeId": "tape-best-pricing-clips-2026",
+          "tapeName": "Best Pricing Moments",
+          "mediaCount": { "clips": 3 }
+        }
+      },
+
+      "readiness": {
+        "requiredFilled": 2,
+        "requiredTotal": 2,
+        "optionalFilled": 2,
+        "optionalTotal": 3,
+        "percent": 100,
+        "blockers": []
+      }
+    },
+
+    {
+      "week": 2,
+      "airDate": "2026-03-06T19:00:00-05:00",
+      "episodeNumber": 6,
+      "title": "Double Feature — Live Guest + Text Q&A",
+      "format": "double-feature",
+      "host": "Ryan Pierce",
+      "status": "in-progress",
+
+      "tapeSlots": {
+        "artist-feature": {
+          "required": true,
+          "status": "collecting",
+          "tapeId": "tape-alex-martinez-2026-03",
+          "tapeName": "Alex Martinez — Miami Ink Collective",
+          "mediaCount": { "images": 11, "videos": 0 },
+          "note": "Waiting on 4 more IG images + 1 reel. Agent scraping tonight."
+        },
+        "text-interview": {
+          "required": true,
+          "status": "review",
+          "tapeId": "tape-emily-tran-text-2026-03",
+          "tapeName": "Emily Tran — Fine Line Text Q&A",
+          "mediaCount": { "images": 8, "questions": 4 },
+          "note": "Answers received. Editor reviewing pull quotes."
+        },
+        "education": {
+          "required": true,
+          "status": "complete",
+          "tapeId": "tape-apprenticeship-edu-2026",
+          "tapeName": "Finding the Right Apprenticeship (Blog)",
+          "mediaCount": { "slides": 4 }
+        },
+        "convention-promo": {
+          "required": false,
+          "status": "complete",
+          "tapeId": "tape-villain-arts-miami-2026",
+          "tapeName": "Villain Arts Miami Convention",
+          "note": "Reusing from week 1"
+        }
+      },
+
+      "readiness": {
+        "requiredFilled": 1,
+        "requiredTotal": 3,
+        "optionalFilled": 1,
+        "optionalTotal": 2,
+        "percent": 60,
+        "blockers": [
+          "artist-feature: needs 4 more images + video",
+          "text-interview: pending editor review"
+        ]
+      }
+    },
+
+    {
+      "week": 3,
+      "airDate": "2026-03-13T19:00:00-05:00",
+      "episodeNumber": 7,
+      "title": "Clip Show — Best Business Advice So Far",
+      "format": "clip-show",
+      "host": "Ryan Pierce",
+      "status": "sourcing",
+
+      "tapeSlots": {
+        "clip-package": {
+          "required": true,
+          "status": "collecting",
+          "tapeId": null,
+          "tapeName": null,
+          "note": "Agent scanning episodes 1-6 transcripts for business advice clips. ETA: 2 days."
+        },
+        "education": {
+          "required": true,
+          "status": "opportunity",
+          "tapeId": null,
+          "tapeName": null,
+          "recommendation": "Blog post 'Top 5 Business Mistakes Tattoo Artists Make' — scheduled to publish 3/10. Agent can build slides from it."
+        },
+        "text-interview": {
+          "required": false,
+          "status": "opportunity",
+          "tapeId": null,
+          "tapeName": null,
+          "recommendation": "Reach out to @tattoo_accountant (Jake Rivera) — he's done text Q&As before and has pricing/business expertise."
+        },
+        "convention-promo": {
+          "required": false,
+          "status": "complete",
+          "tapeId": "tape-villain-arts-miami-2026",
+          "tapeName": "Villain Arts Miami Convention",
+          "note": "Final week before convention — increase ad break placement"
+        }
+      },
+
+      "readiness": {
+        "requiredFilled": 0,
+        "requiredTotal": 2,
+        "optionalFilled": 1,
+        "optionalTotal": 3,
+        "percent": 20,
+        "blockers": [
+          "clip-package: agent still scanning transcripts",
+          "education: waiting on blog post publish (3/10)"
+        ]
+      }
+    },
+
+    {
+      "week": 4,
+      "airDate": "2026-03-20T19:00:00-05:00",
+      "episodeNumber": 8,
+      "title": "Convention Spotlight — Villain Arts Miami Preview",
+      "format": "convention-spotlight",
+      "host": "Gabe Ripley",
+      "status": "sourcing",
+
+      "tapeSlots": {
+        "convention-promo": {
+          "required": true,
+          "status": "complete",
+          "tapeId": "tape-villain-arts-miami-2026",
+          "tapeName": "Villain Arts Miami Convention",
+          "note": "Convention is THIS WEEKEND. Max exposure."
+        },
+        "artist-feature-1": {
+          "required": true,
+          "status": "opportunity",
+          "tapeId": null,
+          "tapeName": null,
+          "recommendation": "Nikko Hurtado is attending — can we get him back for a short convention-focused segment? Or source a new artist: @megan_massacre (confirmed attendee)."
+        },
+        "artist-feature-2": {
+          "required": true,
+          "status": "opportunity",
+          "tapeId": null,
+          "tapeName": null,
+          "recommendation": "Dr. Woo is listed as featured artist. Agent can scrape portfolio. Check if available for live or text Q&A."
+        },
+        "text-interview": {
+          "required": false,
+          "status": "opportunity",
+          "tapeId": null,
+          "tapeName": null,
+          "recommendation": "3rd featured artist from convention lineup — text Q&A as backup if no live guest available"
+        },
+        "education": {
+          "required": false,
+          "status": "opportunity",
+          "tapeId": null,
+          "tapeName": null,
+          "recommendation": "Convention prep checklist: what to bring, how to book, portfolio tips for walk-ups"
+        }
+      },
+
+      "readiness": {
+        "requiredFilled": 1,
+        "requiredTotal": 3,
+        "optionalFilled": 0,
+        "optionalTotal": 2,
+        "percent": 15,
+        "blockers": [
+          "artist-feature-1: no guest confirmed yet",
+          "artist-feature-2: no guest confirmed yet"
+        ]
+      }
+    }
+  ],
+
+  "summary": {
+    "totalTapeSlotsNeeded": 18,
+    "filled": 8,
+    "inProgress": 3,
+    "opportunities": 7,
+    "nextDeadline": "2026-02-25 (Week 1 show — all tapes must be 'complete')",
+    "agentPriority": [
+      "1. Week 2 artist-feature: finish IG scrape (4 images + 1 reel)",
+      "2. Week 3 clip-package: complete transcript scan",
+      "3. Week 3 education: wait for blog publish, then auto-build slides",
+      "4. Week 4 artist-feature-1: confirm guest, begin IG scrape",
+      "5. Week 4 artist-feature-2: confirm guest, begin IG scrape",
+      "6. Week 3 text-interview: send questions to @tattoo_accountant",
+      "7. Week 4 education: draft convention prep checklist"
+    ]
+  }
+}
