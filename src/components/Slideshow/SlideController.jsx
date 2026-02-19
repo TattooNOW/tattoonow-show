@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { TitleCard } from './TitleCard';
 import { PortfolioSlide } from './PortfolioSlide';
@@ -362,40 +362,89 @@ export function SlideController({ episodeData, prebuiltSlides }) {
     );
   }
 
-  // Render Audience View (default)
+  // Render Audience View (default) — scales 1920x1080 content to fill viewport
+  return <AudienceView
+    currentSlide={currentSlide}
+    currentSlideIndex={currentSlideIndex}
+    slides={slides}
+    portfolioLayout={portfolioLayout}
+    selectedImage={selectedImage}
+    handleSelectImage={handleSelectImage}
+    showLowerThird={showLowerThird}
+    showQR={showQR}
+    episodeData={episodeData}
+  />;
+}
+
+/**
+ * AudienceView — Scales the 1920x1080 slide content to fill the entire viewport.
+ * Uses CSS transform to maintain aspect ratio on any screen size (TV, projector, etc.)
+ */
+function AudienceView({
+  currentSlide, currentSlideIndex, slides, portfolioLayout,
+  selectedImage, handleSelectImage, showLowerThird, showQR, episodeData
+}) {
+  const [windowSize, setWindowSize] = useState({
+    w: window.innerWidth,
+    h: window.innerHeight,
+  });
+
+  useEffect(() => {
+    const onResize = () => setWindowSize({ w: window.innerWidth, h: window.innerHeight });
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // Scale 1920x1080 to fill viewport while maintaining aspect ratio
+  const scale = Math.min(windowSize.w / 1920, windowSize.h / 1080);
+  // Center the scaled content
+  const offsetX = (windowSize.w - 1920 * scale) / 2;
+  const offsetY = (windowSize.h - 1080 * scale) / 2;
+
   return (
-    <div className="relative">
-      {/* Main slide content */}
-      {renderSlide(currentSlide, portfolioLayout, selectedImage, handleSelectImage)}
+    <div style={{
+      width: '100vw',
+      height: '100vh',
+      overflow: 'hidden',
+      background: '#0a0a0a',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+    }}>
+      <div style={{
+        width: '1920px',
+        height: '1080px',
+        transform: `translate(${offsetX}px, ${offsetY}px) scale(${scale})`,
+        transformOrigin: 'top left',
+        position: 'absolute',
+      }}>
+        {/* Main slide content */}
+        {renderSlide(currentSlide, portfolioLayout, selectedImage, handleSelectImage)}
 
-      {/* Overlays */}
-      {currentSlide.showLowerThird && (
-        <LowerThird
-          guestName={currentSlide.guestName}
-          title={currentSlide.guestTitle}
-          location={currentSlide.guestLocation}
-          instagram={currentSlide.guestInstagram}
-          display={showLowerThird}
-        />
-      )}
+        {/* Overlays */}
+        {currentSlide.showLowerThird && (
+          <LowerThird
+            guestName={currentSlide.guestName}
+            title={currentSlide.guestTitle}
+            location={currentSlide.guestLocation}
+            instagram={currentSlide.guestInstagram}
+            display={showLowerThird}
+          />
+        )}
 
-      {episodeData.QR_CODE_URL && (
-        <QRCode
-          url={episodeData.QR_CODE_URL}
-          highlevelUrl={episodeData.HIGHLEVEL_QR_URL}
-          message={episodeData.QR_CODE_MESSAGE || 'Book Your Consultation'}
-          display={showQR}
-        />
-      )}
+        {episodeData.QR_CODE_URL && (
+          <QRCode
+            url={episodeData.QR_CODE_URL}
+            highlevelUrl={episodeData.HIGHLEVEL_QR_URL}
+            message={episodeData.QR_CODE_MESSAGE || 'Book Your Consultation'}
+            display={showQR}
+          />
+        )}
 
-      {/* Slide counter (debug - can be hidden) */}
-      <div className="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded text-sm">
-        {currentSlideIndex + 1} / {slides.length}
-      </div>
-
-      {/* Keyboard shortcuts hint (can be toggled off) */}
-      <div className="absolute bottom-4 left-4 bg-black/50 px-3 py-1 rounded text-xs text-muted-foreground">
-        ← → Next/Prev | Q: QR | L: Lower Third | G: Grid/Fullscreen
+        {/* Slide counter */}
+        <div className="absolute top-4 left-4 bg-black/50 px-3 py-1 rounded text-sm">
+          {currentSlideIndex + 1} / {slides.length}
+        </div>
       </div>
     </div>
   );
