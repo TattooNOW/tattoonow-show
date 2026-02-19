@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { fetchTalentPool } from '@/lib/api';
 import type { TalentMember, TalentStatus } from '@/lib/types';

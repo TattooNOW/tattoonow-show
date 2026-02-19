@@ -1,9 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Clock, Film, Disc3 } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Disc3 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { fetchShow } from '@/lib/api';
-import { scriptToMarkdown } from '@/lib/markdown';
 import type { Show, RundownEntry } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
@@ -104,7 +103,7 @@ export function ShowDetail() {
       {activeTab === 'rundown' && (
         <div className="space-y-1">
           {show.rundown.map((entry, i) => (
-            <RundownRow key={i} entry={entry} index={i} />
+            <RundownRow key={i} entry={entry} />
           ))}
         </div>
       )}
@@ -168,7 +167,7 @@ export function ShowDetail() {
   );
 }
 
-function RundownRow({ entry, index }: { entry: RundownEntry; index: number }) {
+function RundownRow({ entry }: { entry: RundownEntry }) {
   const colorClass = SEGMENT_COLORS[entry.type] || 'border-l-gray-500';
 
   return (

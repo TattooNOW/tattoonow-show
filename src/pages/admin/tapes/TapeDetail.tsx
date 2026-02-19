@@ -1,10 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Disc3, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/Button';
 import { fetchTape } from '@/lib/api';
-import { tapeContentToMarkdown, markdownToTapeContent } from '@/lib/markdown';
+import { tapeContentToMarkdown } from '@/lib/markdown';
 import type { Tape } from '@/lib/types';
 import { cn } from '@/lib/utils';
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { generateTeleprompterLines, findLineForSegment } from '@/lib/markdown/script-parser';
 import type { Episode, TeleprompterLine } from '@/lib/types';
 import styles from './Teleprompter.module.css';
@@ -64,7 +64,8 @@ export function EpisodeTeleprompter({ episodeData, currentSlideIndex = 0 }: Epis
   const [scrollSpeed, setScrollSpeed] = useState(5);
   const [hearing, setHearing] = useState('');
 
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
   const scrollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const upcomingRef = useRef<HTMLDivElement>(null);
   const listeningRef = useRef(false);
