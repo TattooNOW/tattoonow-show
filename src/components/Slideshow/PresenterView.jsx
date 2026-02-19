@@ -79,7 +79,8 @@ export function PresenterView({
   portfolioLayout,
   togglePortfolioLayout,
   selectedImage,
-  onSelectImage
+  onSelectImage,
+  showId
 }) {
   const hSplit = useDragResize(60, 'horizontal');
   const vSplit = useDragResize(50, 'vertical');
@@ -297,12 +298,11 @@ export function PresenterView({
         <button
           onClick={() => {
             const params = new URLSearchParams(window.location.search);
-            const episodeId = params.get('episode') || params.get('id') || '1';
-            window.open(
-              `${import.meta.env.BASE_URL}slideshow?episode=${episodeId}`,
-              'slideshow-audience',
-              'width=1920,height=1080'
-            );
+            const sid = showId || params.get('show');
+            const url = sid
+              ? `${import.meta.env.BASE_URL}slideshow?show=${sid}`
+              : `${import.meta.env.BASE_URL}slideshow?episode=${params.get('episode') || params.get('id') || '1'}`;
+            window.open(url, 'slideshow-audience', 'width=1920,height=1080');
           }}
           className={styles.navButton}
           title="Open slides window for screen sharing"

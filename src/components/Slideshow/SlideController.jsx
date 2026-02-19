@@ -13,7 +13,7 @@ import { PresenterView } from './PresenterView';
  * Handles slide sequencing, keyboard controls, overlay toggling,
  * and dual-window presenter mode with BroadcastChannel sync.
  */
-export function SlideController({ episodeData }) {
+export function SlideController({ episodeData, prebuiltSlides }) {
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode'); // 'presenter' or null
 
@@ -26,8 +26,8 @@ export function SlideController({ episodeData }) {
   // BroadcastChannel for syncing between audience and presenter windows
   const channelRef = useRef(null);
 
-  // Build slides array from episode data
-  const slides = buildSlides(episodeData);
+  // Use prebuilt slides (from Show) or build from episode data
+  const slides = prebuiltSlides || buildSlides(episodeData);
 
   // Initialize BroadcastChannel for window sync
   useEffect(() => {
@@ -282,6 +282,7 @@ export function SlideController({ episodeData }) {
         togglePortfolioLayout={togglePortfolioLayout}
         selectedImage={selectedImage}
         onSelectImage={handleSelectImage}
+        showId={episodeData?._showId}
       />
     );
   }
