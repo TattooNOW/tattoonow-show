@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink, Maximize2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Maximize2, Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Timer } from './Timer';
 import { Clock } from './Clock';
 import { TitleCard } from './TitleCard';
@@ -310,6 +311,15 @@ export function PresenterView({
           <ExternalLink size={16} />
           <span>Open Slides</span>
         </button>
+
+        <Link
+          to="/admin"
+          className={styles.navButton}
+          title="Admin"
+          style={{ marginLeft: 'auto', opacity: 0.35 }}
+        >
+          <Settings size={14} />
+        </Link>
       </div>
     </div>
   );
