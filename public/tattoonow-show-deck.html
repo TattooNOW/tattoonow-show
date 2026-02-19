@@ -126,22 +126,73 @@ html, body {
 
 .timer-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-light); }
 
+/* Clock */
+#clockDisplay {
+  font-family: monospace;
+  font-size: 14px;
+  color: var(--text-muted);
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+/* Open Slides button */
+.open-slides-btn {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+
+.open-slides-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-light); }
+
 /* =====================================================
    PRESENTER LAYOUT
    ===================================================== */
 #presenterLayout {
-  display: grid;
-  grid-template-rows: 1fr auto auto;
+  display: flex;
+  flex-direction: column;
   height: calc(100vh - 52px);
   overflow: hidden;
 }
 
 .presenter-main {
-  display: grid;
-  grid-template-columns: 60% 40%;
-  gap: 16px;
+  display: flex;
+  gap: 0;
   padding: 16px;
   overflow: hidden;
+  min-height: 0;
+}
+
+/* Drag handles */
+.drag-handle-v {
+  flex: 0 0 6px;
+  cursor: col-resize;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  align-self: stretch;
+  transition: background 0.15s;
+}
+.drag-handle-v:hover, .drag-handle-v:active {
+  background: rgba(234,147,32,0.6);
+}
+.drag-handle-h {
+  flex: 0 0 6px;
+  cursor: row-resize;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  margin: 0 16px;
+  transition: background 0.15s;
+}
+.drag-handle-h:hover, .drag-handle-h:active {
+  background: rgba(234,147,32,0.6);
 }
 
 .slide-preview-box {
@@ -265,7 +316,8 @@ html, body {
   border: 2px solid var(--border-accent);
   display: flex;
   flex-direction: column;
-  max-height: 200px;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -850,14 +902,16 @@ html, body {
     <button class="timer-btn" onclick="resetTimer()">Reset</button>
   </div>
   <div id="timerDisplay" onclick="toggleTimer()">00:00</div>
+  <div id="clockDisplay"></div>
+  <button class="open-slides-btn" onclick="openSlidesWindow()">Open Slides</button>
 </div>
 
 <!-- =====================================================
      PRESENTER LAYOUT
      ===================================================== -->
 <div id="presenterLayout">
-  <div class="presenter-main">
-    <div class="slide-preview-box">
+  <div class="presenter-main" id="presenterMain">
+    <div class="slide-preview-box" id="currentSlideBox">
       <div class="preview-label"><span class="live-dot"></span> Current Slide</div>
       <div class="preview-content">
         <div class="slide-frame">
@@ -865,7 +919,8 @@ html, body {
         </div>
       </div>
     </div>
-    <div class="slide-preview-box">
+    <div class="drag-handle-v" id="dragV"></div>
+    <div class="slide-preview-box" style="flex:1;min-width:0;">
       <div class="preview-label">Next Slide</div>
       <div class="preview-content">
         <div class="slide-frame">
@@ -874,6 +929,7 @@ html, body {
       </div>
     </div>
   </div>
+  <div class="drag-handle-h" id="dragH"></div>
   <div class="notes-panel">
     <div class="notes-header">
       <h3>Presenter Notes</h3>
@@ -1168,6 +1224,9 @@ function updateSlideViews() {
   var nb = document.getElementById('nextBtn');
   if (pb) pb.disabled = currentSlideIndex === 0;
   if (nb) nb.disabled = currentSlideIndex === SLIDES.length - 1;
+
+  // Sync external slides window
+  syncSlidesWindow();
 }
 
 function updateThumbnails() {
@@ -1968,6 +2027,124 @@ function tp_handleFileImport(event) {
 }
 
 /* =====================================================
+   CLOCK
+   ===================================================== */
+function updateClock() {
+  var now = new Date();
+  var h = now.getHours();
+  var m = now.getMinutes();
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  var el = document.getElementById('clockDisplay');
+  if (el) el.textContent = h + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
+}
+setInterval(updateClock, 1000);
+
+/* =====================================================
+   OPEN SLIDES WINDOW
+   ===================================================== */
+var slidesWindow = null;
+
+function openSlidesWindow() {
+  slidesWindow = window.open('', 'slides-audience', 'width=1920,height=1080');
+  if (!slidesWindow) { alert('Popup blocked. Please allow popups for this site.'); return; }
+  var doc = slidesWindow.document;
+  doc.open();
+  doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>TattooNOW Show</title>');
+  doc.write('<link rel="preconnect" href="https://fonts.googleapis.com">');
+  doc.write('<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Slab:wght@400;600;700&display=swap" rel="stylesheet">');
+  doc.write('<style>');
+  doc.write('*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}');
+  doc.write('body{width:100vw;height:100vh;background:#0a0a0a;color:#fafafa;font-family:"Roboto",sans-serif;overflow:hidden;display:flex;align-items:center;justify-content:center;}');
+  doc.write('#slide{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;}');
+  doc.write('h2{font-family:"Roboto Slab",serif;color:#EA9320;font-size:48px;margin-bottom:24px;text-align:center;}');
+  doc.write('h3{font-family:"Roboto Slab",serif;color:#fafafa;font-size:32px;margin-bottom:16px;}');
+  doc.write('p{color:#aaa;font-size:24px;line-height:1.6;text-align:center;max-width:900px;}');
+  doc.write('ul{list-style:none;text-align:left;padding:0;}');
+  doc.write('li{color:#aaa;font-size:24px;padding:8px 0;line-height:1.5;}');
+  doc.write('li::before{content:"\\25B8 ";color:#EA9320;margin-right:10px;}');
+  doc.write('.segment-badge{display:inline-block;background:#EA9320;color:white;font-size:16px;font-weight:700;padding:4px 16px;border-radius:6px;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}');
+  doc.write('.timecode{color:#9ca3af;font-family:monospace;font-size:18px;margin-bottom:8px;}');
+  doc.write('.counter{position:absolute;bottom:20px;right:24px;background:rgba(0,0,0,0.6);padding:6px 14px;border-radius:6px;font-size:14px;color:#9ca3af;font-family:monospace;}');
+  doc.write('</style></head><body><div id="slide"></div><div class="counter" id="counter"></div></body></html>');
+  doc.close();
+  syncSlidesWindow();
+}
+
+function syncSlidesWindow() {
+  if (!slidesWindow || slidesWindow.closed) { slidesWindow = null; return; }
+  var slide = SLIDES[currentSlideIndex];
+  var doc = slidesWindow.document;
+  var el = doc.getElementById('slide');
+  var ct = doc.getElementById('counter');
+  if (el) el.innerHTML = renderSlideHTML(slide);
+  if (ct) ct.textContent = (currentSlideIndex + 1) + ' / ' + SLIDES.length;
+}
+
+/* =====================================================
+   DRAGGABLE BORDERS
+   ===================================================== */
+var drag = { active: null };
+
+function initDragHandles() {
+  var dragV = document.getElementById('dragV');
+  var dragH = document.getElementById('dragH');
+  var presenterMain = document.getElementById('presenterMain');
+  var presenterLayout = document.getElementById('presenterLayout');
+  var currentBox = document.getElementById('currentSlideBox');
+
+  if (dragV) {
+    dragV.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      drag.active = 'v';
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+  }
+
+  if (dragH) {
+    dragH.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      drag.active = 'h';
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+    });
+  }
+
+  // Default: 60% horizontal split
+  if (currentBox) currentBox.style.flex = '0 0 60%';
+
+  // Default: 55% vertical split for presenter-main
+  if (presenterMain) presenterMain.style.flex = '0 0 55%';
+
+  document.addEventListener('mousemove', function(e) {
+    if (!drag.active) return;
+
+    if (drag.active === 'v' && presenterMain && currentBox) {
+      var rect = presenterMain.getBoundingClientRect();
+      var pct = ((e.clientX - rect.left) / rect.width) * 100;
+      pct = Math.min(85, Math.max(15, pct));
+      currentBox.style.flex = '0 0 ' + pct + '%';
+    }
+
+    if (drag.active === 'h' && presenterLayout) {
+      var rect = presenterLayout.getBoundingClientRect();
+      var pct = ((e.clientY - rect.top) / rect.height) * 100;
+      pct = Math.min(85, Math.max(15, pct));
+      if (presenterMain) presenterMain.style.flex = '0 0 ' + pct + '%';
+    }
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (drag.active) {
+      drag.active = null;
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+  });
+}
+
+/* =====================================================
    INITIALIZATION
    ===================================================== */
 (function init() {
@@ -1981,6 +2158,10 @@ function tp_handleFileImport(event) {
 
   // Render initial slide views
   updateSlideViews();
+
+  // Init drag handles and clock
+  initDragHandles();
+  updateClock();
 
   // Start in presenter mode
   setMode('presenter');
