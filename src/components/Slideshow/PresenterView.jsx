@@ -302,66 +302,113 @@ export function PresenterView({
         />
       </div>
 
-      {/* Bottom: Timer, Clock, Controls */}
+      {/* Bottom: Controls Bar */}
       <div className={styles.controlsBar}>
-        <Timer targetDuration={parseInt(episodeData.DURATION) || 60} />
+        {/* ─── Group 1: Current Time (wall clock) ─── */}
         <Clock />
 
-        {/* Show elapsed */}
-        {showElapsedMs > 0 && (
+        {/* ─── Group 2: Timer (Start/Reset + Elapsed + Remaining) ─── */}
+        <Timer targetDuration={parseInt(episodeData.DURATION) || 60} />
+
+        {/* ─── Group 3: Show & Segment timing ─── */}
+        <div style={{ display: 'flex', gap: '6px' }}>
           <div className={styles.slideCounter}>
             <div className={styles.counterLabel}>Show</div>
             <div className={styles.counterValue} style={{ fontFamily: 'monospace' }}>
-              {formatMsToTimeCode(showElapsedMs)}
+              {showElapsedMs > 0 ? formatMsToTimeCode(showElapsedMs) : '—'}
             </div>
           </div>
-        )}
 
-        <div className={styles.slideCounter}>
-          <div className={styles.counterLabel}>Slide</div>
-          <div className={styles.counterValue}>
-            {currentSlideIndex + 1} / {slides.length}
+          <div className={styles.slideCounter}>
+            <div className={styles.counterLabel}>Remaining</div>
+            <div className={styles.counterValue} style={{
+              fontFamily: 'monospace',
+              color: (() => {
+                const totalMs = slides.reduce((sum, s) => sum + (s.durationMs || 0), 0);
+                const remaining = totalMs - showElapsedMs;
+                if (showElapsedMs <= 0) return 'white';
+                if (remaining <= 0) return '#ef4444';
+                if (remaining < 5 * 60 * 1000) return '#facc15';
+                return 'white';
+              })(),
+            }}>
+              {(() => {
+                const totalMs = slides.reduce((sum, s) => sum + (s.durationMs || 0), 0);
+                const remaining = Math.max(0, totalMs - showElapsedMs);
+                return showElapsedMs > 0 ? formatMsToTimeCode(remaining) : formatMsToTimeCode(totalMs);
+              })()}
+            </div>
+          </div>
+
+          <div className={styles.slideCounter}>
+            <div className={styles.counterLabel}>Segment</div>
+            <div className={styles.counterValue} style={{
+              fontFamily: 'monospace',
+              color: slideDurationMs > 0 && slideElapsedMs > slideDurationMs ? '#ef4444'
+                : slideDurationMs > 0 && (slideDurationMs - slideElapsedMs) < 10000 ? '#facc15'
+                : 'white',
+            }}>
+              {slideDurationMs > 0
+                ? formatMsToTimeCode(Math.max(0, slideDurationMs - slideElapsedMs))
+                : '—'
+              }
+            </div>
           </div>
         </div>
 
-        {/* Auto/Manual toggle */}
-        {toggleAutoMode && (
-          <button
-            onClick={toggleAutoMode}
-            className={`${styles.toggleButton} ${autoMode ? styles.active : ''}`}
-            title="Toggle Auto/Manual navigation (A)"
-            style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
-          >
-            {autoMode ? <Pause size={14} /> : <Play size={14} />}
-            {autoMode ? 'Auto' : 'Manual'}
-          </button>
-        )}
+        {/* ─── Group 4: Auto/Manual + Prev/Next ─── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+          {toggleAutoMode && (
+            <button
+              onClick={toggleAutoMode}
+              className={`${styles.toggleButton} ${autoMode ? styles.active : ''}`}
+              title="Toggle Auto/Manual navigation (A)"
+              style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+            >
+              {autoMode ? <Pause size={14} /> : <Play size={14} />}
+              {autoMode ? 'Auto' : 'Manual'}
+            </button>
+          )}
 
-        <div className={styles.navControls}>
-          <button
-            onClick={previousSlide}
-            disabled={currentSlideIndex === 0}
-            className={styles.navButton}
-            title="Previous Slide"
-          >
-            <ChevronLeft size={20} />
-            <span>Prev</span>
-          </button>
-          <button
-            onClick={nextSlide}
-            disabled={currentSlideIndex === slides.length - 1}
-            className={styles.navButton}
-            title="Next Slide"
-          >
-            <span>Next</span>
-            <ChevronRight size={20} />
-          </button>
+          <div className={styles.navControls} style={{ marginLeft: 0 }}>
+            <button
+              onClick={previousSlide}
+              disabled={currentSlideIndex === 0}
+              className={styles.navButton}
+              title="Previous Slide (←)"
+            >
+              <ChevronLeft size={20} />
+              <span>Prev</span>
+            </button>
+
+            <div style={{
+              fontFamily: 'monospace', fontSize: '13px', color: '#9ca3af',
+              whiteSpace: 'nowrap', padding: '0 4px', display: 'flex', alignItems: 'center',
+            }}>
+              {currentSlideIndex + 1}/{slides.length}
+            </div>
+
+            <button
+              onClick={nextSlide}
+              disabled={currentSlideIndex === slides.length - 1}
+              className={styles.navButton}
+              title="Next Slide (→)"
+            >
+              <span>Next</span>
+              <ChevronRight size={20} />
+            </button>
+          </div>
         </div>
 
-        <div className={styles.overlayToggles}>
+        {/* ─── Group 5: Overlay toggles (stacked) ─── */}
+        <div className={styles.overlayToggles} style={{ flexDirection: 'column', gap: '4px' }}>
           <button
             onClick={toggleQR}
             className={`${styles.toggleButton} ${showQR ? styles.active : ''}`}
+            style={{
+              opacity: currentSlide.showQR !== undefined || currentSlide.showLowerThird ? 1 : 0.4,
+              padding: '6px 12px', fontSize: '11px',
+            }}
             title="Toggle QR Code (Q)"
           >
             QR Code
@@ -369,34 +416,50 @@ export function PresenterView({
           <button
             onClick={toggleLowerThird}
             className={`${styles.toggleButton} ${showLowerThird ? styles.active : ''}`}
+            style={{
+              opacity: currentSlide.showLowerThird ? 1 : 0.4,
+              padding: '6px 12px', fontSize: '11px',
+            }}
             title="Toggle Lower-Third (L)"
           >
             Lower-Third
           </button>
         </div>
 
-        <button
-          onClick={() => {
-            const params = new URLSearchParams(window.location.search);
-            const sid = showId || params.get('show');
-            const url = sid
-              ? `${import.meta.env.BASE_URL}slideshow?show=${sid}&slide=${currentSlideIndex}`
-              : `${import.meta.env.BASE_URL}slideshow?episode=${params.get('episode') || params.get('id') || '1'}&slide=${currentSlideIndex}`;
-            window.open(url, 'slideshow-audience', 'width=1920,height=1080');
-          }}
-          className={styles.navButton}
-          title="Open slides window for screen sharing"
-          style={{ marginLeft: '8px' }}
-        >
-          <ExternalLink size={16} />
-          <span>Open Slides</span>
-        </button>
+        {/* ─── Group 6: Open windows (stacked) ─── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <button
+            onClick={() => {
+              const params = new URLSearchParams(window.location.search);
+              const sid = showId || params.get('show');
+              const url = sid
+                ? `${import.meta.env.BASE_URL}slideshow?show=${sid}&slide=${currentSlideIndex}`
+                : `${import.meta.env.BASE_URL}slideshow?episode=${params.get('episode') || params.get('id') || '1'}&slide=${currentSlideIndex}`;
+              window.open(url, 'slideshow-audience', 'width=1920,height=1080');
+            }}
+            className={styles.navButton}
+            title="Open slides window for OBS/screen sharing"
+            style={{ padding: '6px 12px', fontSize: '12px' }}
+          >
+            <ExternalLink size={14} />
+            <span>Slides</span>
+          </button>
+          <button
+            onClick={openNotesPopout}
+            className={styles.navButton}
+            title="Open notes in separate window"
+            style={{ padding: '6px 12px', fontSize: '12px' }}
+          >
+            <Maximize2 size={14} />
+            <span>Notes</span>
+          </button>
+        </div>
 
         <Link
           to="/admin"
           className={styles.navButton}
           title="Admin"
-          style={{ marginLeft: 'auto', opacity: 0.35 }}
+          style={{ opacity: 0.35, padding: '6px 8px' }}
         >
           <Settings size={14} />
         </Link>
