@@ -152,6 +152,11 @@ export function PresenterView({
     ? Math.min(100, (slideElapsedMs / slideDurationMs) * 100)
     : 0;
 
+  // Auto-advance countdown (seconds remaining on this slide)
+  const slideRemainingMs = slideDurationMs > 0 ? Math.max(0, slideDurationMs - slideElapsedMs) : 0;
+  const slideRemainingSeconds = Math.ceil(slideRemainingMs / 1000);
+  const showCountdown = autoMode && slideDurationMs > 0 && slideRemainingSeconds <= 10 && slideRemainingSeconds > 0;
+
   function openNotesPopout() {
     const params = new URLSearchParams(window.location.search);
     const episodeId = params.get('episode') || params.get('id') || '1';
@@ -205,8 +210,37 @@ export function PresenterView({
               }} />
             </div>
           )}
-          <div className={styles.slidePreviewContainer}>
+          <div className={styles.slidePreviewContainer} style={{ position: 'relative' }}>
             {renderSlidePreview(currentSlide, 'current', portfolioLayout, selectedImage, onSelectImage)}
+            {/* Auto-advance countdown overlay */}
+            {showCountdown && (
+              <div style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                background: slideRemainingSeconds <= 3 ? 'rgba(239, 68, 68, 0.9)' : 'rgba(0, 0, 0, 0.8)',
+                borderRadius: '8px',
+                padding: '8px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                zIndex: 20,
+                transition: 'background 0.3s',
+              }}>
+                <span style={{
+                  fontSize: '28px',
+                  fontWeight: 'bold',
+                  fontFamily: 'monospace',
+                  color: '#fff',
+                  lineHeight: 1,
+                }}>
+                  {slideRemainingSeconds}
+                </span>
+                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.2 }}>
+                  sec to<br/>next
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
