@@ -65,6 +65,19 @@ function ShowSlideshow({ showId }) {
 
   const slides = buildSlidesFromShow(show, tapes);
 
+  // Generate SHOW_SCRIPT from slides so EpisodeTeleprompter / NotesPopout works
+  const showScript = slides
+    .filter(s => s.type === 'script' || (s.talkingPoints && s.talkingPoints.length > 0))
+    .map(s => ({
+      segment: s.segment || s.rundownLabel || '',
+      timeCode: s.timeCode || s.targetTimeCode || '',
+      title: s.title || s.segment || '',
+      type: s.scriptType || s.type || 'discussion',
+      talkingPoints: s.talkingPoints || [],
+      presenterNotes: s.presenterNotes || s.notes || '',
+      cue: s.cue || '',
+    }));
+
   // Synthetic episodeData for SlideController overlays (QR, duration, etc.)
   const ep = show.episode || {};
   const qr = show.showQRCodes?.booking || {};
@@ -77,6 +90,7 @@ function ShowSlideshow({ showId }) {
     QR_CODE_URL: qr.url || '',
     QR_CODE_MESSAGE: qr.message || '',
     HIGHLEVEL_QR_URL: qr.highlevelUrl || '',
+    SHOW_SCRIPT: showScript,
     _showId: show.id,
   };
 

@@ -118,11 +118,6 @@ export function PresenterView({
     });
   }, [currentSlideIndex, slides]);
 
-  // Auto-open notes popout on mount
-  useEffect(() => {
-    openNotesPopout();
-  }, []);
-
   if (!episodeData || !slides || slides.length === 0) {
     return (
       <div className={styles.container}>
