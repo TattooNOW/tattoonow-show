@@ -640,7 +640,8 @@ function parseEducationSlides(episodeData, segmentNumber) {
       visual: slideData.visual,
       keyPoints: slideData.keyPoints || [],
       stats: slideData.stats || [],
-      layout: slideData.layout || 'split'
+      layout: slideData.layout || 'split',
+      presenterNotes: slideData.presenterNotes || '',
     });
   });
 
