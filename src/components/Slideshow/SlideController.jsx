@@ -478,70 +478,35 @@ function buildSlides(episodeData) {
   // Title card
   slides.push({
     type: 'title',
+    rundownLabel: 'Title',
     title: episodeData.EPISODE_TITLE,
     episodeNumber: episodeData.EPISODE_NUMBER,
     airDate: episodeData.AIR_DATE,
     host: episodeData.HOST
   });
 
-  // Segment 1
-  if (episodeData.SEGMENT_1_TYPE === 'interview') {
-    slides.push({
-      type: 'portfolio',
-      segment: 1,
-      artistName: episodeData.SEGMENT_1_GUEST_NAME,
-      artistStyle: episodeData.SEGMENT_1_GUEST_STYLE,
-      artistLocation: episodeData.SEGMENT_1_GUEST_LOCATION,
-      artistInstagram: episodeData.SEGMENT_1_GUEST_INSTAGRAM,
-      images: episodeData.SEGMENT_1_PORTFOLIO_IMAGES || [],
-      showLowerThird: true,
-      guestName: episodeData.SEGMENT_1_GUEST_NAME,
-      guestTitle: episodeData.SEGMENT_1_GUEST_TITLE,
-      guestInstagram: episodeData.SEGMENT_1_GUEST_INSTAGRAM
-    });
-  } else if (episodeData.SEGMENT_1_TYPE === 'education') {
-    const educationSlides = parseEducationSlides(episodeData, 1);
-    slides.push(...educationSlides);
-  }
-
-  // Segment 2
-  if (episodeData.SEGMENT_2_TYPE === 'interview') {
-    slides.push({
-      type: 'portfolio',
-      segment: 2,
-      artistName: episodeData.SEGMENT_2_GUEST_NAME,
-      artistStyle: episodeData.SEGMENT_2_GUEST_STYLE,
-      artistLocation: episodeData.SEGMENT_2_GUEST_LOCATION,
-      artistInstagram: episodeData.SEGMENT_2_GUEST_INSTAGRAM,
-      images: episodeData.SEGMENT_2_PORTFOLIO_IMAGES || [],
-      showLowerThird: true,
-      guestName: episodeData.SEGMENT_2_GUEST_NAME,
-      guestTitle: episodeData.SEGMENT_2_GUEST_TITLE,
-      guestInstagram: episodeData.SEGMENT_2_GUEST_INSTAGRAM
-    });
-  } else if (episodeData.SEGMENT_2_TYPE === 'education') {
-    const educationSlides = parseEducationSlides(episodeData, 2);
-    slides.push(...educationSlides);
-  }
-
-  // Segment 3
-  if (episodeData.SEGMENT_3_TYPE === 'interview') {
-    slides.push({
-      type: 'portfolio',
-      segment: 3,
-      artistName: episodeData.SEGMENT_3_GUEST_NAME,
-      artistStyle: episodeData.SEGMENT_3_GUEST_STYLE,
-      artistLocation: episodeData.SEGMENT_3_GUEST_LOCATION,
-      artistInstagram: episodeData.SEGMENT_3_GUEST_INSTAGRAM,
-      images: episodeData.SEGMENT_3_PORTFOLIO_IMAGES || [],
-      showLowerThird: true,
-      guestName: episodeData.SEGMENT_3_GUEST_NAME,
-      guestTitle: episodeData.SEGMENT_3_GUEST_TITLE,
-      guestInstagram: episodeData.SEGMENT_3_GUEST_INSTAGRAM
-    });
-  } else if (episodeData.SEGMENT_3_TYPE === 'education') {
-    const educationSlides = parseEducationSlides(episodeData, 3);
-    slides.push(...educationSlides);
+  // Build each segment (up to 3)
+  for (let seg = 1; seg <= 3; seg++) {
+    const segType = episodeData[`SEGMENT_${seg}_TYPE`];
+    if (segType === 'interview') {
+      slides.push({
+        type: 'portfolio',
+        segment: seg,
+        rundownLabel: `${episodeData[`SEGMENT_${seg}_GUEST_NAME`] || 'Interview'} (Seg ${seg})`,
+        artistName: episodeData[`SEGMENT_${seg}_GUEST_NAME`],
+        artistStyle: episodeData[`SEGMENT_${seg}_GUEST_STYLE`],
+        artistLocation: episodeData[`SEGMENT_${seg}_GUEST_LOCATION`],
+        artistInstagram: episodeData[`SEGMENT_${seg}_GUEST_INSTAGRAM`],
+        images: episodeData[`SEGMENT_${seg}_PORTFOLIO_IMAGES`] || [],
+        showLowerThird: true,
+        guestName: episodeData[`SEGMENT_${seg}_GUEST_NAME`],
+        guestTitle: episodeData[`SEGMENT_${seg}_GUEST_TITLE`],
+        guestInstagram: episodeData[`SEGMENT_${seg}_GUEST_INSTAGRAM`]
+      });
+    } else if (segType === 'education') {
+      const educationSlides = parseEducationSlides(episodeData, seg);
+      slides.push(...educationSlides);
+    }
   }
 
   return slides;
@@ -613,6 +578,7 @@ function parseEducationSlides(episodeData, segmentNumber) {
     slides.push({
       type: 'education',
       segment: segmentNumber,
+      rundownLabel: slideData.title || `Education ${index + 1}`,
       slideNumber: index + 1,
       title: slideData.title,
       visual: slideData.visual,
