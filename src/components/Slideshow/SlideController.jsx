@@ -544,11 +544,12 @@ function buildSlides(episodeData) {
       slides.push({
         type: 'bumper',
         rundownLabel: 'Ad Break',
-        message: episodeData.QR_CODE_MESSAGE,
+        message: episodeData.BUMPER_MESSAGE || episodeData.QR_CODE_MESSAGE,
+        videoUrl: episodeData.BUMPER_VIDEO_URL,
         qrUrl: episodeData.QR_CODE_URL,
         qrMessage: episodeData.QR_CODE_MESSAGE,
         nextSegmentLabel: nextSegLabel,
-        presenterNotes: 'Ad break. Remind viewers about sponsors, read live chat, tease next segment.',
+        presenterNotes: 'Ad break. Video plays automatically. Remind viewers about sponsors, read live chat, tease next segment.',
       });
     }
   }
@@ -721,6 +722,7 @@ function renderSlide(slide, portfolioLayout, selectedImage, onSelectImage) {
       return (
         <BumperSlide
           message={slide.message}
+          videoUrl={slide.videoUrl}
           qrUrl={slide.qrUrl}
           qrMessage={slide.qrMessage}
           nextSegmentLabel={slide.nextSegmentLabel}

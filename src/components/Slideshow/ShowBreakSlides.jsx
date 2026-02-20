@@ -35,40 +35,95 @@ export function IntroSlide({ episodeTitle, episodeNumber, host, airDate }) {
 
 /**
  * BumperSlide - Ad break / sponsor interstitial between segments
+ * Shows an embedded video (left) and QR code (right)
  */
-export function BumperSlide({ message, qrUrl, qrMessage, nextSegmentLabel }) {
+export function BumperSlide({ message, qrUrl, qrMessage, nextSegmentLabel, videoUrl }) {
+  // Extract YouTube embed URL from various YouTube URL formats
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?#]+)/);
+    if (match) return `https://www.youtube.com/embed/${match[1]}?autoplay=1&mute=1&loop=1&playlist=${match[1]}`;
+    return url;
+  };
+
+  const embedUrl = getEmbedUrl(videoUrl);
+
   return (
     <div className="slideshow-container flex items-center justify-center">
       <div className="absolute inset-0" style={{
         background: 'radial-gradient(ellipse at center, rgba(234,147,32,0.08) 0%, transparent 70%)',
       }} />
 
-      <div className="relative z-10 text-center px-16 max-w-4xl">
-        <div className="text-2xl text-muted-foreground mb-8 tracking-widest uppercase">
-          We'll Be Right Back
+      <div className="relative z-10 w-full h-full flex flex-col" style={{ padding: '40px 60px' }}>
+        {/* Header */}
+        <div className="text-center mb-6">
+          <div className="text-lg text-muted-foreground tracking-widest uppercase mb-2">
+            We'll Be Right Back
+          </div>
+          <div className="text-3xl font-bold">TattooNOW Weekly</div>
         </div>
 
-        <div className="text-5xl font-bold mb-10">TattooNOW Weekly</div>
-
-        {message && (
-          <div className="text-xl text-foreground/70 mb-8">{message}</div>
-        )}
-
-        {qrUrl && (
-          <div style={{
-            display: 'inline-flex', flexDirection: 'column', alignItems: 'center',
-            background: 'rgba(255,255,255,0.05)', borderRadius: '16px',
-            padding: '24px 32px', border: '1px solid rgba(255,255,255,0.1)',
-          }}>
-            <div className="text-lg brand-accent font-semibold mb-2">
-              {qrMessage || 'Scan to Learn More'}
+        {/* Main content area — video + QR side by side */}
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          gap: '40px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: 0,
+        }}>
+          {/* Video embed */}
+          {embedUrl && (
+            <div style={{
+              flex: '1 1 60%',
+              maxWidth: '700px',
+              aspectRatio: '16/9',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              border: '1px solid rgba(255,255,255,0.1)',
+              background: '#000',
+            }}>
+              <iframe
+                src={embedUrl}
+                style={{ width: '100%', height: '100%', border: 'none' }}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                title="Ad break video"
+              />
             </div>
-            <div className="text-sm text-muted-foreground">{qrUrl}</div>
-          </div>
-        )}
+          )}
 
+          {/* QR code + message */}
+          {qrUrl && (
+            <div style={{
+              flex: '0 0 auto',
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              background: 'rgba(255,255,255,0.05)', borderRadius: '16px',
+              padding: '32px 40px', border: '1px solid rgba(255,255,255,0.1)',
+            }}>
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}&bgcolor=000000&color=EA9320`}
+                alt="QR Code"
+                style={{ width: '180px', height: '180px', marginBottom: '16px', borderRadius: '8px' }}
+              />
+              <div className="text-lg brand-accent font-semibold mb-1 text-center">
+                {qrMessage || 'Scan to Learn More'}
+              </div>
+              <div className="text-xs text-muted-foreground text-center" style={{ maxWidth: '200px', wordBreak: 'break-all' }}>
+                {qrUrl}
+              </div>
+            </div>
+          )}
+
+          {/* If no video, show message in the center instead */}
+          {!embedUrl && message && (
+            <div className="text-xl text-foreground/70 text-center">{message}</div>
+          )}
+        </div>
+
+        {/* Footer — Coming up next */}
         {nextSegmentLabel && (
-          <div className="mt-12 text-lg text-muted-foreground">
+          <div className="text-center mt-6 text-lg text-muted-foreground">
             Coming up: <span className="text-foreground font-semibold">{nextSegmentLabel}</span>
           </div>
         )}
