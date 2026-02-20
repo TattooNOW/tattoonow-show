@@ -815,22 +815,48 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, onJumpToS
                 color: isCurrent ? '#fff' : '#aaa',
                 fontWeight: isCurrent ? 600 : 400,
                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                flex: 1,
                 position: 'relative',
               }}>
                 {seg.label}
               </span>
 
-              {/* Bottom row: slide count + duration */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '4px', marginTop: '2px', position: 'relative' }}>
-                {seg.slideCount > 1 ? (
-                  <span style={{ fontSize: '9px', color: '#555' }}>
+              {/* Slide pips — one dot per slide in this segment */}
+              {seg.slideCount > 1 && (
+                <div style={{ display: 'flex', gap: '3px', alignItems: 'center', marginTop: '3px', position: 'relative', flexWrap: 'wrap' }}>
+                  {Array.from({ length: seg.slideCount }, (_, si) => {
+                    const slideIdx = seg.startIndex + si;
+                    const isActiveSlide = slideIdx === currentSlideIndex;
+                    const isPastSlide = slideIdx < currentSlideIndex;
+                    return (
+                      <div
+                        key={si}
+                        onClick={(e) => { e.stopPropagation(); onJumpToSlide && onJumpToSlide(slideIdx); }}
+                        title={slides[slideIdx]?.rundownLabel || slides[slideIdx]?.title || `Slide ${si + 1}`}
+                        style={{
+                          width: isActiveSlide ? '16px' : '8px',
+                          height: '8px',
+                          borderRadius: isActiveSlide ? '4px' : '50%',
+                          background: isActiveSlide ? '#f97316'
+                            : isPastSlide ? 'rgba(255,255,255,0.15)'
+                            : 'rgba(255,255,255,0.35)',
+                          transition: 'all 0.2s',
+                          cursor: 'pointer',
+                          flexShrink: 0,
+                        }}
+                      />
+                    );
+                  })}
+                  <span style={{ fontSize: '9px', color: '#555', marginLeft: '4px' }}>
                     {isCurrent
                       ? `${currentSlideIndex - seg.startIndex + 1}/${seg.slideCount}`
                       : `${seg.slideCount} slides`
                     }
                   </span>
-                ) : <span />}
+                </div>
+              )}
+
+              {/* Bottom row: duration */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px', marginTop: 'auto', paddingTop: '2px', position: 'relative' }}>
                 <span style={{
                   fontSize: '10px', fontFamily: 'monospace',
                   color: segOvertime ? '#ef4444' : isCurrent ? '#f97316' : '#555',
