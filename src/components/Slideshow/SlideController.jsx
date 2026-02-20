@@ -6,6 +6,7 @@ import { EducationSlide } from './EducationSlide';
 import { LowerThird } from './LowerThird';
 import { QRCode, QRCodeWithTracking } from './QRCode';
 import ScriptSlide from '../slides/ScriptSlide';
+import { IntroSlide, BumperSlide, OutroSlide } from './ShowBreakSlides';
 import { PresenterView } from './PresenterView';
 
 /**
@@ -475,39 +476,94 @@ function buildSlides(episodeData) {
   }
 
   // LEGACY: Segment-based slideshow (backwards compatible)
-  // Title card
+
+  // ─── Intro ───
+  slides.push({
+    type: 'intro',
+    rundownLabel: 'Intro',
+    title: episodeData.EPISODE_TITLE,
+    episodeNumber: episodeData.EPISODE_NUMBER,
+    host: episodeData.HOST,
+    airDate: episodeData.AIR_DATE,
+    presenterNotes: 'Pre-show holding slide. Go live, greet viewers, wait for audience to arrive.',
+  });
+
+  // ─── Title Card ───
   slides.push({
     type: 'title',
     rundownLabel: 'Title',
     title: episodeData.EPISODE_TITLE,
     episodeNumber: episodeData.EPISODE_NUMBER,
     airDate: episodeData.AIR_DATE,
-    host: episodeData.HOST
+    host: episodeData.HOST,
+    presenterNotes: 'Welcome to the show! Introduce today\'s episode topic and guest(s).',
   });
 
-  // Build each segment (up to 3)
+  // ─── Segments with bumpers between them ───
+  const segmentCount = [1, 2, 3].filter(n => episodeData[`SEGMENT_${n}_TYPE`]).length;
+
   for (let seg = 1; seg <= 3; seg++) {
     const segType = episodeData[`SEGMENT_${seg}_TYPE`];
+    if (!segType) continue;
+
+    // Figure out what comes next (for bumper "Coming up" text)
+    const nextSeg = seg + 1;
+    const nextSegType = episodeData[`SEGMENT_${nextSeg}_TYPE`];
+    const nextSegLabel = nextSegType === 'interview'
+      ? episodeData[`SEGMENT_${nextSeg}_GUEST_NAME`] || `Segment ${nextSeg}`
+      : nextSegType === 'education'
+      ? (episodeData[`SEGMENT_${nextSeg}_SLIDES`]?.[0]?.title || `Segment ${nextSeg}`)
+      : null;
+
     if (segType === 'interview') {
+      const guestName = episodeData[`SEGMENT_${seg}_GUEST_NAME`] || 'Guest';
+      const topics = episodeData[`SEGMENT_${seg}_DISCUSSION_TOPICS`] || [];
+      const guide = episodeData[`SEGMENT_${seg}_DISCUSSION_GUIDE`] || '';
       slides.push({
         type: 'portfolio',
         segment: seg,
-        rundownLabel: `${episodeData[`SEGMENT_${seg}_GUEST_NAME`] || 'Interview'} (Seg ${seg})`,
-        artistName: episodeData[`SEGMENT_${seg}_GUEST_NAME`],
+        rundownLabel: `${guestName} (Seg ${seg})`,
+        artistName: guestName,
         artistStyle: episodeData[`SEGMENT_${seg}_GUEST_STYLE`],
         artistLocation: episodeData[`SEGMENT_${seg}_GUEST_LOCATION`],
         artistInstagram: episodeData[`SEGMENT_${seg}_GUEST_INSTAGRAM`],
         images: episodeData[`SEGMENT_${seg}_PORTFOLIO_IMAGES`] || [],
         showLowerThird: true,
-        guestName: episodeData[`SEGMENT_${seg}_GUEST_NAME`],
+        guestName: guestName,
         guestTitle: episodeData[`SEGMENT_${seg}_GUEST_TITLE`],
-        guestInstagram: episodeData[`SEGMENT_${seg}_GUEST_INSTAGRAM`]
+        guestInstagram: episodeData[`SEGMENT_${seg}_GUEST_INSTAGRAM`],
+        presenterNotes: guide || `Discussion topics:\n${topics.map(t => `• ${t}`).join('\n')}`,
       });
     } else if (segType === 'education') {
       const educationSlides = parseEducationSlides(episodeData, seg);
       slides.push(...educationSlides);
     }
+
+    // ─── Bumper between segments (not after the last one) ───
+    if (seg < segmentCount) {
+      slides.push({
+        type: 'bumper',
+        rundownLabel: 'Ad Break',
+        message: episodeData.QR_CODE_MESSAGE,
+        qrUrl: episodeData.QR_CODE_URL,
+        qrMessage: episodeData.QR_CODE_MESSAGE,
+        nextSegmentLabel: nextSegLabel,
+        presenterNotes: 'Ad break. Remind viewers about sponsors, read live chat, tease next segment.',
+      });
+    }
   }
+
+  // ─── Outro ───
+  slides.push({
+    type: 'outro',
+    rundownLabel: 'Outro',
+    title: episodeData.EPISODE_TITLE,
+    episodeNumber: episodeData.EPISODE_NUMBER,
+    host: episodeData.HOST,
+    qrUrl: episodeData.QR_CODE_URL,
+    qrMessage: episodeData.QR_CODE_MESSAGE,
+    presenterNotes: 'Thank viewers, remind them to like/subscribe/share, mention next week\'s episode.',
+  });
 
   return slides;
 }
@@ -647,6 +703,37 @@ function renderSlide(slide, portfolioLayout, selectedImage, onSelectImage) {
             notes: slide.notes,
             cue: slide.cue
           }}
+        />
+      );
+
+    case 'intro':
+      return (
+        <IntroSlide
+          episodeTitle={slide.title}
+          episodeNumber={slide.episodeNumber}
+          host={slide.host}
+          airDate={slide.airDate}
+        />
+      );
+
+    case 'bumper':
+      return (
+        <BumperSlide
+          message={slide.message}
+          qrUrl={slide.qrUrl}
+          qrMessage={slide.qrMessage}
+          nextSegmentLabel={slide.nextSegmentLabel}
+        />
+      );
+
+    case 'outro':
+      return (
+        <OutroSlide
+          episodeTitle={slide.title}
+          episodeNumber={slide.episodeNumber}
+          host={slide.host}
+          qrUrl={slide.qrUrl}
+          qrMessage={slide.qrMessage}
         />
       );
 

@@ -580,6 +580,9 @@ function ShowTimeline({ slides, currentSlideIndex, slideElapsedMs = 0, onJumpToS
     portfolio: '#3b82f6',
     education: '#10b981',
     script: '#a855f7',
+    intro: '#eab308',
+    bumper: '#6b7280',
+    outro: '#eab308',
   };
 
   // Total show duration from sum of all slide durations
