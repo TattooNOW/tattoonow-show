@@ -2,155 +2,244 @@
   "EPISODE_NUMBER": 2,
   "EPISODE_TITLE": "Building Your Digital Empire",
   "AIR_DATE": "2026-02-27T19:00:00-05:00",
-  "HOST": "Ryan Pierce",
-  "QR_CODE_URL": "https://tattoonow.com/book-consultation",
-  "QR_CODE_MESSAGE": "Book Your Free 15-Min Consultation",
+  "DURATION": "60",
+  "HOST": "Gabe Ripley",
+  "QR_CODE_URL": "https://longevity.tattoonow.com/book-consultation",
+  "QR_CODE_MESSAGE": "Book Your Free 15-Min Business Consultation",
   "HIGHLEVEL_QR_URL": "https://api.leadconnectorhq.com/qr/abc123",
   "HIGHLEVEL_CAMPAIGN_NAME": "episode-2-digital-empire",
 
-  "YOUTUBE_DESCRIPTION": "In this episode, we sit down with Marcus \"Digital Ink\" Rodriguez to discuss building an online presence that actually converts followers into paying clients. Plus, insights from our latest TattooNOW blog post on Instagram algorithm changes in 2026.\n\nTopics Covered:\n• Building Your Online Presence as a Tattoo Artist\n• Instagram Marketing & Growth Strategies (2026 Algorithm Updates)\n• Website Design & SEO for Maximum Bookings\n\nGuest: Marcus Rodriguez (@digitalink.tattoos)\nStyle: Neo-Traditional & Illustrative\nLocation: Austin, TX\n\n🎨 Want to be a guest on TattooNOW Weekly?\nApply: https://tattoonow.com/guest-application\n\n📚 Blog Post Mentioned:\n\"Instagram Algorithm Changes in 2026: What Tattoo Artists Need to Know\"\nhttps://tattoonow.com/blog/instagram-algorithm-2026\n\n#TattooArtist #InstagramMarketing #TattooBusinessTips #DigitalMarketing #TattooSEO",
+  "YOUTUBE_DESCRIPTION": "In this episode of TattooNOW Weekly, we sit down with Tim O'Connor of 10K Foxes Queens Tattoo to discuss building an online presence that converts followers into booked clients. Plus, a deep dive into TattooNOW's business tools and how the Reinventing the Tattoo curriculum can level up your craft.\n\nTopics Covered:\n• Building Your Online Presence as a Tattoo Artist\n• TattooNOW Business Management Tools & Longevity Platform\n• Reinventing the Tattoo: 48-Week Course with Guy Aitchison\n• Website Design & SEO for Maximum Bookings\n\nGuest: Tim O'Connor (@10kfoxesqueens)\nStyle: Neo-Traditional & Japanese\nLocation: Queens, NY\n\nResources:\nhttps://tattoonow.com\nhttps://longevity.tattoonow.com\nhttps://reinventingthetattoo.com\nhttps://tattoogathering.com\n\n#TattooArtist #TattooNOW #TattooBusiness #ReinventingTheTattoo #TattooMarketing",
 
-  "FACEBOOK_DESCRIPTION": "🎨 NEW EPISODE ALERT!\n\nJoin us TONIGHT at 7PM EST as we dive deep into digital marketing for tattoo artists with Marcus \"Digital Ink\" Rodriguez!\n\n✅ Instagram growth strategies that actually work\n✅ SEO secrets for tattoo artists\n✅ How Marcus went from 500 to 50K followers in 18 months\n\nPLUS: Insights from our latest blog post on the 2026 Instagram algorithm changes!\n\nWatch live: Facebook.com/TattooNOW",
+  "FACEBOOK_DESCRIPTION": "NEW EPISODE ALERT!\n\nJoin us TONIGHT at 7PM EST as we dive into digital marketing and business building for tattoo artists with Tim O'Connor of 10K Foxes Queens Tattoo!\n\nTopics:\n- Building a portfolio that books clients\n- TattooNOW business tools walkthrough\n- Reinventing the Tattoo curriculum preview\n- Live Q&A and website critique\n\nWatch live: Facebook.com/TattooNOW",
 
-  "LINKEDIN_DESCRIPTION": "Tattoo artists: Are you leaving money on the table by ignoring your online presence?\n\nIn this week's TattooNOW episode, Marcus Rodriguez shares how he built a 6-figure tattoo business through strategic digital marketing.\n\nKey insights:\n• Instagram algorithm changes in 2026\n• Website optimization for higher conversion rates\n• Email marketing for client retention\n\nWhether you're a solo artist or studio owner, this episode is packed with actionable strategies.\n\nLive tonight, 7PM EST.",
+  "LINKEDIN_DESCRIPTION": "Tattoo artists: Are you leaving money on the table by ignoring your online presence?\n\nIn this week's TattooNOW Weekly, Tim O'Connor shares how he built a thriving multi-artist studio through strategic branding and the TattooNOW platform.\n\nKey insights:\n- Portfolio presentation that converts viewers to clients\n- Studio management software that eliminates double-bookings\n- The Reinventing the Tattoo curriculum for continuous growth\n\nWhether you're a solo artist or studio owner, this episode is packed with actionable strategies.\n\nLive tonight, 7PM EST.",
 
   "SEGMENT_1_TYPE": "interview",
-  "SEGMENT_1_GUEST_NAME": "Marcus Rodriguez",
-  "SEGMENT_1_GUEST_TITLE": "Digital Marketing Expert & Tattoo Artist",
-  "SEGMENT_1_GUEST_STYLE": "Neo-Traditional & Illustrative",
-  "SEGMENT_1_GUEST_LOCATION": "Austin, TX",
-  "SEGMENT_1_GUEST_INSTAGRAM": "digitalink.tattoos",
+  "SEGMENT_1_GUEST_NAME": "Tim O'Connor",
+  "SEGMENT_1_GUEST_TITLE": "Owner, 10K Foxes Queens Tattoo",
+  "SEGMENT_1_GUEST_STYLE": "Neo-Traditional & Japanese",
+  "SEGMENT_1_GUEST_LOCATION": "Queens, NY",
+  "SEGMENT_1_GUEST_INSTAGRAM": "10kfoxesqueens",
   "SEGMENT_1_PORTFOLIO_IMAGES": [
     {
-      "url": "https://images.unsplash.com/photo-1590246814883-57c511a59f90?w=800",
-      "description": "Neo-traditional phoenix sleeve"
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/1.9.26.JPG",
+      "description": "Fistful of Fu Dog — Tim O'Connor"
     },
     {
-      "url": "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=800",
-      "description": "Illustrative nature scene"
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/1.9.261.jpg",
+      "description": "Masquerade — Jose Baena"
     },
     {
-      "url": "https://images.unsplash.com/photo-1598961942677-86574e2049c4?w=800",
-      "description": "Bold traditional eagle"
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/IMG_0725%202.jpg",
+      "description": "Oscar — Nasa Tsuchiya"
     },
     {
-      "url": "https://images.unsplash.com/photo-1562962230-16a66e891c64?w=800",
-      "description": "Geometric mandala half-sleeve"
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/1.9.26.jpeg",
+      "description": "Lady Bat — Jaime Morales"
     },
     {
-      "url": "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=800",
-      "description": "Neo-traditional rose and dagger"
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/12.3.24.jpg",
+      "description": "Alexis Bozza"
     },
     {
-      "url": "https://images.unsplash.com/photo-1616164744055-63e1b3a6e5c6?w=800",
-      "description": "Black and grey portrait"
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/TOC1%202x3.jpg",
+      "description": "Snake Painting — Tim O'Connor"
+    },
+    {
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/TOC%20SD.jpeg",
+      "description": "The Champ & His Canvases"
+    },
+    {
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/9.25.253.jpeg",
+      "description": "Fighting For The Title"
+    },
+    {
+      "url": "https://www.tattoos.gallery/10kfoxesqueenstattoo.com/images/gallery/medium/6.18.25NEWS.jpg",
+      "description": "Sun, Fun & Tattoos"
     }
   ],
   "SEGMENT_1_DISCUSSION_TOPICS": [
-    "Journey from 500 to 50K Instagram followers",
-    "Instagram algorithm changes in 2026",
-    "Website design that converts visitors to clients",
-    "Email marketing for tattoo artists",
-    "Building authentic connections with your audience"
+    "Building 10K Foxes from a single chair to a multi-artist studio",
+    "How a TattooNOW website changed his booking flow overnight",
+    "Portfolio curation: what to show, what to cut",
+    "Running events and flash days to build community",
+    "Instagram vs. a dedicated portfolio site — why you need both"
   ],
-  "SEGMENT_1_DISCUSSION_GUIDE": "Marcus Rodriguez went from struggling to fill his appointment book to having a 6-month waitlist—all through strategic digital marketing. In this segment, we'll explore his proven framework for building an online presence that actually converts followers into paying clients.\n\nKey discussion points:\n1. The '3-Pillar System' for online growth (Instagram + Website + Email)\n2. How the 2026 Instagram algorithm favors 'engagement pods' less and authentic content more\n3. Marcus's website redesign that tripled his consultation booking rate\n4. Email sequences that keep past clients coming back (and referring friends)\n5. Common digital marketing mistakes tattoo artists make",
+  "SEGMENT_1_DISCUSSION_GUIDE": "Tim O'Connor built 10K Foxes Queens Tattoo into one of NYC's standout shops through relentless portfolio curation and smart online strategy. In this segment, we explore how he uses TattooNOW's platform to showcase his team's work and keep the books full.\n\nKey discussion points:\n1. Going from a solo artist to managing a team — the business leap\n2. How the TattooNOW gallery system (tattoos.gallery) presents work at its best\n3. Running flash events like 'Fighting For The Title' and 'Sun, Fun & Tattoos' to pack the shop\n4. The role of a professional website vs. relying solely on social media\n5. Advice for artists who want to open their own studio",
 
   "SEGMENT_2_TYPE": "education",
   "SEGMENT_2_SLIDES": [
     {
-      "title": "Instagram Algorithm Changes in 2026",
-      "subtitle": "What Tattoo Artists Need to Know",
+      "title": "TattooNOW Business Platform",
+      "subtitle": "Tools Built by Tattooers, for Tattooers",
       "keyPoints": [
-        "Reels now prioritize 'watch time' over likes",
-        "Carousel posts get 3x more reach than static images",
-        "Stories with interactive stickers boost engagement by 40%",
-        "Hashtags: Use 5-10 niche tags instead of 30 generic ones"
+        "Professional portfolio websites on tattoos.gallery",
+        "Automated social media posting & content scheduling",
+        "Intelligent calendar — prevents double-bookings",
+        "Built-in CRM with client history & follow-up"
       ],
       "stats": [
         {
-          "value": "3x",
-          "label": "Higher reach with carousels"
+          "value": "$99",
+          "label": "Artist Starter Pack / month"
         },
         {
-          "value": "40%",
-          "label": "More engagement with interactive stories"
+          "value": "5-day",
+          "label": "Free trial — no credit card"
         }
       ],
       "layout": "key-points",
+      "presenterNotes": "Walk through the TattooNOW business platform. Show the tattoos.gallery portfolio system. Mention Gabe Ripley built this from decades of industry experience. Point viewers to longevity.tattoonow.com for details.",
       "source": {
-        "type": "blog",
-        "title": "Instagram Algorithm Changes in 2026: What Tattoo Artists Need to Know",
-        "url": "https://tattoonow.com/blog/instagram-algorithm-2026",
-        "author": "Ryan Pierce"
+        "type": "product",
+        "title": "TattooNOW Longevity Platform",
+        "url": "https://longevity.tattoonow.com",
+        "author": "Gabe Ripley"
       }
     },
     {
-      "title": "The Content Trifecta for Maximum Reach",
+      "title": "Reinventing the Tattoo",
+      "subtitle": "48-Week Interactive Course with Guy Aitchison",
       "keyPoints": [
-        "🎥 Reels: Behind-the-scenes of your tattooing process (15-30 seconds)",
-        "📸 Carousels: Before/after transformations (5-10 images)",
-        "📖 Stories: Daily engagement (polls, Q&A, countdown timers)"
-      ],
-      "diagram": {
-        "type": "triangle",
-        "sections": [
-          { "label": "Reels", "percentage": 40 },
-          { "label": "Carousels", "percentage": 35 },
-          { "label": "Stories", "percentage": 25 }
-        ]
-      },
-      "layout": "diagram",
-      "source": {
-        "type": "blog",
-        "url": "https://tattoonow.com/blog/instagram-algorithm-2026"
-      }
-    },
-    {
-      "title": "Hashtag Strategy That Actually Works",
-      "subtitle": "Stop using random trending hashtags!",
-      "keyPoints": [
-        "5-10 niche hashtags > 30 generic hashtags",
-        "Mix of follower sizes: 10K, 50K, 500K+",
-        "Location-based tags for local clients",
-        "Create a branded hashtag for your studio"
+        "Written chapters + webinars + recorded exercises each week",
+        "Live Monday Night Exercises via Zoom — every week",
+        "20+ art and tattoo-specific courses available",
+        "Guest instructors: Nick Baxter, Russ Abbott, Bob Tyrrell & more"
       ],
       "stats": [
         {
-          "value": "2.7x",
-          "label": "More bookings with niche hashtags"
+          "value": "48",
+          "label": "Weeks of structured curriculum"
+        },
+        {
+          "value": "20+",
+          "label": "Courses from apprentice to master"
         }
       ],
       "layout": "key-points",
+      "presenterNotes": "This is the flagship education product. Guy Aitchison started this in 1993 as a 3-ring binder. Now it's a full interactive platform. Enrollment opens 3x/year before each 16-week trimester. Mention the 7-day free trial. Point to reinventingthetattoo.com and classrooms.reinventingthetattoo.com.",
       "source": {
-        "type": "blog",
-        "url": "https://tattoonow.com/blog/instagram-algorithm-2026"
+        "type": "course",
+        "title": "Reinventing The Tattoo Evolution",
+        "url": "https://reinventingthetattoo.com",
+        "author": "Guy Aitchison"
+      }
+    },
+    {
+      "title": "Webinars On Demand",
+      "subtitle": "Learn from the Best in the Industry",
+      "keyPoints": [
+        "Jeff Gogue — 'Size Doesn't Matter' Hand Tattoo ($150)",
+        "Bob Tyrrell — 'Method to My Madness' 10-Hour Epic ($149)",
+        "BJ Betts — Lettering Masterclass ($175)",
+        "Guy Aitchison & Jeff Gogue — CollabTattoo ($19.99)"
+      ],
+      "stats": [
+        {
+          "value": "$19.99",
+          "label": "Starting price for on-demand content"
+        }
+      ],
+      "layout": "key-points",
+      "presenterNotes": "Highlight the webinar catalog. These are pre-recorded deep-dives from world-class artists. The CollabTattoo with Guy & Jeff is a great entry point at $19.99. Full catalog at tattoonow.com/professional-development/webinars-on-demand/. Play a clip of Jeff Gogue if time allows.",
+      "source": {
+        "type": "catalog",
+        "title": "TattooNOW Webinars On Demand",
+        "url": "https://www.tattoonow.com/professional-development/webinars-on-demand/"
+      }
+    },
+    {
+      "title": "Paradise Tattoo Gathering",
+      "subtitle": "4 Days of Responsible Tattoo & Art Education",
+      "keyPoints": [
+        "Jiminy Peak Mountain Resort, Hancock, MA",
+        "Seminars, lectures, live critiques & paint jams",
+        "4 full-ride scholarships (travel, lodging, pass)",
+        "Art retreats with Shawn Barber & Nick Baxter"
+      ],
+      "stats": [
+        {
+          "value": "4",
+          "label": "Full-ride scholarships available"
+        }
+      ],
+      "layout": "key-points",
+      "presenterNotes": "Paradise Tattoo Gathering is the premier education event. Mention the scholarship program — 4 full rides including travel, lodging, airport transport, and guided tour. This is NOT a convention — it's focused entirely on education and community. Point to tattoogathering.com.",
+      "source": {
+        "type": "event",
+        "title": "Paradise Tattoo Gathering",
+        "url": "https://www.tattoogathering.com"
       }
     },
     {
       "title": "Action Steps for This Week",
       "keyPoints": [
-        "✅ Create 3 Reels showing your tattooing process",
-        "✅ Post 2 carousel before/afters",
-        "✅ Update your hashtag list (5-10 niche tags)",
-        "✅ Add interactive stickers to your Stories (polls, Q&A)",
-        "✅ Read the full blog post: tattoonow.com/blog"
+        "Visit longevity.tattoonow.com — start your 5-day free trial",
+        "Browse reinventingthetattoo.com — check the course catalog",
+        "Watch the Guy & Jeff CollabTattoo webinar ($19.99 entry point)",
+        "Book a free 15-min business consultation with Gabe",
+        "Apply for a Paradise Tattoo Gathering scholarship"
       ],
-      "layout": "checklist"
+      "layout": "checklist",
+      "presenterNotes": "This is the call-to-action slide. Encourage viewers to take ONE step this week. The free trial and the $19.99 webinar are the lowest-friction entry points. The consultation booking QR code should be visible."
     }
   ],
 
   "SEGMENT_3_TYPE": "interview",
-  "SEGMENT_3_GUEST_NAME": "Marcus Rodriguez",
-  "SEGMENT_3_GUEST_TITLE": "Digital Marketing Expert & Tattoo Artist",
-  "SEGMENT_3_GUEST_STYLE": "Neo-Traditional & Illustrative",
-  "SEGMENT_3_GUEST_LOCATION": "Austin, TX",
-  "SEGMENT_3_GUEST_INSTAGRAM": "digitalink.tattoos",
-  "SEGMENT_3_PORTFOLIO_IMAGES": [],
+  "SEGMENT_3_GUEST_NAME": "Tim O'Connor",
+  "SEGMENT_3_GUEST_TITLE": "Owner, 10K Foxes Queens Tattoo",
+  "SEGMENT_3_GUEST_STYLE": "Neo-Traditional & Japanese",
+  "SEGMENT_3_GUEST_LOCATION": "Queens, NY",
+  "SEGMENT_3_GUEST_INSTAGRAM": "10kfoxesqueens",
+  "SEGMENT_3_PORTFOLIO_IMAGES": [
+    {
+      "url": "https://www.tattoos.gallery/philrobertsontattoos.com/images/gallery/medium/IMG_1354.jpeg",
+      "description": "Moth in Space — Phil Robertson"
+    },
+    {
+      "url": "https://www.tattoos.gallery/philrobertsontattoos.com/images/gallery/medium/IMG_1286.jpeg",
+      "description": "Reaper and Snake — Phil Robertson"
+    },
+    {
+      "url": "https://www.tattoos.gallery/artimmortaltattoo.com/images/gallery/medium/5BF958D9-B2A7-4142-AB7D-D144B09EF361.jpeg",
+      "description": "Chucky — Selena Rogers"
+    },
+    {
+      "url": "https://www.tattoos.gallery/artimmortaltattoo.com/images/gallery/medium/47A3A550-F2C1-4D6D-98C9-EF53DE0D9BA0.jpeg",
+      "description": "Girl Mask — Selena Rogers"
+    },
+    {
+      "url": "https://www.tattoos.gallery/artimmortaltattoo.com/images/gallery/medium/IMG_4426.jpeg",
+      "description": "Lovers — Sara Stewart"
+    },
+    {
+      "url": "https://www.tattoos.gallery/artimmortaltattoo.com/images/gallery/medium/IMG_3148.jpeg",
+      "description": "Trust — Sara Stewart"
+    }
+  ],
   "SEGMENT_3_DISCUSSION_TOPICS": [
-    "Q&A with viewers",
-    "Marcus's website teardown (live critique)",
-    "Common pricing mistakes",
+    "Q&A with live viewers",
+    "Live website critique — audience volunteer",
+    "Common pricing mistakes tattoo artists make",
+    "How the Reinventing the Tattoo course changed Tim's approach",
     "Building a waitlist instead of discounting"
   ],
-  "SEGMENT_3_DISCUSSION_GUIDE": "In the final segment, we'll open it up to live viewer questions and do a real-time website critique for one lucky attendee. Marcus will also share his pricing philosophy and how he maintains a premium brand while staying booked solid."
+  "SEGMENT_3_DISCUSSION_GUIDE": "In the final segment, we open it up to live viewer questions and do a real-time website critique for one lucky attendee. Tim shares how the Reinventing the Tattoo curriculum shifted his approach to design, and Gabe breaks down the most common pricing mistakes he sees artists make.\n\nKey discussion points:\n1. Live Q&A — pull questions from chat\n2. Website critique — pick a volunteer from the audience, walk through their site live\n3. Pricing: why discounting destroys your brand (and what to do instead)\n4. Tim's experience with Reinventing the Tattoo — what week was the biggest breakthrough?\n5. Final thoughts: one piece of advice for artists watching tonight",
+
+  "BUMPER_VIDEO_URL": "https://www.youtube.com/watch?v=XKNANXtDDt8",
+  "BUMPER_MESSAGE": "TattooNOW — Connecting Tattooers & Collectors Since the 90s",
+
+  "VIDEOS": [
+    {
+      "title": "Jeff Gogue — Size Doesn't Matter (Preview)",
+      "url": "https://www.youtube.com/watch?v=7IolmNwjuVw",
+      "context": "webinar-preview"
+    },
+    {
+      "title": "TattooNOW Educational Series",
+      "url": "https://www.youtube.com/watch?v=XKNANXtDDt8&list=PLOLj3oJ1fEfQBgwK4YUzgnjnM533Pdfx6",
+      "context": "playlist"
+    }
+  ]
 }
