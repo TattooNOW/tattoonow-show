@@ -134,12 +134,12 @@ export function PortfolioSlide({
   if (currentLayout === 'grid' && selectedImage === null) {
     return (
       <div className="slideshow-container bg-background"
-        style={{ display: 'flex', flexDirection: 'column', padding: '2.5rem 3rem' }}
+        style={{ display: 'flex', flexDirection: 'column', padding: '0.75rem 1rem' }}
       >
-        {/* Header */}
-        <div style={{ flexShrink: 0, marginBottom: '1rem' }}>
-          <h2 className="text-5xl font-bold mb-2">{artistName}</h2>
-          <div className="flex items-center gap-6 text-xl text-muted-foreground">
+        {/* Header — compact overlay-style bar */}
+        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'baseline', gap: '1rem', marginBottom: '0.5rem' }}>
+          <h2 className="text-2xl font-bold" style={{ margin: 0 }}>{artistName}</h2>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
             {artistStyle && <span>{artistStyle}</span>}
             {artistLocation && <span>• {artistLocation}</span>}
             {artistInstagram && (
@@ -148,9 +148,9 @@ export function PortfolioSlide({
           </div>
         </div>
 
-        {/* Image grid — fills remaining space */}
+        {/* Image grid — fills nearly all remaining space */}
         <div
-          className="gap-3"
+          className="gap-2"
           style={{
             display: 'grid',
             gridTemplateColumns: `repeat(${gridLayout.cols}, 1fr)`,
@@ -172,9 +172,9 @@ export function PortfolioSlide({
           ))}
         </div>
 
-        {/* Footer: page indicator + hint */}
-        <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', paddingTop: '0.75rem' }}
-          className="text-muted-foreground text-sm"
+        {/* Footer */}
+        <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', paddingTop: '0.25rem' }}
+          className="text-muted-foreground text-xs"
         >
           <span>
             {totalImages > pageImages.length
