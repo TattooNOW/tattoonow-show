@@ -1,0 +1,80 @@
+{
+  "id": "tape-tall-video-reels-2026-03",
+  "type": "interview",
+  "status": "complete",
+  "createdBy": "agent",
+  "createdDate": "2026-02-19",
+  "estimatedDuration": 5,
+  "tags": ["reels", "process", "tall-video", "9:16", "instagram"],
+
+  "subject": {
+    "name": "Nikko Hurtado",
+    "title": "World-Renowned Tattoo Artist & Innovator",
+    "style": "Color Realism & Photorealistic Portraits",
+    "location": "Hesperia, CA",
+    "instagram": "nikkohurtado"
+  },
+
+  "media": {
+    "images": [],
+    "videos": [
+      {
+        "url": "https://picsum.photos/seed/reel-process-01/1080/1920",
+        "description": "Color realism portrait — full session timelapse",
+        "aspect": "9:16",
+        "duration": 60,
+        "source": "instagram:nikkohurtado:reel_r01",
+        "tags": ["timelapse", "portrait", "process"]
+      },
+      {
+        "url": "https://picsum.photos/seed/reel-process-02/1080/1920",
+        "description": "Lining a full back piece — real-time close-up",
+        "aspect": "9:16",
+        "duration": 45,
+        "source": "instagram:nikkohurtado:reel_r02",
+        "tags": ["lining", "back-piece", "close-up"]
+      },
+      {
+        "url": "https://picsum.photos/seed/reel-reveal-03/1080/1920",
+        "description": "Client reaction — memorial portrait reveal",
+        "aspect": "9:16",
+        "duration": 30,
+        "source": "instagram:nikkohurtado:reel_r03",
+        "tags": ["reveal", "reaction", "memorial"]
+      },
+      {
+        "url": "https://picsum.photos/seed/reel-studio-04/1080/1920",
+        "description": "Studio tour — Black Anchor Tattoo walkthrough",
+        "aspect": "9:16",
+        "duration": 55,
+        "source": "instagram:nikkohurtado:reel_r04",
+        "tags": ["studio", "tour", "behind-scenes"]
+      },
+      {
+        "url": "https://picsum.photos/seed/reel-color-05/1080/1920",
+        "description": "Color packing technique — slow motion needle work",
+        "aspect": "9:16",
+        "duration": 40,
+        "source": "instagram:nikkohurtado:reel_r05",
+        "tags": ["technique", "color-packing", "slow-mo"]
+      },
+      {
+        "url": "https://picsum.photos/seed/reel-healed-06/1080/1920",
+        "description": "Fresh vs healed comparison — 6 month follow-up",
+        "aspect": "9:16",
+        "duration": 25,
+        "source": "instagram:nikkohurtado:reel_r06",
+        "tags": ["healed", "comparison", "follow-up"]
+      }
+    ]
+  },
+
+  "content": {
+    "talkingPoints": [
+      "Walk us through your Reels process",
+      "How has short-form video changed your bookings?",
+      "Tips for artists filming their own process videos"
+    ],
+    "presenterNotes": "These are Nikko's top-performing Instagram Reels. Let each video play through — they auto-advance. Talk over the process videos, pause on reveals for audience reaction."
+  }
+}
